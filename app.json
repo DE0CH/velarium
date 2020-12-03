@@ -1,9 +1,9 @@
 {
-  "name": "Start on Heroku: Python",
-  "description": "A barebones Python app, which can easily be deployed to Heroku.",
+  "name": "codestudy",
+  "description": "A search engine for IB Psychology Studies",
   "image": "heroku/python",
   "repository": "https://github.com/heroku/python-getting-started",
-  "keywords": ["python", "django" ],
+  "keywords": ["ib", "psychology" ],
   "addons": [ "heroku-postgresql" ],
   "env": {
     "SECRET_KEY": {

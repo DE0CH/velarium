@@ -1,3 +1,5 @@
+ipython
 django
+psycopg2
 gunicorn
 django-heroku

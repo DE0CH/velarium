@@ -1,13 +1,13 @@
-{% extends "code_study/base.html" %}
+{% extends "codestudy/base.html" %}
 
 {% block content %}
     <title>Welcome</title>
     <main role="main" class="container  mt-4">
 
         <h1>Search for Code Studies</h1>
-        <p><a href="{% url 'code_study:index' %}">Self</a></p>
+        <p><a href="{% url 'codestudy:index' %}">Self</a></p>
 
-                <form action="{% url 'code_study:search_result' %}" method='get' class="needs-validation" novalidate>
+                <form action="{% url 'codestudy:search_result' %}" method='get' class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="search-terms">Search Terms</label>
                         <input type="text" class="form-control" name="search-terms" placeholder="Cognitive Schema" required>
