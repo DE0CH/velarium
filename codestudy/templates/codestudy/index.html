@@ -1,106 +1,65 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-    <title>Code Study</title>
-</head>
-<body>
-<div class="ui main text container">
-    <h1>Welcome to Code Study</h1>
+{% extends "codestudy/base.html" %}
+{% block title %}
+    Search
+{% endblock %}
+{% block content %}
+    <div class="ui text container">
+        <h1 style="text-align: center">Search in Code Study</h1>
+        <form class="ui form" action="{% url 'codestudy:results' %}" method="get">
 
-    <div class="ui middle aligned grid">
-        <div class="column">
-            <h2 class="ui teal image header">
-                <div class="content">
-                    Search...
+            <div class="field">
+                <div class="ui left icon input">
+                    <i class="search icon"></i>
+                    <input type="text" name="terms" placeholder="Search Terms">
                 </div>
-            </h2>
-            <form class="ui large form" method="post">
-                {% csrf_token %}
-                <div class="ui stacked segment">
+            </div>
+            <div class="ui stacked segment">
+                {% for tag_class in tag_classes %}
                     <div class="field">
-                        <div class="ui left icon input">
-                            <i class="search icon"></i>
-                            <input type="text" name="terms" placeholder="Search Terms">
-                        </div>
+                        <select class="ui fluid search dropdown" multiple name="{{ tag_class.name }}">
+                            <option value="">{{ tag_class.name }}</option>
+                            {% for tag in tag_class.tag_set.all %}
+                                <option value="{{ tag.name }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
-
-                    {#                    <div class="field">#}
-                    {#                        <div class="ui left icon input">#}
-                    {#                            <i class="lock icon"></i>#}
-                    {#                            <input type="password" name="password" placeholder="Password">#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-                    <div class="ui divider"></div>
-                        <div class="field">
-                            <select class="ui fluid search dropdown" multiple name="topic">
-                                <option value="">Topic</option>
-                                <option>Brain & Behavior</option>
-                                <option>Hormones and pheromones and their effects on behavior</option>
-                                <option>The relationship between genetics and behavior</option>
-                                <option>Cognitive processes</option>
-                                <option>The reliability of cognitive processes</option>
-                                <option>Emotion and cognition</option>
-                                <option>The individual and the group</option>
-                                <option>Cultural origins of behavior and cognition</option>
-                                <option>Cultural influences on behavior</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <select class="ui fluid search dropdown" multiple name="approach">
-                                <option value="">Approach</option>
-                                <option>Biological</option>
-                                <option>Cognitive</option>
-                                <option>Sociocultural</option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <select class="ui fluid search dropdown" multiple name="approach">
-                                <option value="">Tags</option>
-                                <option>Tag 1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>... (these will be the tags that you make overtime)</option>
-                            </select>
-                        </div>
-                    <div class="ui divider"></div>
-                    <div class="field">
-                        <div class="ui checkbox">
-                            <input id="example-id" type="checkbox" name="checkbox" value="ib">
-                            <label for="example-id">IB Approved</label>
-                        </div>
+                {% endfor %}
+                <div class="ui divider"></div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input class="hidden" type="checkbox" name="checkbox" tabindex="0" value="ib">
+                        <label>IB Approved</label>
                     </div>
-
-                    {#                    <div class="ui divider"></div>#}
-                    {#                    <div class="Field">#}
-                    {#                        <div class="ui radio checkbox">#}
-                    {#                            <input type="radio" name="b1" value="a1">#}
-                    {#                            <label>Radio 1</label>#}
-                    {#                        </div>#}
-                    {#                    </div>#}
-
-                    <div class="ui divider"></div>
-
-
-                    <button type="submit" class="ui fluid large teal submit button">Search</button>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="example">
+                        <label>Make my profile visible</label>
+                    </div>
                 </div>
 
+                {#                    <div class="ui divider"></div>#}
+                {#                    <div class="Field">#}
+                {#                        <div class="ui radio checkbox">#}
+                {#                            <input type="radio" name="b1" value="a1">#}
+                {#                            <label>Radio 1</label>#}
+                {#                        </div>#}
+                {#                    </div>#}
 
-            </form>
+            </div>
 
-        </div>
+            <button type="submit" class="ui fluid large teal button">Search</button>
+
+
+        </form>
+
     </div>
-</div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script>
-    $('.ui.dropdown')
-        .dropdown()
-    ;
-</script>
-</body>
-</html>
+{% endblock %}
+{% block js %}
+    <script>
+        $('.ui.dropdown').dropdown();
+        $('.ui.checkbox').checkbox();
+        $('#menu-search').addClass('active');
+    </script>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "codestudy/base.html" %}
+{% block title %}
+    Add Paper
+{% endblock %}
+{% block content %}
+    <div class="ui text container">
+        <h1>Add Paper to Code Study</h1>
+        <div class="ui form">
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="sticky note icon"></i>
+                        <input type="text" name="title" placeholder="Title">
+                    </div>
+                </div>
+                <div class="field">
+                    <select class="ui fluid search dropdown" multiple name="topic">
+                        <option value="">Tags</option>
+                        {% for tag in tags %}
+                            <option value="{{ tag }}">{{ tag }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="field">
+                    <button class="ui fluid large teal button">
+                        <i class="paperclip icon"></i>
+                        Upload PDF
+                    </button>
+                </div>
+                <button type="submit" class="ui fluid large teal button">Add</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script>
+        $('#menu-add-paper').addClass('active');
+        $('.ui.dropdown').dropdown();
+    </script>
+{% endblock %}
