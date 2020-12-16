@@ -1,28 +1,44 @@
-{% extends "codestudy/base.html" %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <title>Code Study</title>
+</head>
+<body>
+<div class="ui main text container">
+    <h1>Welcome to Code Study</h1>
 
-{% block content %}
-    <title>Welcome</title>
-    <main role="main" class="container  mt-4">
-
-        <h1>Search for Code Studies</h1>
-        <p><a href="{% url 'codestudy:index' %}">Self</a></p>
-
-                <form action="{% url 'codestudy:search_result' %}" method='get' class="needs-validation" novalidate>
-                    <div class="mb-3">
-                        <label for="search-terms">Search Terms</label>
-                        <input type="text" class="form-control" name="search-terms" placeholder="Cognitive Schema" required>
-                        <div class="invalid-feedback">
-                            Please enter the search terms.
+    <div class="ui middle aligned grid">
+        <div class="column">
+            <h2 class="ui teal image header">
+                <div class="content">
+                    Search...
+                </div>
+            </h2>
+            <form class="ui large form" method="post">
+                {% csrf_token %}
+                <div class="ui stacked segment">
+                    <div class="field">
+                        <div class="ui left icon input">
+                            <i class="search icon"></i>
+                            <input type="text" name="terms" placeholder="Search Terms">
                         </div>
                     </div>
 
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="topic">Topic</label>
-                            <select class="custom-select d-block w-100" id="topic" name="topic" required>
-                                <option value="">Choose...</option>
-                                <option>Brain & Behavior </option>
+                    {#                    <div class="field">#}
+                    {#                        <div class="ui left icon input">#}
+                    {#                            <i class="lock icon"></i>#}
+                    {#                            <input type="password" name="password" placeholder="Password">#}
+                    {#                        </div>#}
+                    {#                    </div>#}
+                    <div class="ui divider"></div>
+                        <div class="field">
+                            <select class="ui fluid search dropdown" multiple name="topic">
+                                <option value="">Topic</option>
+                                <option>Brain & Behavior</option>
                                 <option>Hormones and pheromones and their effects on behavior</option>
                                 <option>The relationship between genetics and behavior</option>
                                 <option>Cognitive processes</option>
@@ -32,77 +48,59 @@
                                 <option>Cultural origins of behavior and cognition</option>
                                 <option>Cultural influences on behavior</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a valid topic.
-                            </div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="approach">Approach</label>
-                            <select class="custom-select d-block w-100" id="approach" name="approach" required>
-                                <option value="">Choose...</option>
-                                <option>Biological Approach</option>
-                                <option>Cognitive Approach</option>
-                                <option>Sociocultural Approach</option>
+                        <div class="field">
+                            <select class="ui fluid search dropdown" multiple name="approach">
+                                <option value="">Approach</option>
+                                <option>Biological</option>
+                                <option>Cognitive</option>
+                                <option>Sociocultural</option>
                             </select>
-                            <div class="invalid-feedback">
-                                Please select a valid approach.
-                            </div>
+                        </div>
+                        <div class="field">
+                            <select class="ui fluid search dropdown" multiple name="approach">
+                                <option value="">Tags</option>
+                                <option>Tag 1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>... (these will be the tags that you make overtime)</option>
+                            </select>
+                        </div>
+                    <div class="ui divider"></div>
+                    <div class="field">
+                        <div class="ui checkbox">
+                            <input id="example-id" type="checkbox" name="checkbox" value="ib">
+                            <label for="example-id">IB Approved</label>
                         </div>
                     </div>
-                    <hr class="mb-4">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="ib-approved" name="ib-approved">
-                        <label class="custom-control-label" for="ib-approved">IB Approved</label>
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="other-options" name="other-options">
-                        <label class="custom-control-label" for="other-options">Other options...</label>
-                    </div>
-                    <hr class="mb-4">
 
-                    <h4 class="mb-3">Options</h4>
+                    {#                    <div class="ui divider"></div>#}
+                    {#                    <div class="Field">#}
+                    {#                        <div class="ui radio checkbox">#}
+                    {#                            <input type="radio" name="b1" value="a1">#}
+                    {#                            <label>Radio 1</label>#}
+                    {#                        </div>#}
+                    {#                    </div>#}
 
-                    <div class="d-block my-3">
-                        <div class="custom-control custom-radio">
-                            <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked
-                                   required>
-                            <label class="custom-control-label" for="credit">#1</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
-                            <label class="custom-control-label" for="debit">#2</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                            <input id="paypal" name="paymentMethod" type="radio" class="custom-control-input" required>
-                            <label class="custom-control-label" for="paypal">#3</label>
-                        </div>
-                    </div>
-                    <hr class="mb-4">
-                    <button class="btn btn-primary btn-lg btn-block" type="submit">Search</button>
-                </form>
+                    <div class="ui divider"></div>
 
-    </main>
-        <script>
-      // Example starter JavaScript for disabling form submissions if there are invalid fields
-      (function() {
-        'use strict';
 
-        window.addEventListener('load', function() {
-          // Fetch all the forms we want to apply custom Bootstrap validation styles to
-          var forms = document.getElementsByClassName('needs-validation');
+                    <button type="submit" class="ui fluid large teal submit button">Search</button>
+                </div>
 
-          // Loop over them and prevent submission
-          var validation = Array.prototype.filter.call(forms, function(form) {
-            form.addEventListener('submit', function(event) {
-              if (form.checkValidity() === false) {
-                event.preventDefault();
-                event.stopPropagation();
-              }
-              form.classList.add('was-validated');
-            }, false);
-          });
-        }, false);
-      })();
-    </script>
 
-{% endblock %}
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $('.ui.dropdown')
+        .dropdown()
+    ;
+</script>
+</body>
+</html>

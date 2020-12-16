@@ -16,4 +16,4 @@ def sui(request):
         print(request.POST.getlist('state', []))
         print(request.POST.getlist('checkbox', []))
         return redirect('codestudy:sui')
-    return render(request, 'codestudy/sui.html', context={})
+    return render(request, 'codestudy/index.html', context={})
