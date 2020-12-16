@@ -21,7 +21,7 @@
             <i class="dropdown icon"></i>
             <div class="menu">
                 {% for tag in tag_class.tag_set.all %}
-                    <a class="item" href="{% url 'codestudy:browse' tag.name|escape %}">{{ tag.name }}</a>
+                    <a class="item" href="{% url 'codestudy:browse' tag_class.name tag.name %}">{{ tag.name }}</a>
                 {% endfor %}
             </div>
         </div>

@@ -6,5 +6,5 @@ urlpatterns = [
     path('results/', views.results, name='results'),
     path('', views.index, name='index'),
     path('add-paper/', views.add_paper, name='add-paper'),
-    path('browse/<str:tag>', views.browse, name='browse')
+    path('browse/<str:tag_class>/<str:tag>', views.browse, name='browse')
 ]

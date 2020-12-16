@@ -3,6 +3,7 @@ from .logins import get_user
 from .models import TagClass, Tag, Paper
 from django.contrib.staticfiles.storage import staticfiles_storage
 import os
+from html import unescape
 
 def get_base_context(request):
     return {
@@ -26,11 +27,13 @@ def results(request):
     return render(request, 'codestudy/results.html', context=context)
 
 
-def browse(request, tag=None):
-    print(tag)
+def browse(request, tag_class=None, tag=None):
+    tag_class = unescape(tag_class)
+    tag = unescape(tag)
+
     context = get_base_context(request)
     context.update({
-        'papers': Paper.objects.all(),
+        'papers': Tag.objects.get(name=tag, tag_class__name=tag_class).paper_set.all(),
     })
     return render(request, 'codestudy/results.html', context=context)
 
