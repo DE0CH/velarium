@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect
 from .logins import get_user
-from .models import TagClass
-
-from django.http import HttpResponse
-
+from .models import TagClass, Tag, Paper
+from django.contrib.staticfiles.storage import staticfiles_storage
+import os
 
 def get_base_context(request):
     return {
@@ -27,9 +26,31 @@ def results(request):
     return render(request, 'codestudy/results.html', context=context)
 
 
+def browse(request, tag=None):
+    print(tag)
+    context = get_base_context(request)
+    context.update({
+        'papers': Paper.objects.all(),
+    })
+    return render(request, 'codestudy/results.html', context=context)
+
+
 def add_paper(request):
     if request.method == 'POST':
-        # TODO: Implement ingest
+        title = request.POST.get('title', '')
+        description = request.POST.get('description', '')
+        paper = Paper(title=title, description=description)
+        paper.save()
+        for tag_class in TagClass.objects.all():
+            tags = request.POST.getlist(tag_class.name, [])
+            for tag_name in tags:
+                tag = Tag.objects.get(name=tag_name, tag_class__name=tag_class.name)
+                paper.tags.add(tag)
+        f = request.FILES.get('pdf', open(staticfiles_storage.path('failed/failed.pdf')))
+        paper.pdf.save(os.path.basename(f.name), f)
+        print(paper.pdf.url)
+        paper.save()
+
         return redirect('codestudy:index')
     else:
         context = get_base_context(request)

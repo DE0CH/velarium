@@ -3,6 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <title>{% block title %}Code Study{% endblock %}</title>
 </head>
@@ -10,24 +11,21 @@
 <div class="ui menu">
     <div class="header item">Code Study</div>
     <a class="item" id="menu-search" href="{% url 'codestudy:index' %}">Search</a>
-    <a class="item" id="menu-results" href="{% url 'codestudy:results' %}">Results</a>
     {% if user.can_edit %}
         <a class="item" id="menu-add-paper" href="{% url 'codestudy:add-paper' %}">Add Paper</a>
         <a class="item" id="menu-edit-tags">Edit Tags</a>
     {% endif %}
-    <div class="ui dropdown item" tabindex="0">
-        Browse by Topic
-        <i class="dropdown icon"></i>
-        <div class="menu" tabindex="-1">
-            <div class="item">Action</div>
-            <div class="item">Another Action</div>
-            <div class="item">Something else here</div>
-            <div class="divider"></div>
-            <div class="item">Separated Link</div>
-            <div class="divider"></div>
-            <div class="item">One more separated link</div>
+    {% for tag_class in tag_classes %}
+        <div class="ui dropdown item">
+            {{ tag_class.name }}
+            <i class="dropdown icon"></i>
+            <div class="menu">
+                {% for tag in tag_class.tag_set.all %}
+                    <a class="item" href="{% url 'codestudy:browse' tag.name|escape %}">{{ tag.name }}</a>
+                {% endfor %}
+            </div>
         </div>
-    </div>
+    {% endfor %}
     <div class="right menu">
         <a class="item">Log In</a>
     </div>
@@ -38,8 +36,9 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
-<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script>
+    $('.ui.dropdown').dropdown();
+</script>
 {% block js %}
 {% endblock %}
 </body>

@@ -48,3 +48,10 @@ For more information about using Python on Heroku, see these Dev Center articles
 <ol>
 <li>Figure out how to do the UI</li>
 </ol>
+
+#Known Issues
+<ul>
+<li>
+If the file is too large or the internet is too slow (i.e. it takes more than 30 seconds to upload). The server will crash.
+</li>
+</ul>
