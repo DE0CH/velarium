@@ -20,6 +20,10 @@
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (csia)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="react-dom" level="application" />
+    <orderEntry type="library" name="react" level="application" />
+    <orderEntry type="library" name="semantic-ui" level="application" />
+    <orderEntry type="library" name="jquery" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
