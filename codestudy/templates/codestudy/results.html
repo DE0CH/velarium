@@ -4,9 +4,16 @@
     <div class="ui three column stackable grid">
         {% for paper in papers %}
             <div class="column">
-                <div class="ui fluid card">
-                    <div class="image">
-                        <img src="">
+                <div class="ui fluid special card">
+                    <div class="blurring dimmable image">
+                        <div class="ui dimmer transition hidden">
+                            <div class="content">
+                                <div class="center">
+                                    <a class="ui inverted button" href="{{ paper.pdf.url }}">Open PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                        <img src="{{ paper.png.url }}">
                     </div>
                     <div class="content ">
                         <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
@@ -15,8 +22,8 @@
                         </div>
                     </div>
                     <div class="content">
-                    <span class="right floated">
-                      <i class="heart like icon" id="like-{{ paper.pk }}" onclick="like({{ paper.pk }})"></i>
+                    <span class="right floated like">
+                      <i class="star icon" id="like-{{ paper.pk }}" onclick="like({{ paper.pk }})"></i>
                       Bookmark
                     </span>
                     </div>
@@ -27,6 +34,10 @@
 {% endblock %}
 {% block js %}
     <script>
+        $('.special.card .image').dimmer({
+            on: 'hover'
+        });
+
         function like(pk) {
             console.log(pk);
             const likeBtn = $('#like-' + pk);

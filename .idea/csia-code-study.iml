@@ -24,6 +24,7 @@
     <orderEntry type="library" name="react" level="application" />
     <orderEntry type="library" name="semantic-ui" level="application" />
     <orderEntry type="library" name="jquery" level="application" />
+    <orderEntry type="library" name="bootstrap" level="application" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

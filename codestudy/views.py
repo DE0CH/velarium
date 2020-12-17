@@ -4,6 +4,9 @@ from .models import TagClass, Tag, Paper
 from django.contrib.staticfiles.storage import staticfiles_storage
 import os
 from html import unescape
+from .pdf_to_png import pdf_to_png
+from threading import Thread
+
 
 def get_base_context(request):
     return {
@@ -49,12 +52,15 @@ def add_paper(request):
             for tag_name in tags:
                 tag = Tag.objects.get(name=tag_name, tag_class__name=tag_class.name)
                 paper.tags.add(tag)
-        f = request.FILES.get('pdf', open(staticfiles_storage.path('failed/failed.pdf')))
-        paper.pdf.save(os.path.basename(f.name), f)
-        print(paper.pdf.url)
-        paper.save()
-
+        pdf = request.FILES.get('pdf', open(staticfiles_storage.path('failed/failed.pdf')))
+        paper.pdf.save(os.path.basename(pdf.name), pdf)
+        Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
         return redirect('codestudy:index')
     else:
         context = get_base_context(request)
         return render(request, 'codestudy/add-paper.html', context=context)
+
+
+def edit_tags(request):
+    context = get_base_context(request)
+    return render(request, 'codestudy/edit-tags.html', context=context)

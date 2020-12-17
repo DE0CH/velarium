@@ -1,0 +1,105 @@
+{% extends 'codestudy/base.html' %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="ui text container">
+
+        {% for tag_class in tag_classes %}
+            <div class="ui stackable grid">
+                <div class="twelve wide column">
+                    <h1>{{ tag_class.name }}</h1>
+                </div>
+                <div class="four wide column right aligned">
+                    <button class="ui icon fluid button"><i class="trash icon"></i></button>
+                </div>
+            </div>
+            <table class="ui left aligned table">
+                <tbody>
+                {% for tag in tag_class.tag_set.all %}
+                    <tr>
+                        <td>{{ tag.name }}</td>
+                        <td class="right aligned">
+                            <div class="ui icon buttons">
+                                <button class="ui button"><i class="angle up icon"></i></button>
+                                <button class="ui button"><i class="angle down icon"></i></button>
+                            </div>
+                            <button class="ui icon button"><i class="trash icon"></i></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <div class="ui input">
+                            <input type="text" placeholder="New tag...">
+                        </div>
+                    </td>
+                    <td class="right aligned">
+                        <button class="ui icon button"><i class="plus icon"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        {% endfor %}
+        <div class="ui stackable grid middle aligned">
+            <div class="twelve wide column">
+                <div class="ui fluid input">
+                    <input id="tag_class_name" type="text" placeholder="New tag group...">
+                </div>
+
+            </div>
+            <div class="four wide column right aligned">
+                <button class="ui icon fluid button" onclick="addTable()"><i class="plus icon"></i></button>
+            </div>
+        </div>
+        <div class="ui right aligned grid">
+            <div class="column">
+
+                <form method="post">
+                    {% csrf_token %}
+                    <input id="change-json" hidden>
+                    <button type="button" class="ui button" onclick="window.location.reload();">Cancel</button>
+                    <button type="submit" class="ui teal button">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
+{% block js %}
+    <script>
+        $('#menu-edit-tags').addClass('active')
+        var changeLog = {
+            newTables: [],
+            removedTag: [],
+            addedTag: [],
+
+        };
+        function addTable() {
+            const tagClassName = $('#tag_class_name');
+            const tableName = tagClassName.val();
+            console.log($('form[name ="csrfmiddlewaretoken"]').val())
+            tagClassName.val('');
+
+            let data = new FormData();
+            data.append("tag", document.getElementById("user-name").value);
+            data.append("email", document.getElementById("user-email").value);
+
+            // (B) AJAX
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "0-dummy.php");
+            // What to do when server responds
+            xhr.onload = function () {
+                console.log(this.response);
+            };
+            xhr.send(data);
+
+            console.log(tableName);
+            $('#new_tag_class').submit();
+        }
+    </script>
+{% endblock %}
