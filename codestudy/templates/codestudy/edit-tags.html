@@ -29,25 +29,28 @@
                         </td>
                     </tr>
                 {% endfor %}
-                <tr>
+                <tr id="new_tags_{{ tag_class.name }}">
                     <td>
                         <div class="ui input">
-                            <input type="text" placeholder="New tag...">
+                            <input id="new_tag_name_{{ tag_class.name }}" type="text" placeholder="New tag...">
                         </div>
                     </td>
                     <td class="right aligned">
-                        <button class="ui icon button"><i class="plus icon"></i></button>
+                        <button class="ui icon button" onclick="addTag('{{ tag_class.name }}')"><i class="plus icon"></i></button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         {% endfor %}
+        <div id="new_tag_classes"></div>
         <div class="ui stackable grid middle aligned">
             <div class="twelve wide column">
                 <div class="ui fluid input">
                     <input id="tag_class_name" type="text" placeholder="New tag group...">
                 </div>
+                <div id="tag_class_name_error" class="ui pointing red basic label hidden">
 
+                </div>
             </div>
             <div class="four wide column right aligned">
                 <button class="ui icon fluid button" onclick="addTable()"><i class="plus icon"></i></button>
@@ -72,34 +75,80 @@
 {% endblock %}
 {% block js %}
     <script>
-        $('#menu-edit-tags').addClass('active')
-        var changeLog = {
+        /**
+         * @param {String} html: HTML representing a single element
+         * @return {Element}
+         * source: https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518
+         */
+        function htmlToElement(html) {
+            let template = document.createElement('template');
+            html = html.trim(); // Never return a text node of whitespace as the result
+            template.innerHTML = html;
+            return template.content.firstChild;
+        }
+
+
+        $('#menu-edit-tags').addClass('active');
+        const xmlHttp = new XMLHttpRequest();
+        let tags = {};
+        xmlHttp.onreadystatechange = () => {
+            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
+                tags = JSON.parse(xmlHttp.responseText);
+            }
+        };
+        xmlHttp.open("GET", "{% url 'codestudy:api:tags' %}");
+        xmlHttp.send(null);
+        let changeLog = {
             newTables: [],
             removedTag: [],
             addedTag: [],
-
         };
+
+        function addTag(tagClassName) {
+            const newTagInput = $('#new_tag_name_' + tagClassName);
+            const tagName = newTagInput.val();
+            newTagInput.val('');
+            $('#new_tags_' + tagClassName).before(htmlToElement(`
+                <tr>
+                    <td>${tagName}</td>
+                    <td class="right aligned">
+                        <div class="ui icon buttons">
+                            <button id=${"up_"+tagClassName+"_"+tagName} class="ui button"><i class="angle up icon"></i></button>
+                            <button class="ui button"><i class="angle down icon"></i></button>
+                        </div>
+                        <button class="ui icon button"><i class="trash icon"></i></button>
+                    </td>
+                </tr>
+            `))
+        }
+
         function addTable() {
             const tagClassName = $('#tag_class_name');
-            const tableName = tagClassName.val();
-            console.log($('form[name ="csrfmiddlewaretoken"]').val())
+            tagClassName.val();
+            if (!tagClassName.val().trim()) {
+                const tagClassNameError = $('#tag_class_name_error');
+                tagClassNameError.text('Cannot be empty');
+                tagClassNameError.removeClass('hidden');
+                tagClassName.parent().addClass('error');
+                setTimeout(() => {
+                    tagClassNameError.addClass('hidden');
+                    tagClassName.parent().removeClass('error');
+                }, 2000);
+            } else if (tagClassName.val() in tags) {
+                const tagClassNameError = $('#tag_class_name_error');
+                tagClassNameError.text('"' + tagClassName.val() + '" already exists');
+                tagClassNameError.removeClass('hidden');
+                tagClassName.parent().addClass('error');
+                setTimeout(() => {
+                    tagClassNameError.addClass('hidden');
+                    tagClassName.parent().removeClass('error');
+                }, 2000);
+            } else {
+                changeLog.newTables.push(tagClassName.val());
+                $('#new_tag_classes').append(htmlToElement(`<h1>${tagClassName.val()}</h1>`));
+            }
             tagClassName.val('');
-
-            let data = new FormData();
-            data.append("tag", document.getElementById("user-name").value);
-            data.append("email", document.getElementById("user-email").value);
-
-            // (B) AJAX
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "0-dummy.php");
-            // What to do when server responds
-            xhr.onload = function () {
-                console.log(this.response);
-            };
-            xhr.send(data);
-
-            console.log(tableName);
-            $('#new_tag_class').submit();
         }
+
     </script>
 {% endblock %}
