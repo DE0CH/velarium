@@ -44,6 +44,15 @@ def browse(request, tag_class=None, tag=None):
     return render(request, 'codestudy/results.html', context=context)
 
 
+def all_papers(request):
+    context = get_base_context(request)
+    context.update({
+        'papers': Paper.objects.all(),
+        'all-paper': True
+    })
+    return render(request, 'codestudy/results.html', context=context)
+
+
 def add_paper(request):
     if request.method == 'POST':
         title = request.POST.get('title', '')
@@ -51,9 +60,11 @@ def add_paper(request):
         paper = Paper(title=title, description=description)
         paper.save()
         for tag_class in TagClass.objects.all():
-            tags = request.POST.getlist(tag_class.name, [])
-            for tag_name in tags:
-                tag = Tag.objects.get(name=tag_name, tag_class__name=tag_class.name)
+            tags = request.POST.getlist(str(tag_class.pk))
+            print(tags)
+            for tag_pk in tags:
+                tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
+                print(tag)
                 paper.tags.add(tag)
         pdf = request.FILES.get('pdf', open(staticfiles_storage.path('failed/failed.pdf')))
         paper.pdf.save(os.path.basename(pdf.name), pdf)

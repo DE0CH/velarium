@@ -22,10 +22,15 @@
                         </div>
                     </div>
                     <div class="content">
-                    <span class="right floated like">
-                      <i class="star icon" id="like-{{ paper.pk }}" onclick="like({{ paper.pk }})"></i>
-                      Bookmark
-                    </span>
+                        <div class="ui two column grid middle aligned">
+                            <div class="column">
+                                <a class="ui small teal button">Edit</a>
+                            </div>
+                            <div class="column right aligned">
+                            <i class="star icon" id="like-{{ paper.pk }}"
+                                                  onclick="like('{{ paper.pk }}')"></i>Bookmark
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -34,6 +39,9 @@
 {% endblock %}
 {% block js %}
     <script>
+        {% if 'all-papers' %}
+            $('#menu-all-papers').addClass('active');
+        {% endif %}
         $('.special.card .image').dimmer({
             on: 'hover'
         });

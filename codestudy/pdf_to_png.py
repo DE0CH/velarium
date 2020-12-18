@@ -14,10 +14,7 @@ def pdf_to_png(paper, pdf):
         with open(png_name, 'rb') as f:
             paper.png.save(os.path.basename(pdf.name).replace('.pdf', '') + '.png', f)
         os.remove(png_name)
-        print('converted')
     except:
         print_exc()
-        print('error')
         with open(staticfiles_storage.path('failed/failed.png'), 'rb') as f:
             paper.png.save('failed.png', f)
-    print('exited')

@@ -5,7 +5,7 @@
 {% block content %}
     <div class="ui text container">
         <h1 style="text-align: center">Add Paper to Code Study</h1>
-        <div class="ui form" >
+        <div class="ui form">
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 <div class="field">
@@ -14,25 +14,25 @@
                         <input type="text" name="title" placeholder="Title">
                     </div>
                 </div>
-            <div class="field">
-                <div class="ui left icon input">
-                    <i class="align left icon"></i>
-                    <input type="text" name="description" placeholder="Description">
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="align left icon"></i>
+                        <input type="text" name="description" placeholder="Description">
+                    </div>
                 </div>
-            </div>
                 {% for tag_class in tag_classes %}
                     <div class="field">
-                        <select class="ui fluid search dropdown" multiple name="{{ tag_class.name }}">
+                        <select class="ui fluid search dropdown" multiple name="{{ tag_class.pk }}">
                             <option value="">{{ tag_class.name }}</option>
                             {% for tag in tag_class.tag_set.all %}
-                                <option value="{{ tag.name }}">{{ tag.name }}</option>
+                                <option value="{{ tag.pk }}">{{ tag.name }}</option>
                             {% endfor %}
                         </select>
                     </div>
                 {% endfor %}
 
                 <div class="field">
-{#                    <label for="pdf" hidden>PDF of the Paper</label>#}
+                    {#                    <label for="pdf" hidden>PDF of the Paper</label>#}
                     <input type="file" name="pdf" id="pdf" accept=".pdf">
 
                 </div>
@@ -47,28 +47,23 @@
     <script>
         $('#menu-add-paper').addClass('active');
         $('.ui.dropdown').dropdown();
-
-
         $('.ui.form')
             .form({
-                fields: {
-                    title: 'empty',
-                    description: 'empty',
-        {% for tag_class in tag_classes %}
-            {{ tag_class.name }}: 'empty',
-        {% endfor %}
-        pdf:
-        'empty',
-        }
-        }
-        )
+                    fields: {
+                        title: 'empty',
+                        description: 'empty',
+
+                        pdf: 'empty',
+                    }
+                }
+            )
         ;
 
         async function fs() {
             const status = $('#s3');
             const submit = $('#submit');
             submit.click()
-            if( $('.ui.form').form('is valid')) {
+            if ($('.ui.form').form('is valid')) {
                 const button = $('#fakeSubmit');
                 button.addClass('loading');
             }
