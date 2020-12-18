@@ -1,8 +1,18 @@
-boto3==1.16.22
-django-heroku==0.3.1
-django-storages==1.10.1
-gunicorn==20.0.4
+# Ipython is just the best
 ipython==7.19.0
+
+# Django
+django==3.1.4
+
+# Heroku stuff
+django-heroku==0.3.1
 psycopg2==2.8.6
+gunicorn==20.0.4
+
+# S3 Storage
+django-storages==1.10.1
+boto3==1.16.22
 python-dotenv==0.15.0
-pdf2image
+
+# PDF Processing
+pdf2image==1.14.0

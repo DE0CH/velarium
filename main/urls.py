@@ -1,9 +1,7 @@
 from django.urls import path, include
-
 from django.contrib import admin
 
 admin.autodiscover()
-
 
 # To add a new path, first import the app:
 # import blog

@@ -1,9 +1,11 @@
 from django.db import models
 from django.dispatch import receiver
+import uuid
 # Create your models here.
 
 
 class TagClass(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.TextField()
 
     def __str__(self):
@@ -11,6 +13,7 @@ class TagClass(models.Model):
 
 
 class Tag(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tag_class = models.ForeignKey(TagClass, on_delete=models.CASCADE)
     name = models.TextField()
 
@@ -19,6 +22,7 @@ class Tag(models.Model):
 
 
 class Paper(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()

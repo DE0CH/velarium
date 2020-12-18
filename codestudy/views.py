@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+import logging
 from .logins import get_user
 from .models import TagClass, Tag, Paper
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -6,6 +7,8 @@ import os
 from html import unescape
 from .pdf_to_png import pdf_to_png
 from threading import Thread
+import json
+import uuid
 
 
 def get_base_context(request):
@@ -62,5 +65,35 @@ def add_paper(request):
 
 
 def edit_tags(request):
-    context = get_base_context(request)
-    return render(request, 'codestudy/edit-tags.html', context=context)
+    if request.method == 'POST':
+        change_log = json.loads(request.POST['changeLog-json'])
+        print(change_log)
+        for new_tag_class in change_log['newTagClasses']:
+            if new_tag_class['name']:
+                try:
+                    TagClass.objects.get(name=new_tag_class['name'])
+                except TagClass.DoesNotExist:
+                    TagClass(pk=uuid.UUID(new_tag_class['pk']), name=new_tag_class['name']).save()
+        for new_tag in change_log['newTags']:
+            print(new_tag)
+            if new_tag['name']:
+                try:
+                    Tag.objects.get(name=new_tag['name'])
+                except Tag.DoesNotExist:
+                    Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'], tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
+        for deleted_tag in change_log['deletedTags']:
+            try:
+                Tag.objects.get(pk=deleted_tag).delete()
+            except Tag.DoesNotExist:
+                logging.exception('Could not find tag in database')
+        for deleted_tag_class in change_log['deletedTagClasses']:
+            try:
+                TagClass.objects.get(pk=deleted_tag_class).delete()
+            except TagClass.DoesNotExist:
+                logging.exception('Did not find tag class in database')
+
+
+        return redirect('codestudy:edit-tags')
+    else:
+        context = get_base_context(request)
+        return render(request, 'codestudy/edit-tags.html', context=context)

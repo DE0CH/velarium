@@ -7,63 +7,60 @@
     <div class="ui text container">
 
         {% for tag_class in tag_classes %}
-            <div class="ui stackable grid">
+            <div id="tag_class_{{ tag_class.pk }}" class="ui stackable grid">
                 <div class="twelve wide column">
                     <h1>{{ tag_class.name }}</h1>
                 </div>
                 <div class="four wide column right aligned">
-                    <button class="ui icon fluid button"><i class="trash icon"></i></button>
+                    <button class="ui icon fluid button" onclick="deleteTagClass('{{ tag_class.pk }}')"><i class="trash icon"></i></button>
                 </div>
             </div>
             <table class="ui left aligned table">
                 <tbody>
                 {% for tag in tag_class.tag_set.all %}
-                    <tr>
+                    <tr id="tag_{{ tag.pk }}">
                         <td>{{ tag.name }}</td>
                         <td class="right aligned">
-                            <div class="ui icon buttons">
-                                <button class="ui button"><i class="angle up icon"></i></button>
-                                <button class="ui button"><i class="angle down icon"></i></button>
-                            </div>
-                            <button class="ui icon button"><i class="trash icon"></i></button>
+                            <button class="ui icon button" onclick="deleteTag('{{ tag.pk }}')"><i
+                                    class="trash icon"></i></button>
                         </td>
                     </tr>
                 {% endfor %}
-                <tr id="new_tags_{{ tag_class.name }}">
+                <tr id="new_tags_{{ tag_class.pk }}">
                     <td>
                         <div class="ui input">
-                            <input id="new_tag_name_{{ tag_class.name }}" type="text" placeholder="New tag...">
+                            <input id="new_tag_input_{{ tag_class.pk }}" type="text" placeholder="New tag...">
                         </div>
                     </td>
                     <td class="right aligned">
-                        <button class="ui icon button" onclick="addTag('{{ tag_class.name }}')"><i class="plus icon"></i></button>
+                        <button class="ui icon button" onclick="addTag('{{ tag_class.pk }}')"><i class="plus icon"></i>
+                        </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
         {% endfor %}
-        <div id="new_tag_classes"></div>
-        <div class="ui stackable grid middle aligned">
+        <div id="new_tag_classes" class="ui stackable grid middle aligned">
             <div class="twelve wide column">
                 <div class="ui fluid input">
-                    <input id="tag_class_name" type="text" placeholder="New tag group...">
+                    <input id="new_tag_class_input" type="text" placeholder="New tag group...">
                 </div>
-                <div id="tag_class_name_error" class="ui pointing red basic label hidden">
-
+                <div id="tag_class_error" class="ui pointing red basic label hidden">
+                    Cannot be empty
                 </div>
             </div>
             <div class="four wide column right aligned">
-                <button class="ui icon fluid button" onclick="addTable()"><i class="plus icon"></i></button>
+                <button class="ui icon fluid button" onclick="addTagClass()"><i class="plus icon"></i></button>
             </div>
         </div>
         <div class="ui right aligned grid">
             <div class="column">
-
                 <form method="post">
                     {% csrf_token %}
-                    <input id="change-json" hidden>
+                    <input id="changeLog-json" name="changeLog-json" hidden>
                     <button type="button" class="ui button" onclick="window.location.reload();">Cancel</button>
-                    <button type="submit" class="ui teal button">Save</button>
+                    <button type="button" class="ui teal button" onclick="save()">Save</button>
+                    <button type="submit" id="changeLog-submit" hidden></button>
                 </form>
             </div>
         </div>
@@ -74,81 +71,126 @@
 
 {% endblock %}
 {% block js %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.1/uuid.min.js"
+            integrity="sha512-4JH7nC4nSqPixxbhZCLETJ+DUfHa+Ggk90LETm25fi/SitneSvtxkcWAUujvYrgKgvrvwv4NDAsFgdwCS79Dcw=="
+            crossorigin="anonymous"></script>
     <script>
+        $('#menu-edit-tags').addClass('active');
+
         /**
          * @param {String} html: HTML representing a single element
-         * @return {Element}
+         * @return {DocumentFragment}
          * source: https://stackoverflow.com/questions/494143/creating-a-new-dom-element-from-an-html-string-using-built-in-dom-methods-or-pro/35385518#35385518
          */
         function htmlToElement(html) {
             let template = document.createElement('template');
             html = html.trim(); // Never return a text node of whitespace as the result
             template.innerHTML = html;
-            return template.content.firstChild;
+            return template.content;
         }
 
-
-        $('#menu-edit-tags').addClass('active');
-        const xmlHttp = new XMLHttpRequest();
-        let tags = {};
-        xmlHttp.onreadystatechange = () => {
-            if (xmlHttp.readyState === 4 && xmlHttp.status === 200) {
-                tags = JSON.parse(xmlHttp.responseText);
-            }
-        };
-        xmlHttp.open("GET", "{% url 'codestudy:api:tags' %}");
-        xmlHttp.send(null);
         let changeLog = {
-            newTables: [],
-            removedTag: [],
-            addedTag: [],
+            newTagClasses: [],
+            deletedTagClasses: new Set(),
+            newTags: [],
+            deletedTags: new Set(),
         };
 
-        function addTag(tagClassName) {
-            const newTagInput = $('#new_tag_name_' + tagClassName);
+        function addTag(tagClassPk) {
+            const newTagInput = $('#new_tag_input_' + tagClassPk);
             const tagName = newTagInput.val();
+            const tagPk = uuid.v4();
+            changeLog.newTags.push({
+                pk: tagPk,
+                name: tagName,
+                tagClass: tagClassPk
+            });
             newTagInput.val('');
-            $('#new_tags_' + tagClassName).before(htmlToElement(`
-                <tr>
+            $('#new_tags_' + tagClassPk).before(htmlToElement(`
+                <tr id="tag_${tagPk}">
                     <td>${tagName}</td>
-                    <td class="right aligned">
-                        <div class="ui icon buttons">
-                            <button id=${"up_"+tagClassName+"_"+tagName} class="ui button"><i class="angle up icon"></i></button>
-                            <button class="ui button"><i class="angle down icon"></i></button>
-                        </div>
+                    <td class="right aligned" onclick="deleteTag('${tagPk}')">
                         <button class="ui icon button"><i class="trash icon"></i></button>
                     </td>
                 </tr>
             `))
         }
 
-        function addTable() {
-            const tagClassName = $('#tag_class_name');
-            tagClassName.val();
-            if (!tagClassName.val().trim()) {
-                const tagClassNameError = $('#tag_class_name_error');
-                tagClassNameError.text('Cannot be empty');
-                tagClassNameError.removeClass('hidden');
-                tagClassName.parent().addClass('error');
-                setTimeout(() => {
-                    tagClassNameError.addClass('hidden');
-                    tagClassName.parent().removeClass('error');
-                }, 2000);
-            } else if (tagClassName.val() in tags) {
-                const tagClassNameError = $('#tag_class_name_error');
-                tagClassNameError.text('"' + tagClassName.val() + '" already exists');
-                tagClassNameError.removeClass('hidden');
-                tagClassName.parent().addClass('error');
-                setTimeout(() => {
-                    tagClassNameError.addClass('hidden');
-                    tagClassName.parent().removeClass('error');
-                }, 2000);
+        function deleteTag(tagPk) {
+            const tagUi = $(`#tag_${tagPk}`);
+            const tagDeleteButton = tagUi.find('td > button');
+            if (tagDeleteButton.hasClass('negative')) {
+                tagDeleteButton.removeClass('negative');
+                changeLog.deletedTags.delete(tagPk);
             } else {
-                changeLog.newTables.push(tagClassName.val());
-                $('#new_tag_classes').append(htmlToElement(`<h1>${tagClassName.val()}</h1>`));
+                tagDeleteButton.addClass('negative');
+                changeLog.deletedTags.add(tagPk);
             }
-            tagClassName.val('');
+            tagDeleteButton.removeClass('active')
         }
+
+        function addTagClass() {
+            const newTagClassInput = $('#new_tag_class_input');
+            const tagClassName = newTagClassInput.val();
+            if (tagClassName === '') {
+                const TagClassError = $('#tag_class_error');
+                TagClassError.removeClass('hidden');
+                setTimeout(() => TagClassError.addClass('hidden'), 2000);
+                return;
+            }
+            const tagClassPk = uuid.v4();
+            changeLog.newTagClasses.push({
+                pk: tagClassPk,
+                name: tagClassName,
+            });
+            newTagClassInput.val('');
+            $('#new_tag_classes').before(htmlToElement(`
+                <div id="tag_class_${tagClassPk}" class="ui stackable grid">
+                    <div class="twelve wide column">
+                        <h1>${tagClassName}</h1>
+                    </div>
+                    <div class="four wide column right aligned">
+                        <button class="ui icon fluid button" onclick="deleteTagClass('${tagClassPk}')"><i class="trash icon"></i></button>
+                    </div>
+                </div>
+                <table class="ui left aligned table">
+                    <tbody>
+                        <tr id="new_tags_${tagClassPk}">
+                            <td>
+                                <div class="ui input">
+                                    <input id="new_tag_input_${tagClassPk}" type="text" placeholder="New tag...">
+                                </div>
+                            </td>
+                            <td class="right aligned">
+                                <button class="ui icon button" onclick="addTag('${tagClassPk}')"><i class="plus icon"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            `));
+        }
+
+        function deleteTagClass(tagClassPk) {
+            const tagClassUi = $(`#tag_class_${tagClassPk}`);
+            const tagClassDeleteButton = tagClassUi.find('div > button');
+            if (tagClassDeleteButton.hasClass('negative')) {
+                tagClassDeleteButton.removeClass('negative');
+                changeLog.deletedTagClasses.delete(tagClassPk);
+            } else {
+                tagClassDeleteButton.addClass('negative');
+                changeLog.deletedTagClasses.add(tagClassPk);
+            }
+        }
+
+        function save() {
+            changeLog.deletedTags = Array.from(changeLog.deletedTags);
+            changeLog.deletedTagClasses = Array.from(changeLog.deletedTagClasses);
+            const changeLogJson = $('#changeLog-json');
+            changeLogJson.val(JSON.stringify(changeLog));
+            const changeLogSubmit = $('#changeLog-submit');
+            changeLogSubmit.click();
+        }
+
 
     </script>
 {% endblock %}
