@@ -53,7 +53,7 @@ def all_papers(request):
     context = get_base_context(request)
     context.update({
         'papers': Paper.objects.all(),
-        'all-paper': True
+        'all_papers': True
     })
     return render(request, 'codestudy/results.html', context=context)
 
