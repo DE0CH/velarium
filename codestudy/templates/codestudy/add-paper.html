@@ -85,7 +85,7 @@
         let uploaded = false;
 
         async function fs() {
-            if (uploaded) {
+            if (uploaded || !form.form('is valid')) {
                 return;
             }
             const submit = $('#submit');
