@@ -4,6 +4,7 @@ import os
 from django.contrib.staticfiles.storage import staticfiles_storage
 from traceback import print_exc
 
+
 def pdf_to_png(paper, pdf):
     # noinspection PyBroadException
     pdf_byte = pdf.read()

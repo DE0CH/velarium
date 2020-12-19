@@ -26,8 +26,8 @@ class Paper(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
-    png = models.FileField()
-    pdf = models.FileField()
+    png = models.FileField(default='failed.png')
+    pdf = models.FileField(default='failed.pdf')
     tags = models.ManyToManyField(Tag)
 
     def __str__(self):

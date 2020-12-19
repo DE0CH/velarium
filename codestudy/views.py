@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 import logging
 from .logins import get_user
 from .models import TagClass, Tag, Paper
@@ -9,6 +10,10 @@ from .pdf_to_png import pdf_to_png
 from threading import Thread
 import json
 import uuid
+import boto3
+import botocore.client
+from django.conf import settings
+from utils import fix_hk_s3_url
 
 
 def get_base_context(request):
@@ -58,7 +63,6 @@ def add_paper(request):
         title = request.POST.get('title', '')
         description = request.POST.get('description', '')
         paper = Paper(title=title, description=description)
-        paper.save()
         for tag_class in TagClass.objects.all():
             tags = request.POST.getlist(str(tag_class.pk))
             print(tags)
@@ -66,13 +70,36 @@ def add_paper(request):
                 tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
                 print(tag)
                 paper.tags.add(tag)
-        pdf = request.FILES.get('pdf', open(staticfiles_storage.path('failed/failed.pdf')))
-        paper.pdf.save(os.path.basename(pdf.name), pdf)
+        pdf_key = request.POST.get('pdf-key', 'failed.pdf')
+        paper.pdf.name = pdf_key
+        paper.save()
         Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
         return redirect('codestudy:index')
     else:
         context = get_base_context(request)
         return render(request, 'codestudy/add-paper.html', context=context)
+
+
+def presign_s3(request):
+    file_name = request.GET['file_name']
+    file_name = os.path.join(str(uuid.uuid4()), file_name)
+    s3 = boto3.client('s3',
+                      aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                      aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                      config=botocore.client.Config(signature_version='s3v4'),
+                      region_name=settings.AWS_S3_REGION_NAME)
+
+    presigned_post = s3.generate_presigned_post(
+        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+        Key=file_name,
+        Fields={"Content-Type": 'application/pdf'},
+        Conditions=[
+            {"Content-Type": 'application/pdf'}
+        ],
+        ExpiresIn=600
+    )
+    presigned_post['url'] = fix_hk_s3_url(presigned_post['url'])
+    return JsonResponse(presigned_post)
 
 
 def edit_tags(request):
@@ -102,7 +129,6 @@ def edit_tags(request):
                 TagClass.objects.get(pk=deleted_tag_class).delete()
             except TagClass.DoesNotExist:
                 logging.exception('Did not find tag class in database')
-
 
         return redirect('codestudy:edit-tags')
     else:
