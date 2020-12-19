@@ -13,7 +13,7 @@ import uuid
 import boto3
 import botocore.client
 from django.conf import settings
-from utils import fix_hk_s3_url
+from utils import s3_client
 
 
 def get_base_context(request):
@@ -63,6 +63,9 @@ def add_paper(request):
         title = request.POST.get('title', '')
         description = request.POST.get('description', '')
         paper = Paper(title=title, description=description)
+        pdf_key = request.POST.get('pdf-key', 'failed.pdf')
+        paper.pdf.name = pdf_key
+        paper.save()
         for tag_class in TagClass.objects.all():
             tags = request.POST.getlist(str(tag_class.pk))
             print(tags)
@@ -70,9 +73,6 @@ def add_paper(request):
                 tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
                 print(tag)
                 paper.tags.add(tag)
-        pdf_key = request.POST.get('pdf-key', 'failed.pdf')
-        paper.pdf.name = pdf_key
-        paper.save()
         Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
         return redirect('codestudy:index')
     else:
@@ -83,13 +83,8 @@ def add_paper(request):
 def presign_s3(request):
     file_name = request.GET['file_name']
     file_name = os.path.join(str(uuid.uuid4()), file_name)
-    s3 = boto3.client('s3',
-                      aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
-                      aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
-                      config=botocore.client.Config(signature_version='s3v4'),
-                      region_name=settings.AWS_S3_REGION_NAME)
 
-    presigned_post = s3.generate_presigned_post(
+    presigned_post = s3_client.generate_presigned_post(
         Bucket=settings.AWS_STORAGE_BUCKET_NAME,
         Key=file_name,
         Fields={"Content-Type": 'application/pdf'},
@@ -98,7 +93,6 @@ def presign_s3(request):
         ],
         ExpiresIn=600
     )
-    presigned_post['url'] = fix_hk_s3_url(presigned_post['url'])
     return JsonResponse(presigned_post)
 
 

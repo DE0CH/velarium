@@ -22,7 +22,7 @@
                 </div>
                 {% for tag_class in tag_classes %}
                     <div class="field">
-                        <select class="ui fluid search dropdown" multiple name="{{ tag_class.pk }}">
+                        <select class="ui fluid search dropdown" multiple id="select-{{ tag_class.pk }}" name="{{ tag_class.pk }}">
                             <option value="">{{ tag_class.name }}</option>
                             {% for tag in tag_class.tag_set.all %}
                                 <option value="{{ tag.pk }}">{{ tag.name }}</option>
@@ -65,7 +65,9 @@
             total: 200,
         });
         $('#menu-add-paper').addClass('active');
-        $('.ui.dropdown').dropdown();
+        {% for tag_class in tag_classes %}
+            $('#select-{{ tag_class.pk }}').dropdown();
+        {% endfor %}
         const form = $('.ui.form');
         form
             .form({
