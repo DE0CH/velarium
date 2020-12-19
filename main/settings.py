@@ -131,4 +131,8 @@ DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
+if os.getenv('IS_LOCAL', False):
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_SSL_REDIRECT = True
+
 django_heroku.settings(locals())
