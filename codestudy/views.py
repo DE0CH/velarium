@@ -35,6 +35,12 @@ def index(request):
 
 def results(request):
     context = get_base_context(request)
+    context.update({
+        'message': {
+            'title': 'Search function is not implemented yet',
+            'description': 'Try to use the tabs on top to navigate'
+        }
+    })
     return render(request, 'codestudy/results.html', context=context)
 
 
@@ -133,3 +139,8 @@ def edit_tags(request):
 def edit_paper(request, pk):
     context = get_base_context(request)
     return render(request, 'codestudy/edit-paper.html', context=context)
+
+
+def login(request):
+    context = get_base_context(request)
+    return render(request, 'codestudy/login.html', context=context)

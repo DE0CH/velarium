@@ -28,10 +28,19 @@
     {% endfor %}
     <a class="item" id="menu-all-papers" href="{% url 'codestudy:all-papers' %}">All Papers</a>
     <div class="right menu">
-        <a class="item">Log In</a>
+        <a class="item" href="{% url 'codestudy:login' %}">Log In</a>
     </div>
 </div>
 
+{% if message %}
+    <div class="ui text container">
+        <div class="ui message">
+            <div class="header">{{ message.title }}</div>
+            <p>
+                {{ message.description }}
+            </p>
+        </div>
+    </div>{% endif %}
 {% block content %}
 {% endblock %}
 
