@@ -24,7 +24,7 @@
                         <div class="content">
                             <div class="ui two column grid middle aligned">
                                 <div class="column">
-                                    <a class="ui small teal button">Edit</a>
+                                    <a class="ui small teal button" href="{% url 'codestudy:edit-paper' paper.pk %}">Edit</a>
                                 </div>
                                 <div class="column right aligned">
                                     <i class="star icon" id="like-{{ paper.pk }}"

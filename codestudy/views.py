@@ -128,3 +128,8 @@ def edit_tags(request):
     else:
         context = get_base_context(request)
         return render(request, 'codestudy/edit-tags.html', context=context)
+
+
+def edit_paper(request, pk):
+    context = get_base_context(request)
+    return render(request, 'codestudy/edit-paper.html', context=context)
