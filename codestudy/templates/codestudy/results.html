@@ -1,40 +1,41 @@
 {% extends "codestudy/base.html" %}
 {% block content %}
     <div class="ui container">
-    <div class="ui three column stackable grid">
-        {% for paper in papers %}
-            <div class="column">
-                <div class="ui fluid special card">
-                    <div class="blurring dimmable image">
-                        <div class="ui dimmer transition hidden">
-                            <div class="content">
-                                <div class="center">
-                                    <a class="ui inverted button" href="{{ paper.pdf.url }}">Open PDF</a>
+        <div class="ui three column stackable grid">
+            {% for paper in papers %}
+                <div class="column">
+                    <div class="ui fluid special card">
+                        <div class="blurring dimmable image">
+                            <div class="ui dimmer transition hidden">
+                                <div class="content">
+                                    <div class="center">
+                                        <a class="ui inverted button" href="{{ paper.pdf.url }}">Open PDF</a>
+                                    </div>
                                 </div>
                             </div>
+                            <img src="{{ paper.png.url }}">
                         </div>
-                        <img src="{{ paper.png.url }}">
-                    </div>
-                    <div class="content ">
-                        <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
-                        <div class="description">
-                            {{ paper.description }}
-                        </div>
-                    </div>
-                    <div class="content">
-                        <div class="ui two column grid middle aligned">
-                            <div class="column">
-                                <a class="ui small teal button">Edit</a>
+                        <div class="content ">
+                            <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
+                            <div class="description">
+                                {{ paper.description }}
                             </div>
-                            <div class="column right aligned">
-                            <i class="star icon" id="like-{{ paper.pk }}"
-                                                  onclick="like('{{ paper.pk }}')"></i>Bookmark
+                        </div>
+                        <div class="content">
+                            <div class="ui two column grid middle aligned">
+                                <div class="column">
+                                    <a class="ui small teal button">Edit</a>
+                                </div>
+                                <div class="column right aligned">
+                                    <i class="star icon" id="like-{{ paper.pk }}"
+                                       onclick="like('{{ paper.pk }}')"></i>Bookmark
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}
 {% block js %}
