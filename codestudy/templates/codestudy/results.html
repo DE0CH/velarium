@@ -20,14 +20,20 @@
                             <div class="ui dimmer transition hidden">
                                 <div class="content">
                                     <div class="center">
-                                        <a class="ui inverted button" href="{{ paper.pdf.url }}">Open PDF</a>
+                                        {% if paper.pdf %}
+                                            <a class="ui inverted button" href="{{ paper.pdf.url }}">Open PDF</a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
-                            <img src="{{ paper.png.url }}">
+                            {% if paper.png %}
+                                <img src="{{ paper.png.url }}" alt="{{ paper.title }}">
+                            {% endif %}
                         </div>
                         <div class="content ">
-                            <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
+                            {% if paper.pdf %}
+                                <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
+                            {% endif %}
                             <div class="description">
                                 {{ paper.description }}
                             </div>

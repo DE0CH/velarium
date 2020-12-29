@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import logging
 from .logins import get_user
-from .models import TagClass, Tag, Paper
+from .models import TagClass, Tag, Paper, User
 from django.contrib.staticfiles.storage import staticfiles_storage
 import os
 from html import unescape
@@ -14,6 +14,8 @@ import boto3
 import botocore.client
 from django.conf import settings
 from utils import s3_client
+import google.oauth2.id_token
+import google.auth.transport.requests
 
 
 def get_base_context(request):
@@ -72,13 +74,7 @@ def add_paper(request):
         pdf_key = request.POST.get('pdf-key', 'failed.pdf')
         paper.pdf.name = pdf_key
         paper.save()
-        for tag_class in TagClass.objects.all():
-            tags = request.POST.getlist(str(tag_class.pk))
-            print(tags)
-            for tag_pk in tags:
-                tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
-                print(tag)
-                paper.tags.add(tag)
+        update_tag(request, paper)
         Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
         return redirect('codestudy:index')
     else:
@@ -105,7 +101,6 @@ def presign_s3(request):
 def edit_tags(request):
     if request.method == 'POST':
         change_log = json.loads(request.POST['changeLog-json'])
-        print(change_log)
         for new_tag_class in change_log['newTagClasses']:
             if new_tag_class['name']:
                 try:
@@ -137,10 +132,58 @@ def edit_tags(request):
 
 
 def edit_paper(request, pk):
-    context = get_base_context(request)
-    return render(request, 'codestudy/edit-paper.html', context=context)
+    if request.method == 'POST':
+        paper = Paper.objects.get(pk=pk)
+        if request.POST.get('delete', 'off') == 'on':
+            paper.delete()
+            return redirect('codestudy:all-papers')
+        else:
+            paper.title = request.POST.get('title', '')
+            paper.description = request.POST.get('description', '')
+            paper.save()
+            update_tag(request, paper)
+            return redirect('codestudy:edit-paper', pk)
+    else:
+        context = get_base_context(request)
+        context.update({
+            'paper': Paper.objects.get(pk=pk),
+        })
+        return render(request, 'codestudy/edit-paper.html', context=context)
+
+
+def update_tag(request, paper):
+    paper.tags.clear()
+    for tag_class in TagClass.objects.all():
+        tags = request.POST.getlist(str(tag_class.pk))
+        print(tags)
+        for tag_pk in tags:
+            tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
+            print(tag)
+            paper.tags.add(tag)
+    paper.save()
 
 
 def login(request):
-    context = get_base_context(request)
-    return render(request, 'codestudy/login.html', context=context)
+    success = False
+    if request.method == 'POST':
+        id_token = request.POST['id-token']
+        try:
+            # Specify the CLIENT_ID of the app that accesses the backend:
+            idinfo = google.oauth2.id_token.verify_oauth2_token(id_token,
+                                                  google.auth.transport.requests.Request(),
+                                                  settings.G_CLIENT_ID)
+
+            user = User.objects.get_or_create(pk=idinfo['sub'])[0]
+            user.email = idinfo['email']
+            user.name = idinfo['name']
+            user.given_name = idinfo['given_name']
+            user.family_name = idinfo['family_name']
+            user.save()
+            success = True
+        except ValueError:
+            # Invalid token
+            print('error')
+            success = False
+    return JsonResponse({
+        'success': success
+    })

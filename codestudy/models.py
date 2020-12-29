@@ -33,11 +33,12 @@ class Paper(models.Model):
     def __str__(self):
         return self.title
 
+class User(models.Model):
+    id = models.TextField(primary_key=True, editable=False)
+    name = models.TextField()
+    given_name = models.TextField()
+    family_name = models.TextField()
+    email = models.TextField()
 
-@receiver(models.signals.post_delete, sender=Paper)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes file from filesystem
-    when corresponding `Paper` object is deleted.
-    """
-    instance.pdf.delete(save=False)
+    def __str__(self):
+        return self.name

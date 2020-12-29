@@ -2,6 +2,7 @@ venv
 *.pyc
 staticfiles
 .env
+creds.txt
 db.sqlite3
 getting-started/*
 

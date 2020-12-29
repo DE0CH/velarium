@@ -124,6 +124,8 @@ AWS_DEFAULT_ACL = None
 AWS_QUERYSTRING_EXPIRE = 300
 AWS_S3_REGION_NAME = 'ap-east-1'
 
+G_CLIENT_ID = '330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com'
+
 DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

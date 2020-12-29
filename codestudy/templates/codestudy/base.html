@@ -5,6 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <meta name="google-signin-client_id"
+          content="330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com">
     <title>{% block title %}Code Study{% endblock %}</title>
 </head>
 <body>
@@ -28,7 +30,10 @@
     {% endfor %}
     <a class="item" id="menu-all-papers" href="{% url 'codestudy:all-papers' %}">All Papers</a>
     <div class="right menu">
-        <a class="item" href="{% url 'codestudy:login' %}">Log In</a>
+
+        <a id="loginBtn" class="item">
+            Sign In with Google
+        </a>
     </div>
 </div>
 
@@ -49,10 +54,54 @@
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
 <script>
     {% for tag_class in tag_classes %}
         $('#menu-{{ tag_class.pk }}').dropdown();
     {% endfor %}
+    function signOut() {
+        const auth2 = gapi.auth2.getAuthInstance();
+        auth2.signOut();
+    }
+
+    function sendIdToken(idToken) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "{% url 'codestudy:login' %}");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            console.log(response);
+        };
+        xhr.send('id-token=' + idToken + '&csrfmiddlewaretoken=' + '{{ csrf_token }}');
+
+    }
+
+    gapi.load('auth2', function () {
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        const auth2 = gapi.auth2.init({
+            client_id: '330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin',
+            // Request scopes in addition to 'profile' and 'email'
+            //scope: 'additional_scope'
+        });
+        const element = document.getElementById('loginBtn');
+        auth2.attachClickHandler(element, {},
+            function (googleUser) {
+                const id_token = googleUser.getAuthResponse().id_token;
+                sendIdToken(id_token)
+            }, function (error) {
+                console.log(error);
+            });
+    });
+    $('.message .close')
+        .on('click', function () {
+            $(this)
+                .closest('.message')
+                .transition('fade')
+            ;
+        })
+    ;
+
 </script>
 {% block js %}
 {% endblock %}

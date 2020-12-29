@@ -16,3 +16,8 @@ python-dotenv==0.15.0
 
 # PDF Processing
 pdf2image==1.14.0
+
+# Authentication
+requests==2.25.1
+google-auth==1.24.0
+
