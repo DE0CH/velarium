@@ -11,7 +11,6 @@ class MediaStorage(S3Boto3Storage):
         # Not sure what http_method will give, so default to https in all cases (there's not many reasons to use http).
         if expire is None:
             expire = 3600
-        print(filepath_to_uri(name))
         response = generate_presigned_url(name, 600)
         return response
 

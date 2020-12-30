@@ -15,7 +15,8 @@ s3_client = boto3.client('s3',
 
 def generate_presigned_url(object_key, expiration):
     presigned_url = s3_client.generate_presigned_url('get_object',
-                                            Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME, 'Key': object_key},
-                                            ExpiresIn=expiration)
+                                                     Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
+                                                             'Key': object_key},
+                                                     ExpiresIn=expiration)
     # presigned_url = fix_hk_s3_url(presigned_url)
     return presigned_url

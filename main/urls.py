@@ -1,5 +1,6 @@
 from django.urls import path, include
 from django.contrib import admin
+from codestudy import views
 
 admin.autodiscover()
 
@@ -15,3 +16,8 @@ urlpatterns = [
     path('', include('codestudy.urls')),
     path("admin/", admin.site.urls),
 ]
+
+handler404 = views.handler404
+handler500 = views.handler500
+handler403 = views.handler403
+handler400 = views.handler400

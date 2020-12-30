@@ -12,5 +12,11 @@ urlpatterns = [
     path('edit-paper/<uuid:pk>/', views.edit_paper, name='edit-paper'),
     path('browse/<str:tag_class>/<str:tag>', views.browse, name='browse'),
     path('all-papers/', views.all_papers, name='all-papers'),
-    path('login/', views.login, name='login')
+    path('login/', views.login, name='login'),
+    path('admin/', views.admin, name='admin'),
+    path('logout/', views.logout, name='logout'),
 ]
+
+
+# handler400 = 'codestudy.views.error_404'
+# handler403 = 'codestudy.views.error_404'

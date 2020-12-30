@@ -1,21 +1,19 @@
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 import logging
 from .logins import get_user
 from .models import TagClass, Tag, Paper, User
-from django.contrib.staticfiles.storage import staticfiles_storage
 import os
 from html import unescape
 from .pdf_to_png import pdf_to_png
 from threading import Thread
 import json
 import uuid
-import boto3
-import botocore.client
 from django.conf import settings
 from utils import s3_client
 import google.oauth2.id_token
 import google.auth.transport.requests
+from django.core.exceptions import PermissionDenied
 
 
 def get_base_context(request):
@@ -27,8 +25,6 @@ def get_base_context(request):
 
 def index(request):
     if request.method == 'POST':
-        print(request.POST.getlist('state', []))
-        print(request.POST.getlist('checkbox', []))
         return redirect('codestudy:index')
     else:
         context = get_base_context(request)
@@ -108,12 +104,12 @@ def edit_tags(request):
                 except TagClass.DoesNotExist:
                     TagClass(pk=uuid.UUID(new_tag_class['pk']), name=new_tag_class['name']).save()
         for new_tag in change_log['newTags']:
-            print(new_tag)
             if new_tag['name']:
                 try:
                     Tag.objects.get(name=new_tag['name'])
                 except Tag.DoesNotExist:
-                    Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'], tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
+                    Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'],
+                        tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
         for deleted_tag in change_log['deletedTags']:
             try:
                 Tag.objects.get(pk=deleted_tag).delete()
@@ -155,35 +151,89 @@ def update_tag(request, paper):
     paper.tags.clear()
     for tag_class in TagClass.objects.all():
         tags = request.POST.getlist(str(tag_class.pk))
-        print(tags)
         for tag_pk in tags:
             tag = Tag.objects.get(pk=uuid.UUID(tag_pk))
-            print(tag)
             paper.tags.add(tag)
     paper.save()
 
 
 def login(request):
-    success = False
     if request.method == 'POST':
         id_token = request.POST['id-token']
         try:
             # Specify the CLIENT_ID of the app that accesses the backend:
-            idinfo = google.oauth2.id_token.verify_oauth2_token(id_token,
-                                                  google.auth.transport.requests.Request(),
-                                                  settings.G_CLIENT_ID)
+            id_info = google.oauth2.id_token.verify_oauth2_token(id_token,
+                                                                 google.auth.transport.requests.Request(),
+                                                                 settings.G_CLIENT_ID)
 
-            user = User.objects.get_or_create(pk=idinfo['sub'])[0]
-            user.email = idinfo['email']
-            user.name = idinfo['name']
-            user.given_name = idinfo['given_name']
-            user.family_name = idinfo['family_name']
+            user = User.objects.get_or_create(pk=id_info['sub'])[0]
+            user.email = id_info['email']
+            user.name = id_info['name']
+            user.given_name = id_info['given_name']
+            user.family_name = id_info['family_name']
             user.save()
+            request.session['sub'] = user.pk
             success = True
         except ValueError:
             # Invalid token
-            print('error')
             success = False
+    else:
+        raise Http404()
     return JsonResponse({
         'success': success
     })
+
+
+def admin(request):
+    context = get_base_context(request)
+    return render(request, 'codestudy/admin.html', context=context)
+
+
+def logout(request):
+    try:
+        del request.session['sub']
+        success = True
+    except KeyError:
+        success = False
+    return JsonResponse({'success': success})
+
+
+def permission_denied(request):
+    raise PermissionDenied
+
+
+def handler404(request, exception):
+    context = get_base_context(request)
+    context.update({
+        'message': {
+            'title': '404 Not Found',
+            'description': 'This is no the web page you are looking for.',
+        }
+    })
+    return render(request, 'codestudy/base.html', context=context)
+
+
+def handler500(request):
+    return render(request, 'codestudy/500.html')
+
+
+def handler403(request, exception):
+    context = get_base_context(request)
+    context.update({
+        'message': {
+            'title': '403 Permission Denied',
+            'description': 'Looks like you don\'t have the permission to perform the action.'
+        }
+    })
+    return render(request, 'codestudy/base.html', context=context)
+
+
+def handler400(request, exception):
+    context = get_base_context(request)
+    context.update({
+        'message': {
+            'title': '400 Bad Request',
+            'description': 'Your client has issued a malformed or illegal request.'
+        }
+    })
+    return render(request, 'codestudy/base.html', context=context)

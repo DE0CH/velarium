@@ -33,8 +33,11 @@ class Paper(models.Model):
     def __str__(self):
         return self.title
 
+
 class User(models.Model):
     id = models.TextField(primary_key=True, editable=False)
+    can_edit = models.BooleanField(default=False)
+
     name = models.TextField()
     given_name = models.TextField()
     family_name = models.TextField()
@@ -42,3 +45,4 @@ class User(models.Model):
 
     def __str__(self):
         return self.name
+
