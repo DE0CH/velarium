@@ -28,7 +28,7 @@ if os.path.isfile(dotenv_file):
 SECRET_KEY = "iNZc97keQtytmd7x82q9zqBBzX6ZA8sKH8QpncbbqtfsTdRBA9dxAYmCLXQMPAhb"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'FALSE') == 'TRUE'
 
 ALLOWED_HOSTS = []
 
@@ -135,7 +135,7 @@ DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-if os.getenv('IS_LOCAL', 'False') != 'True':
+if os.getenv('IS_LOCAL', 'FALSE') != 'TRUE':
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
 
