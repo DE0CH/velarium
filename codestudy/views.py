@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, Http404
 import logging
 from .logins import get_user
-from .models import TagClass, Tag, Paper, User
+from .models import TagClass, Tag, Paper, User, UserType
 import os
 from html import unescape
 from .pdf_to_png import pdf_to_png
@@ -63,19 +63,22 @@ def all_papers(request):
 
 
 def add_paper(request):
-    if request.method == 'POST':
-        title = request.POST.get('title', '')
-        description = request.POST.get('description', '')
-        paper = Paper(title=title, description=description)
-        pdf_key = request.POST.get('pdf-key', 'failed.pdf')
-        paper.pdf.name = pdf_key
-        paper.save()
-        update_tag(request, paper)
-        Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
-        return redirect('codestudy:index')
+    if get_user(request) and get_user(request).can_edit:
+        if request.method == 'POST':
+            title = request.POST.get('title', '')
+            description = request.POST.get('description', '')
+            paper = Paper(title=title, description=description)
+            pdf_key = request.POST.get('pdf-key', 'failed.pdf')
+            paper.pdf.name = pdf_key
+            paper.save()
+            update_tag(request, paper)
+            Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
+            return redirect('codestudy:index')
+        else:
+            context = get_base_context(request)
+            return render(request, 'codestudy/add-paper.html', context=context)
     else:
-        context = get_base_context(request)
-        return render(request, 'codestudy/add-paper.html', context=context)
+        raise Http404()
 
 
 def presign_s3(request):
@@ -95,56 +98,62 @@ def presign_s3(request):
 
 
 def edit_tags(request):
-    if request.method == 'POST':
-        change_log = json.loads(request.POST['changeLog-json'])
-        for new_tag_class in change_log['newTagClasses']:
-            if new_tag_class['name']:
+    if get_user(request) and get_user(request).can_edit:
+        if request.method == 'POST':
+            change_log = json.loads(request.POST['changeLog-json'])
+            for new_tag_class in change_log['newTagClasses']:
+                if new_tag_class['name']:
+                    try:
+                        TagClass.objects.get(name=new_tag_class['name'])
+                    except TagClass.DoesNotExist:
+                        TagClass(pk=uuid.UUID(new_tag_class['pk']), name=new_tag_class['name']).save()
+            for new_tag in change_log['newTags']:
+                if new_tag['name']:
+                    try:
+                        Tag.objects.get(name=new_tag['name'])
+                    except Tag.DoesNotExist:
+                        Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'],
+                            tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
+            for deleted_tag in change_log['deletedTags']:
                 try:
-                    TagClass.objects.get(name=new_tag_class['name'])
-                except TagClass.DoesNotExist:
-                    TagClass(pk=uuid.UUID(new_tag_class['pk']), name=new_tag_class['name']).save()
-        for new_tag in change_log['newTags']:
-            if new_tag['name']:
-                try:
-                    Tag.objects.get(name=new_tag['name'])
+                    Tag.objects.get(pk=deleted_tag).delete()
                 except Tag.DoesNotExist:
-                    Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'],
-                        tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
-        for deleted_tag in change_log['deletedTags']:
-            try:
-                Tag.objects.get(pk=deleted_tag).delete()
-            except Tag.DoesNotExist:
-                logging.exception('Could not find tag in database')
-        for deleted_tag_class in change_log['deletedTagClasses']:
-            try:
-                TagClass.objects.get(pk=deleted_tag_class).delete()
-            except TagClass.DoesNotExist:
-                logging.exception('Did not find tag class in database')
+                    logging.exception('Could not find tag in database')
+            for deleted_tag_class in change_log['deletedTagClasses']:
+                try:
+                    TagClass.objects.get(pk=deleted_tag_class).delete()
+                except TagClass.DoesNotExist:
+                    logging.exception('Did not find tag class in database')
 
-        return redirect('codestudy:edit-tags')
+            return redirect('codestudy:edit-tags')
+        else:
+            context = get_base_context(request)
+            return render(request, 'codestudy/edit-tags.html', context=context)
     else:
-        context = get_base_context(request)
-        return render(request, 'codestudy/edit-tags.html', context=context)
+        raise Http404
 
 
 def edit_paper(request, pk):
-    if request.method == 'POST':
-        paper = Paper.objects.get(pk=pk)
-        if request.POST.get('delete', 'off') == 'on':
-            paper.delete()
-            return redirect('codestudy:all-papers')
+    if get_user(request) and get_user(request).can_edit:
+        if request.method == 'POST':
+            paper = Paper.objects.get(pk=pk)
+            if request.POST.get('delete', 'off') == 'on':
+                paper.delete()
+                return redirect('codestudy:all-papers')
+            else:
+                paper.title = request.POST.get('title', '')
+                paper.description = request.POST.get('description', '')
+                paper.save()
+                update_tag(request, paper)
+                return redirect('codestudy:edit-paper', pk)
         else:
-            paper.title = request.POST.get('title', '')
-            paper.description = request.POST.get('description', '')
-            paper.save()
-            update_tag(request, paper)
-            return redirect('codestudy:edit-paper', pk)
+            context = get_base_context(request)
+            context.update({
+                'paper': Paper.objects.get(pk=pk),
+            })
+            return render(request, 'codestudy/edit-paper.html', context=context)
     else:
-        context = get_base_context(request)
-        context.update({
-            'paper': Paper.objects.get(pk=pk),
-        })
-        return render(request, 'codestudy/edit-paper.html', context=context)
+        raise Http404()
 
 
 def update_tag(request, paper):
@@ -185,8 +194,21 @@ def login(request):
 
 
 def admin(request):
-    context = get_base_context(request)
-    return render(request, 'codestudy/admin.html', context=context)
+    if get_user(request) and get_user(request).is_admin:
+        if request.method == 'POST':
+            for user in User.objects.all():
+                user.type = UserType[request.POST[user.pk].upper()]
+                user.save()
+                print(request.POST[user.pk])
+            return redirect('codestudy:admin')
+        else:
+            context = get_base_context(request)
+            context.update({
+                'users': User.objects.all()
+            })
+            return render(request, 'codestudy/admin.html', context=context)
+    else:
+        raise Http404()
 
 
 def logout(request):
@@ -213,8 +235,19 @@ def handler404(request, exception):
     return render(request, 'codestudy/base.html', context=context)
 
 
+# noinspection PyBroadException
 def handler500(request):
-    return render(request, 'codestudy/500.html')
+    try:
+        context = get_base_context(request)
+        context.update({
+            'message': {
+                'title': '500 Server Error',
+                'description': 'Something went wrong. Please try again later.'
+            }
+        })
+        return render(request, 'codestudy/base.html', context=context)
+    except:
+        return render(request, 'codestudy/500.html')
 
 
 def handler403(request, exception):
@@ -237,3 +270,28 @@ def handler400(request, exception):
         }
     })
     return render(request, 'codestudy/base.html', context=context)
+
+
+def bookmark(request):
+    user = get_user(request)
+    if user:
+        paper = Paper.objects.get(pk=request.GET['pk'])
+        if user.bookmarks.filter(pk=paper.pk).exists():
+            user.bookmarks.remove(paper)
+        else:
+            user.bookmarks.add(paper)
+        return redirect('codestudy:index')
+    else:
+        raise Http404()
+
+
+def bookmarked(request):
+    user = get_user(request)
+    if user:
+        context = get_base_context(request)
+        context.update({
+            'papers': user.bookmarks.all()
+        })
+        return render(request, 'codestudy/results.html', context=context)
+    else:
+        raise Http404()

@@ -1,4 +1,5 @@
 {% extends "codestudy/base.html" %}
+{% load codestudy_tags %}
 {% block content %}
     <div class="ui container">
         {% if not papers %}
@@ -38,17 +39,23 @@
                                 {{ paper.description }}
                             </div>
                         </div>
-                        <div class="content">
-                            <div class="ui two column grid middle aligned">
-                                <div class="column">
-                                    <a class="ui small teal button" href="{% url 'codestudy:edit-paper' paper.pk %}">Edit</a>
-                                </div>
-                                <div class="column right aligned">
-                                    <i class="star icon" id="like-{{ paper.pk }}"
-                                       onclick="like('{{ paper.pk }}')"></i>Bookmark
+                        {% if user %}
+                            <div class="content">
+                                <div class="ui two column grid middle aligned">
+                                    <div class="column">
+                                        {% if user.can_edit %}
+                                            <a class="ui small teal button"
+                                               href="{% url 'codestudy:edit-paper' paper.pk %}">Edit</a>
+                                        {% endif %}
+                                    </div>
+                                    <div class="column right aligned">
+                                        <i class="star icon {% if not paper|is_bookmark:user %}outline{% endif %}"
+                                           id="like-{{ paper.pk }}"
+                                           onclick="like('{{ paper.pk }}')"></i>Bookmark
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
@@ -67,6 +74,9 @@
         function like(pk) {
             console.log(pk);
             const likeBtn = $('#like-' + pk);
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', '{% url 'codestudy:bookmark' %}?pk=' + pk);
+            xhr.send();
             if (likeBtn.hasClass('outline')) {
                 likeBtn.removeClass('outline');
             } else {

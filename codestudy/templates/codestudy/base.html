@@ -35,8 +35,8 @@
                 {{ user.name }}
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <a class="item" href=""><i class="star icon"></i>Saved Papers</a>
-                    {% if user.can_edit %}
+                    <a class="item" href="{% url 'codestudy:bookmarked' %}"><i class="star icon"></i>Bookmarked Papers</a>
+                    {% if user.is_admin %}
                         <a class="item" href="{% url 'codestudy:admin' %}"><i class="edit icon"></i>Admin Console</a>
                     {% endif %}
                     <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out </a>

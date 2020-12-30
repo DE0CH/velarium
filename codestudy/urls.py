@@ -15,8 +15,7 @@ urlpatterns = [
     path('login/', views.login, name='login'),
     path('admin/', views.admin, name='admin'),
     path('logout/', views.logout, name='logout'),
+    path('bookmark/', views.bookmark, name='bookmark'),
+    path('bookmarked/', views.bookmarked, name='bookmarked')
 ]
 
-
-# handler400 = 'codestudy.views.error_404'
-# handler403 = 'codestudy.views.error_404'
