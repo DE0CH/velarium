@@ -37,9 +37,9 @@ def get_text(paper):
     text = textract.process(id1, extension='pdf').decode('utf-8')
     if _RE_COMBINE_WHITESPACE.sub("", text) == '':
         id2 = str(uuid.uuid4())
-        subprocess.run(['ocrmypdf', id1, os.path.join(os.getcwd(), id2)])
-        text = textract.process(id2, extension='pdf').decode('utf-8')
-        os.remove(id2)
+        subprocess.run(['ocrmypdf', id1, os.path.join('/tmp', id2)])
+        text = textract.process(os.path.join('/tmp', id2), extension='pdf').decode('utf-8')
+        os.remove(os.path.join('/tmp', id2))
     os.remove(id1)
     # Replace all white spaces with space: https://stackoverflow.com/questions/2077897/substitute-multiple-whitespace-with-single-whitespace-in-python
     # Strip punctuation: https://stackoverflow.com/questions/265960/best-way-to-strip-punctuation-from-a-string
