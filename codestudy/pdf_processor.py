@@ -7,7 +7,7 @@ import uuid
 import urllib.request
 import textract
 import string
-import subprocess
+import ocrmypdf
 
 
 def pdf_to_png_and_save(paper):
@@ -37,7 +37,7 @@ def get_text(paper):
     text = textract.process(id1, extension='pdf').decode('utf-8')
     if _RE_COMBINE_WHITESPACE.sub("", text) == '':
         id2 = str(uuid.uuid4())
-        subprocess.run(['ocrmypdf', id1, id2])
+        ocrmypdf.ocr(id1, id2)
         text = textract.process(id2, extension='pdf').decode('utf-8')
         os.remove(id2)
     os.remove(id1)
