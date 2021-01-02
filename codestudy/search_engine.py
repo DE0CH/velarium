@@ -69,7 +69,7 @@ def search(terms, tags, user):
         for tag in tags:
             if tag in paper_tags:
                 tag_has += 1
-        scores[paper] += tag_has / len(tags) * 2/3 * 1/3 * 2/3
+        scores[paper] += tag_has / max(1, len(tags)) * 2/3 * 1/3 * 2/3
         tag_no = 0
         for paper_tag in paper_tags:
             if paper_tag not in tags:
