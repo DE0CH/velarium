@@ -36,9 +36,24 @@
                                 <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
                             {% endif %}
                             <div class="description">
-                                {{ paper.description }}
+                                <p>{{ paper.description }}</p>
                             </div>
                         </div>
+                        {% if paper.nested_tag_names %}
+                            <div class="content">
+                                <div class="description">
+                                    {% for tag_class, tags in paper.nested_tag_names.items %}
+                                        <p>{{ tag_class }}: {{ tags|join:', ' }}</p>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="content">
+                                <div class="description">
+                                    No tag added
+                                </div>
+                            </div>
+                        {% endif %}
                         {% if user %}
                             <div class="content">
                                 <div class="ui two column grid middle aligned">

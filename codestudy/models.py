@@ -1,7 +1,6 @@
 from django.db import models
 import uuid
 from enum import IntEnum
-from django import template
 # Create your models here.
 
 
@@ -22,14 +21,6 @@ class Tag(models.Model):
         return self.name
 
 
-register = template.Library()
-
-
-@register.simple_tag
-def is_bookmarked(paper, user):
-    return paper.is_bookmarked(user)
-
-
 class Paper(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.TextField()
@@ -44,6 +35,15 @@ class Paper(models.Model):
 
     def __str__(self):
         return self.title
+
+    @property
+    def nested_tag_names(self):
+        tag_classes = {}
+        for tag in self.tags.all():
+            if tag.tag_class.name not in tag_classes:
+                tag_classes[tag.tag_class.name] = []
+            tag_classes[tag.tag_class.name].append(tag.name)
+        return tag_classes
 
 
 class UserType(IntEnum):
