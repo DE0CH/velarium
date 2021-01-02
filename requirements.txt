@@ -1,31 +1,29 @@
 # Ipython is just the best
-ipython==7.19.0
+ipython
 
 # Django
-django==3.1.4
+django
 
 # Heroku stuff
-django-heroku==0.3.1
-psycopg2==2.8.6
-gunicorn==20.0.4
+django-heroku
+psycopg2
+gunicorn
 
 # S3 Storage
-django-storages==1.10.1
-boto3==1.16.22
-python-dotenv==0.15.0
+django-storages
+boto3
+python-dotenv
 
 # PDF Processing
-pdf2image==1.14.0
+pdf2image
 
 # Authentication
-requests==2.25.1
-google-auth==1.24.0
+requests
+google-auth
 
 # Extract PDF text
-textract==1.5.0
-pdfminer.six!=20200720,<=20201018,>=20191110
-ocrmypdf==11.4.4
+textract
 
 # Search Engine
-python-Levenshtein==0.12.0
-fuzzywuzzy==0.18.0
+python-Levenshtein
+fuzzywuzzy
