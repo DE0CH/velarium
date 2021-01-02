@@ -21,3 +21,7 @@ pdf2image==1.14.0
 requests==2.25.1
 google-auth==1.24.0
 
+# Search Engine
+textract==1.6.3
+python-Levenshtein==0.12.0
+fuzzywuzzy==0.18.0

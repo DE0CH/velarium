@@ -72,7 +72,6 @@
         });
 
         function like(pk) {
-            console.log(pk);
             const likeBtn = $('#like-' + pk);
             const xhr = new XMLHttpRequest();
             xhr.open('GET', '{% url 'codestudy:bookmark' %}?pk=' + pk);

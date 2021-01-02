@@ -6,7 +6,8 @@
     <div class="ui text container">
         <h1 style="text-align: center">Add Paper to Code Study</h1>
         <div class="ui form">
-            <form method="post">
+            <form method="post" autocomplete="off">
+                <input autocomplete="false" name="hidden" type="text" style="display:none;">
                 {% csrf_token %}
                 <div class="field">
                     <div class="ui left icon input">

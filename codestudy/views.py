@@ -5,7 +5,7 @@ from .logins import get_user
 from .models import TagClass, Tag, Paper, User, UserType
 import os
 from html import unescape
-from .pdf_to_png import pdf_to_png
+from .pdf_processor import pdf_to_png_and_save, get_text
 from threading import Thread
 import json
 import uuid
@@ -72,7 +72,12 @@ def add_paper(request):
             paper.pdf.name = pdf_key
             paper.save()
             update_tag(request, paper)
-            Thread(target=pdf_to_png, args=(paper, paper.pdf)).run()
+
+            def process(paper):
+                pdf_to_png_and_save(paper)
+                paper.text = get_text(paper)
+                paper.save()
+            Thread(target=process, args=(paper,)).start()
             return redirect('codestudy:index')
         else:
             context = get_base_context(request)
@@ -199,7 +204,6 @@ def admin(request):
             for user in User.objects.all():
                 user.type = UserType[request.POST[user.pk].upper()]
                 user.save()
-                print(request.POST[user.pk])
             return redirect('codestudy:admin')
         else:
             context = get_base_context(request)

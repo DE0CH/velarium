@@ -83,3 +83,4 @@ class User(models.Model):
     @property
     def type_lower(self):
         return UserType(self.type).name.lower()
+
