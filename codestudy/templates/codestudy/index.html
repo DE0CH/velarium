@@ -1,11 +1,8 @@
 {% extends "codestudy/base.html" %}
-{% block title %}
-    Search
-{% endblock %}
 {% block content %}
     <div class="ui text container">
         <h1 style="text-align: center">Search in Code Study</h1>
-        <form class="ui form" action="{% url 'codestudy:results' %}" method="get">
+        <form class="ui form" action="{% url 'codestudy:search' %}" method="get">
 
             <div class="field">
                 <div class="ui left icon input">
@@ -30,12 +27,6 @@
 
 
         </form>
-        <div class="ui segment">
-            <h2 class="ui orange header">Functions yet to be implemented</h2>
-            <ul>
-                <li>The search function</li>
-            </ul>
-        </div>
     </div>
 
 {% endblock %}

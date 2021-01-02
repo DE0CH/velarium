@@ -26,8 +26,8 @@ register = template.Library()
 
 
 @register.simple_tag
-def is_bookmark(paper, user):
-    return paper.is_bookmark(user)
+def is_bookmarked(paper, user):
+    return paper.is_bookmarked(user)
 
 
 class Paper(models.Model):
@@ -39,8 +39,8 @@ class Paper(models.Model):
     pdf = models.FileField(default='failed.pdf')
     tags = models.ManyToManyField(Tag)
 
-    def is_bookmark(self, user):
-        return self.user_set.filter(pk=user.pk).exists()
+    def is_bookmarked(self, user):
+        return self.bookmarkers.filter(pk=user.pk).exists()
 
     def __str__(self):
         return self.title
@@ -63,7 +63,7 @@ class User(models.Model):
     given_name = models.TextField()
     family_name = models.TextField()
     email = models.TextField()
-    bookmarks = models.ManyToManyField(Paper)
+    bookmarks = models.ManyToManyField(Paper, related_name='bookmarkers')
 
     def __str__(self):
         return self.name

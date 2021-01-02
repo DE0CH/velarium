@@ -34,7 +34,7 @@
                         </div>
                     </td>
                     <td class="right aligned">
-                        <button class="ui icon button" onclick="addTag('{{ tag_class.pk }}')"><i class="plus icon"></i>
+                        <button class="ui icon button" onclick="addTag('{{ tag_class.pk }}', '{{ tag_class.name }}')"><i class="plus icon"></i>
                         </button>
                     </td>
                 </tr>
@@ -97,14 +97,14 @@
             deletedTags: new Set(),
         };
 
-        function addTag(tagClassPk) {
+        function addTag(tagClassPk, tagClassName) {
             const newTagInput = $('#new_tag_input_' + tagClassPk);
             const tagName = newTagInput.val();
             const tagPk = uuid.v4();
             changeLog.newTags.push({
                 pk: tagPk,
                 name: tagName,
-                tagClass: tagClassPk
+                tagClass: tagClassName
             });
             newTagInput.val('');
             $('#new_tags_' + tagClassPk).before(htmlToElement(`
@@ -163,7 +163,7 @@
                                 </div>
                             </td>
                             <td class="right aligned">
-                                <button class="ui icon button" onclick="addTag('${tagClassPk}')"><i class="plus icon"></i></button>
+                                <button class="ui icon button" onclick="addTag('${tagClassPk}', '${tagClassName}')"><i class="plus icon"></i></button>
                             </td>
                         </tr>
                     </tbody>

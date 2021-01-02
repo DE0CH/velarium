@@ -8,6 +8,7 @@ import urllib.request
 import textract
 import string
 
+
 def pdf_to_png_and_save(paper):
     # noinspection PyBroadException
     try:

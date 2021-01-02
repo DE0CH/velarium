@@ -49,7 +49,7 @@
                                         {% endif %}
                                     </div>
                                     <div class="column right aligned">
-                                        <i class="star icon {% if not paper|is_bookmark:user %}outline{% endif %}"
+                                        <i class="star icon {% if not paper|is_bookmarked:user %}outline{% endif %}"
                                            id="like-{{ paper.pk }}"
                                            onclick="like('{{ paper.pk }}')"></i>Bookmark
                                     </div>

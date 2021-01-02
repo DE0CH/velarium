@@ -14,6 +14,7 @@ from utils import s3_client
 import google.oauth2.id_token
 import google.auth.transport.requests
 from django.core.exceptions import PermissionDenied
+from .search_engine import search as s_search
 
 
 def get_base_context(request):
@@ -31,13 +32,20 @@ def index(request):
         return render(request, 'codestudy/index.html', context=context)
 
 
-def results(request):
+def search(request):
+    tags = []
+    for tag_class in TagClass.objects.all():
+        tag_names = request.GET.getlist(tag_class.name)
+        for tag_name in tag_names:
+            tag = tag_class.tag_set.get(name=tag_name)
+            tags.append(tag)
+    terms = request.GET.get('terms', '')
+    user = get_user(request)
+    papers = s_search(terms, tags, user)
     context = get_base_context(request)
+    print(papers)
     context.update({
-        'message': {
-            'title': 'Search function is not implemented yet',
-            'description': 'Try to use the tabs on top to navigate'
-        }
+        'papers': papers,
     })
     return render(request, 'codestudy/results.html', context=context)
 
@@ -114,11 +122,9 @@ def edit_tags(request):
                         TagClass(pk=uuid.UUID(new_tag_class['pk']), name=new_tag_class['name']).save()
             for new_tag in change_log['newTags']:
                 if new_tag['name']:
-                    try:
-                        Tag.objects.get(name=new_tag['name'])
-                    except Tag.DoesNotExist:
-                        Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'],
-                            tag_class=TagClass.objects.get(pk=new_tag['tagClass'])).save()
+                    tag_class = TagClass.objects.get(name=new_tag['tagClass'])
+                    if not tag_class.tag_set.filter(name=new_tag['name']).exists():
+                        Tag(pk=uuid.UUID(new_tag['pk']), name=new_tag['name'], tag_class=tag_class).save()
             for deleted_tag in change_log['deletedTags']:
                 try:
                     Tag.objects.get(pk=deleted_tag).delete()
