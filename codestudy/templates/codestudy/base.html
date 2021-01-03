@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <meta name="google-signin-client_id"
           content="330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
     <title>{% block title %}Code Study{% endblock %}</title>
 </head>
 <body>
@@ -35,7 +36,8 @@
                 {{ user.name }}
                 <i class="dropdown icon"></i>
                 <div class="menu">
-                    <a class="item" href="{% url 'codestudy:bookmarked' %}"><i class="star icon"></i>Bookmarked Papers</a>
+                    <a class="item" href="{% url 'codestudy:bookmarked' %}"><i class="star icon"></i>Bookmarked
+                        Papers</a>
                     {% if user.is_admin %}
                         <a class="item" href="{% url 'codestudy:admin' %}"><i class="edit icon"></i>Admin Console</a>
                     {% endif %}
