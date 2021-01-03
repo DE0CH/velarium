@@ -1,5 +1,8 @@
 {% extends "codestudy/base.html" %}
 {% load codestudy_tags %}
+{% block title %}
+    {{ page_title }} | Code Study
+{% endblock %}
 {% block content %}
     <div class="ui container">
         {% if not papers %}

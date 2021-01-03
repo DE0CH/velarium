@@ -6,10 +6,10 @@
     <div class="ui text container">
         <h1 style="text-align: center">Edit Paper {{ paper.title }}</h1>
         <div class="ui form">
-            <form method="post">
+            <form method="post" autocomplete="off">
+                <input autocomplete="false" name="hidden" type="text" style="display:none;">
                 {% csrf_token %}
                 <div class="field">
-
                     <div class="ui left icon input">
                         <i class="sticky note icon"></i>
                         <input type="text" name="title" placeholder="Title" value="{{ paper.title }}">
@@ -18,7 +18,8 @@
                 <div class="field">
                     <div class="ui left icon input">
 
-                        <textarea rows="3" name="description" placeholder="Description">{{ paper.description }}</textarea>
+                        <textarea rows="3" name="description"
+                                  placeholder="Description">{{ paper.description }}</textarea>
                     </div>
                 </div>
                 {% for tag_class in tag_classes %}

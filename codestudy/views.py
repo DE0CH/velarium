@@ -45,6 +45,7 @@ def search(request):
     context = get_base_context(request)
     print(papers)
     context.update({
+        'page_title': f'{terms}',
         'papers': papers,
     })
     return render(request, 'codestudy/results.html', context=context)
@@ -56,6 +57,7 @@ def browse(request, tag_class=None, tag=None):
 
     context = get_base_context(request)
     context.update({
+        'page_title': tag,
         'papers': Tag.objects.get(name=tag, tag_class__name=tag_class).paper_set.all(),
     })
     return render(request, 'codestudy/results.html', context=context)
@@ -64,6 +66,7 @@ def browse(request, tag_class=None, tag=None):
 def all_papers(request):
     context = get_base_context(request)
     context.update({
+        'page_title': 'All Papers',
         'papers': Paper.objects.all(),
         'all_papers': True
     })
@@ -300,6 +303,7 @@ def bookmarked(request):
     if user:
         context = get_base_context(request)
         context.update({
+            'page_title': 'Bookmarked',
             'papers': user.bookmarks.all()
         })
         return render(request, 'codestudy/results.html', context=context)
