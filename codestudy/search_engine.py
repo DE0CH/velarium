@@ -13,7 +13,7 @@ def search(terms, tags, user):
     :return: A list of paper, ranked.
 
     Weights:
-    properties: 2/3
+    properties: 3/4
         title + description: 1/3
             title: 2/3
             description: 1/3
@@ -23,7 +23,7 @@ def search(terms, tags, user):
         others: 1/3:
             star_count: 2/3
             field_search: 1/3
-    star: 1/3
+    star: 1/4
     """
     _RE_COMBINE_WHITESPACE = re.compile(r"\s+")
     terms = _RE_COMBINE_WHITESPACE.sub(" ", terms).lower().translate(str.maketrans('', '', string.punctuation))
@@ -43,7 +43,7 @@ def search(terms, tags, user):
         texts.append(paper.text)
         scores[paper] = 0
         if user and paper.is_bookmarked(user):
-            scores[paper] += 1/3
+            scores[paper] += 1/4
         no_tag = 0
         for tag in paper.tags.all():
             if tag not in tags:
@@ -60,22 +60,21 @@ def search(terms, tags, user):
     for description, score in fz:
         descriptions_scores[description] = score / 100
     for paper in scores:
-        scores[paper] += title_scores.get(paper.title, 0) * 2/3 * 1/3 * 2/3
-        scores[paper] += descriptions_scores.get(paper.description, 0) * 2/3 * 1/3 * 1/3
-        scores[paper] += text_scores.get(paper.text, 0) * 2/3 * 1/3 * 1/3
-        scores[paper] += paper.bookmarkers.count() / max_bookmarker * 2/3 * 1/3 * 2/3
+        scores[paper] += title_scores.get(paper.title, 0) * 3/4 * 1/3 * 2/3
+        scores[paper] += descriptions_scores.get(paper.description, 0) * 3/4 * 1/3 * 1/3
+        scores[paper] += text_scores.get(paper.text, 0) * 3/4 * 1/3 * 1/3
+        scores[paper] += paper.bookmarkers.count() / max_bookmarker * 3/4 * 1/3 * 2/3
         tag_has = 0
         paper_tags = set([tag for tag in paper.tags.all()])
         for tag in tags:
             if tag in paper_tags:
                 tag_has += 1
-        scores[paper] += tag_has / max(1, len(tags)) * 2/3 * 1/3 * 2/3
+        scores[paper] += tag_has / max(1, len(tags)) * 3/4 * 1/3 * 2/3
         tag_no = 0
         for paper_tag in paper_tags:
             if paper_tag not in tags:
                 tag_no += 1
-        scores[paper] += (max_no_tag-tag_no) / max_no_tag * 2/3 * 1/3 * 1/3
+        scores[paper] += (max_no_tag-tag_no) / max_no_tag * 3/4 * 1/3 * 1/3
 
-    print(scores)
     papers_ranked = [k for k, v in sorted(scores.items(), key=lambda item: item[1], reverse=True)]
     return papers_ranked

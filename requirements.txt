@@ -1,6 +1,9 @@
 # Ipython is just the best
 ipython
 
+# Safekeeping Credentials
+python-dotenv
+
 # Django
 django
 
@@ -12,7 +15,6 @@ gunicorn
 # S3 Storage
 django-storages
 boto3
-python-dotenv
 
 # PDF Processing
 pdf2image
