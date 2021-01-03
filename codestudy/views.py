@@ -43,7 +43,6 @@ def search(request):
     user = get_user(request)
     papers = s_search(terms, tags, user)
     context = get_base_context(request)
-    print(papers)
     context.update({
         'page_title': f'{terms}',
         'papers': papers,
