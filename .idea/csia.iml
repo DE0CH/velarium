@@ -20,7 +20,7 @@
       <excludeFolder url="file://$MODULE_DIR$/venv2" />
       <excludeFolder url="file://$MODULE_DIR$/venv3" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.9 (csia) (2)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (csia)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="react-dom" level="application" />
     <orderEntry type="library" name="react" level="application" />
