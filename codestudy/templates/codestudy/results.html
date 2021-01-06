@@ -35,7 +35,9 @@
                             {% endif %}
                         </div>
                         <div class="content ">
-                            {% if paper.pdf %}
+                            {% if paper.link %}
+                                <a class="header" href="{{ paper.link }}">{{ paper.title }}</a>
+                            {% elif paper.pdf %}
                                 <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
                             {% endif %}
                             <div class="description">

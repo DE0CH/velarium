@@ -3,6 +3,11 @@ from .models import TagClass, Tag
 
 def populate_new_database():
     tags_groups = {
+        'Approaches': [
+            'Biological',
+            'Cognitive',
+            'Sociocultural',
+        ],
         'Topics': [
             'Brain & Behavior',
             'Hormones and pheromones and their effects on behavior',
@@ -14,11 +19,7 @@ def populate_new_database():
             'Cultural origins of behavior and cognition',
             'Cultural influences on behavior',
         ],
-        'Approaches': [
-            'Biological',
-            'Cognitive',
-            'Sociocultural',
-        ],
+        'Content': []
     }
     for tag_class, tags in tags_groups.items():
         tc = TagClass(name=tag_class)
