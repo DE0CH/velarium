@@ -260,7 +260,7 @@ def handler404(request, exception):
             'description': 'This is no the web page you are looking for.',
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=404)
 
 
 # noinspection PyBroadException
@@ -273,9 +273,9 @@ def handler500(request):
                 'description': 'Something went wrong. Please try again later.'
             }
         })
-        return render(request, 'codestudy/base.html', context=context)
+        return render(request, 'codestudy/base.html', context=context, status=500)
     except:
-        return render(request, 'codestudy/500.html')
+        return render(request, 'codestudy/500.html', status=500)
 
 
 def handler403(request, exception):
@@ -286,7 +286,7 @@ def handler403(request, exception):
             'description': 'Looks like you don\'t have the permission to perform the action.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=403)
 
 
 def handler400(request, exception):
@@ -297,7 +297,7 @@ def handler400(request, exception):
             'description': 'Your client has issued a malformed or illegal request.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=400)
 
 
 def bookmark(request):
