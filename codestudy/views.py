@@ -21,7 +21,7 @@ import enum
 def get_base_context(request):
     return {
         'user': get_user(request),
-        'tag_classes': TagClass.objects.all
+        'tag_classes': TagClass.objects.all()
     }
 
 
