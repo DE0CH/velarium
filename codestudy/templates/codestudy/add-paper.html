@@ -33,8 +33,19 @@
                 {% endfor %}
 
                 <div class="field">
-                    {#                    <label for="pdf" hidden>PDF of the Paper</label>#}
-                    <input type="file" name="pdf" id="pdf" accept=".pdf">
+                    <div class="ui grid middle aligned">
+                        <div class="ui four wide column">
+                            <select class="ui fluid dropdown" name="upload-option" id="upload-option">
+                                <option value="">Upload Method</option>
+                                <option value="1">File</option>
+                                <option value="2">Link</option>
+                            </select>
+                        </div>
+                        <div class="ui twelve wide column">
+                            <input type="file" name="pdf" id="pdf" accept=".pdf">
+                            <input type="text" name="link" id="link" placeholder="Link" hidden>
+                        </div>
+                    </div>
 
                 </div>
                 <input type="text" name="pdf-key" id="pdf-key" hidden>
@@ -62,7 +73,8 @@
          *
          * source https://stackoverflow.com/questions/3820381/need-a-basename-function-in-javascript
          */
-        $('#progress-bar').progress({
+        const bar = $('#progress-bar');
+        bar.progress({
             value: 20,
             total: 200,
         });
@@ -70,28 +82,59 @@
         {% for tag_class in tag_classes %}
             $('#select-{{ tag_class.pk }}').dropdown();
         {% endfor %}
+        const uploadOptionsSelect = $('#upload-option');
+        const uploadOptionsEnum = Object.freeze({
+            'file': 1,
+            'link': 2,
+        });
+        let uploadOption = uploadOptionsEnum.file;
+        const pdf = $('#pdf');
+        const link = $('#link');
         const form = $('.ui.form');
-        form
-            .form({
-                    fields: {
-                        title: 'empty',
-                        description: 'empty',
-
-                        pdf: 'empty',
+        uploadOptionsSelect
+            .dropdown({
+                onChange: function (value, text, $selectedItem) {
+                    uploadOption = Number(value);
+                    console.log(uploadOption);
+                    if (uploadOption === uploadOptionsEnum.file) {
+                        pdf.removeAttr('hidden');
+                        link.attr('hidden', 'hidden');
+                        form.form({
+                            fields:
+                                {
+                                    title: 'empty',
+                                    description: 'empty',
+                                    pdf: 'empty',
+                                }
+                        });
+                    } else if (uploadOption === uploadOptionsEnum.link) {
+                        pdf.attr('hidden', 'hidden');
+                        link.removeAttr('hidden');
+                        form.form({
+                            fields:
+                                {
+                                    title: 'empty',
+                                    description: 'empty',
+                                    link: 'empty',
+                                }
+                        });
+                    } else {
+                        console.assert(false, "Upload Option does not match any known type");
                     }
                 }
-            )
+            })
         ;
+        uploadOptionsSelect.dropdown('set selected', uploadOptionsEnum.file);
+
 
         let uploaded = false;
 
         async function fs() {
             const submit = $('#submit');
-            if (uploaded || !form.form('is valid')) {
+            if (uploaded || !form.form('is valid') || uploadOption === uploadOptionsEnum.link) {
                 submit.click();
                 return;
             }
-            const pdf = $('#pdf');
             const s3Data = await getS3Data(pdf.val().replace(/C:\\fakepath\\/i, ''));
             uploadFile(pdf.prop('files')[0], s3Data, fileName => {
                     return () => {
@@ -123,7 +166,7 @@
                 postData.append(key, s3Data.fields[key]);
             }
             postData.append('file', file);
-            const bar = $('#progress-bar');
+
             bar.css('display', 'block');
             $('#fake-submit').css('display', 'none');
             xhr.upload.addEventListener('progress', function (e) {

@@ -15,12 +15,13 @@ import google.oauth2.id_token
 import google.auth.transport.requests
 from django.core.exceptions import PermissionDenied
 from .search_engine import search as s_search
+import enum
 
 
 def get_base_context(request):
     return {
         'user': get_user(request),
-        'tag_classes': TagClass.objects.all
+        'tag_classes': TagClass.objects.all()
     }
 
 
@@ -72,22 +73,37 @@ def all_papers(request):
     return render(request, 'codestudy/results.html', context=context)
 
 
+class UploadOption(enum.IntEnum):
+    FILE = 1
+    LINK = 2
+
+
 def add_paper(request):
     if get_user(request) and get_user(request).can_edit:
         if request.method == 'POST':
             title = request.POST.get('title', '')
             description = request.POST.get('description', '')
             paper = Paper(title=title, description=description)
-            pdf_key = request.POST.get('pdf-key', 'failed.pdf')
-            paper.pdf.name = pdf_key
-            paper.save()
-            update_tag(request, paper)
-
-            def process(paper):
-                pdf_to_png_and_save(paper)
-                paper.text = get_text(paper)
+            # Did not supply default value because it's better to crash and notify user and dev than silently fail.
+            upload_option = UploadOption(int(request.POST['upload-option']))
+            if upload_option == UploadOption.FILE:
+                pdf_key = request.POST.get('pdf-key', 'failed.pdf')
+                paper.pdf.name = pdf_key
                 paper.save()
-            Thread(target=process, args=(paper,)).start()
+
+                def process(paper):
+                    pdf_to_png_and_save(paper)
+                    paper.text = get_text(paper)
+                    paper.save()
+                Thread(target=process, args=(paper,)).start()
+
+            elif upload_option == UploadOption.LINK:
+                link = request.POST.get('link', '')
+                paper.link = link
+                paper.save()
+            else:
+                raise NotImplementedError('Upload Option does not match any known type')
+            update_tag(request, paper)
             return redirect('codestudy:index')
         else:
             context = get_base_context(request)
@@ -244,7 +260,7 @@ def handler404(request, exception):
             'description': 'This is no the web page you are looking for.',
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=404)
 
 
 # noinspection PyBroadException
@@ -257,9 +273,9 @@ def handler500(request):
                 'description': 'Something went wrong. Please try again later.'
             }
         })
-        return render(request, 'codestudy/base.html', context=context)
+        return render(request, 'codestudy/base.html', context=context, status=500)
     except:
-        return render(request, 'codestudy/500.html')
+        return render(request, 'codestudy/500.html', status=500)
 
 
 def handler403(request, exception):
@@ -270,7 +286,7 @@ def handler403(request, exception):
             'description': 'Looks like you don\'t have the permission to perform the action.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=403)
 
 
 def handler400(request, exception):
@@ -281,7 +297,7 @@ def handler400(request, exception):
             'description': 'Your client has issued a malformed or illegal request.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context)
+    return render(request, 'codestudy/base.html', context=context, status=400)
 
 
 def bookmark(request):

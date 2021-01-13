@@ -1,7 +1,3 @@
-import datetime
-import hashlib
-import hmac
-import urllib
 from django.conf import settings
 import boto3
 import botocore.client

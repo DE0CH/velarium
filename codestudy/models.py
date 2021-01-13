@@ -26,8 +26,9 @@ class Paper(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
-    png = models.FileField(default='failed.png')
+    png = models.FileField()
     pdf = models.FileField(default='failed.pdf')
+    link = models.TextField(null=True)
     tags = models.ManyToManyField(Tag)
 
     def is_bookmarked(self, user):

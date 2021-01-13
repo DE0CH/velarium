@@ -35,7 +35,9 @@
                             {% endif %}
                         </div>
                         <div class="content ">
-                            {% if paper.pdf %}
+                            {% if paper.link %}
+                                <a class="header" href="{{ paper.link }}">{{ paper.title }}</a>
+                            {% elif paper.pdf %}
                                 <a class="header" href="{{ paper.pdf.url }}">{{ paper.title }}</a>
                             {% endif %}
                             <div class="description">
@@ -46,7 +48,7 @@
                             <div class="content">
                                 <div class="description">
                                     {% for tag_class, tags in paper.nested_tag_names.items %}
-                                        <p>{{ tag_class }}: {{ tags|join:', ' }}</p>
+                                        <p><b>{{ tag_class }}</b>: {{ tags|join:', ' }}</p>
                                     {% endfor %}
                                 </div>
                             </div>

@@ -12,7 +12,7 @@
 </head>
 <body>
 <div class="ui menu">
-    <div class="header item">Code Study</div>
+    <div class="header item"><a href="{% url 'codestudy:index' %}" style="color: black">Code Study</a></div>
     <a class="item" id="menu-search" href="{% url 'codestudy:index' %}">Search</a>
     {% if user.can_edit %}
         <a class="item" id="menu-add-paper" href="{% url 'codestudy:add-paper' %}">Add Paper</a>
