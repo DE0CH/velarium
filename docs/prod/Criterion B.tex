@@ -1,0 +1,290 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage{listings}
+\newcommand{\passthrough}[1]{#1}
+\lstset{defaultdialect=[5.3]Lua}
+\lstset{defaultdialect=[x86masm]Assembler}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+%! suppress = FileNotFound
+\usepackage[a4paper, margin=1in]{geometry}
+%\linespread{1.5}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{newpxtext}
+\usepackage[euler-digits]{eulervm}
+
+
+\lstset{
+  basicstyle=\ttfamily,
+  columns=fullflexible,
+  frame=single,
+  breaklines=true,
+  postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{}
+
+\begin{document}
+
+\hypertarget{crit-b}{%
+\section{Crit B}\label{crit-b}}
+
+\hypertarget{use-cases}{%
+\section{Use Cases}\label{use-cases}}
+
+\hypertarget{iteration-1}{%
+\subsubsection{Iteration 1}\label{iteration-1}}
+
+\hypertarget{iteration-2}{%
+\subsubsection{Iteration 2}\label{iteration-2}}
+
+The client feedback that she would like to use the help of students to
+manage some paper for her but would not want them to change who can edit
+the papers. Therefore I have decided to refactor the user into three
+groups: standard, editor and admin. Standard users can only view the
+website and bookmark for themselves, editors can, in addition, add, edit
+and remove papers, and admin can, in addition, manage the permissions of
+users.
+
+\hypertarget{iteratioion-3}{%
+\subsubsection{Iteratioion 3}\label{iteratioion-3}}
+
+\includegraphics{img/landing page iteration 3.png}\\
+I have added a header to navigate to different functions of the web app,
+and designed a favicon for the website.
+
+\hypertarget{uml}{%
+\section{UML}\label{uml}}
+
+\hypertarget{mockup}{%
+\section{Mockup}\label{mockup}}
+
+\hypertarget{landing-page}{%
+\subsection{Landing Page}\label{landing-page}}
+
+This is the page that the user first sees when he/she open the
+application. It presents them options for their search. Layout is
+powered by Bootstrap.\\
+
+\hypertarget{iteration-1-1}{%
+\subsubsection{Iteration 1}\label{iteration-1-1}}
+
+\begin{figure}
+\centering
+\includegraphics{img/landing page iteration 1.png}
+\caption{Landing Page Iteration 1}
+\end{figure}
+
+\hypertarget{iteration-2-1}{%
+\subsubsection{Iteration 2}\label{iteration-2-1}}
+
+\begin{figure}
+\centering
+\includegraphics{img/landing page iteration 2.png}
+\caption{Landing Page Iteration 2}
+\end{figure}
+
+After the first iteration, the client game me feedback that she would
+want to be able to select multiple topic and approaches for each search
+box. After I have found no way to implement it with Bootstrap and I
+didn't want to write UI from scratch because it will inevitably look
+ugly, I found out that I could use a framework called Semantic UI.\\
+\#\#\# Iteration 3 \includegraphics{img/landing page iteration 3.png}\\
+In this iteration, I have added a navigation bar and a sign in with
+Google option.
+
+\hypertarget{results-page}{%
+\subsection{Results Page}\label{results-page}}
+
+\hypertarget{iteration-1-2}{%
+\subsubsection{Iteration 1}\label{iteration-1-2}}
+
+\includegraphics{img/results page iteration 1.png}\\
+This is the page where users get their search results in these card-like
+info boxes, from which they can see the results.
+
+\hypertarget{iteration-2-2}{%
+\subsubsection{Iteration 2}\label{iteration-2-2}}
+
+\includegraphics{img/results page iteration 2.png}\\
+This iteration is unchanged in principle compared with the first
+iteration, but since I changed the framework, the design looks
+different.
+
+\hypertarget{edit-tags-page}{%
+\subsection{Edit Tags Page}\label{edit-tags-page}}
+
+This page is used to add and delete tag and tag groups in the database.
+
+\hypertarget{iteration-1-3}{%
+\subsubsection{Iteration 1}\label{iteration-1-3}}
+
+\includegraphics{img/edit tags page iteration 1.png}\\
+
+\hypertarget{design-description}{%
+\section{Design Description}\label{design-description}}
+
+The program is entirely based on the web, part of the functionality will
+be accomplished through JS running on client's computer, but a core part
+of the program will be accomplished through back-end code in Python
+running on Heroku and storage stored in AWS S3. The UI will be rendered
+using client's web browser
+
+\hypertarget{class-dictionary}{%
+\section{Class Dictionary}\label{class-dictionary}}
+
+\hypertarget{properties}{%
+\subsubsection{Properties}\label{properties}}
+
+This class does not have any property.
+
+\hypertarget{class---paper}{%
+\subsection{Class - Paper}\label{class---paper}}
+
+This class represents a paper stored in the database
+
+\hypertarget{iteration-1-4}{%
+\subsubsection{Iteration 1}\label{iteration-1-4}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.06}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.17}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.77}}@{}}
+\toprule
+Property Name & Signature & Description \\ \addlinespace
+\midrule
+\endhead
+tags & tags: String{[}{]} & This returns the tags that the paper is
+associated with through manual assignment or automatic detection by the
+classifier. \\ \addlinespace
+topics & topics: String{[}{]} & Self-explanatory. Similar as
+above. \\ \addlinespace
+approaches & approaches: String{[}{]} & Self-explanatory. Similar as
+above. \\ \addlinespace
+methods & methods: String{[}{]} & Self-explanatory. Similar as
+above. \\ \addlinespace
+ethics & ethics: String{[}{]} & Self-explanatory. Similar as
+above. \\ \addlinespace
+pdf & pdf: File & This stores the pdf of the paper \\ \addlinespace
+png & png: File & This stores the screenshot of the first page to be
+displayed on the results page. \\ \addlinespace
+text & text: String{[}{]} & This is the content of the paper, extracted
+in plain text form to increase the search speed. \\ \addlinespace
+\bottomrule
+\end{longtable}
+
+\hypertarget{iteration-2-3}{%
+\subsubsection{Iteration 2}\label{iteration-2-3}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.08}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.12}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 4\tabcolsep) * \real{0.80}}@{}}
+\toprule
+Property Name & Signature & Description \\ \addlinespace
+\midrule
+\endhead
+title & title:String & This is the title of the pape that the user
+inputs, short and direct. \\ \addlinespace
+description & description:String & This is the description of the paper
+that the user inputs. It can be used as a abstract of the
+paper. \\ \addlinespace
+tags & tags: String{[}{]} & This returns the tags that the paper is
+associated with through manual assignment or automatic detection by the
+classifier. \\ \addlinespace
+pdf & pdf: File & This stores the pdf of the paper \\ \addlinespace
+png & png: File & This stores the screenshot of the first page to be
+displayed on the results page. \\ \addlinespace
+text & text: String{[}{]} & This is the content of the paper, extracted
+in plain text form to increase the search speed. \\ \addlinespace
+\bottomrule
+\end{longtable}
+
+I realised that the user wants more flexibility to add and remove tag
+that I cannot foresee during development, so I've generalized the class
+to allow for more flexibility.
+
+\hypertarget{methods}{%
+\subsubsection{Methods}\label{methods}}
+
+This class does not have any method.
+
+\hypertarget{class---search-engine}{%
+\subsection{Class - Search Engine}\label{class---search-engine}}
+
+This is an API for interacting with the search engine that returns the
+paper given some phrases. The implementations of the methods are not
+shown here. It might be implemented with the Google Search Engine or one
+that I write myself. A search engine is algorithm-based, therefore it's
+difficult to break it down into smaller methods.
+
+\end{document}
