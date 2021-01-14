@@ -19,6 +19,12 @@ import enum
 
 
 def get_base_context(request):
+    """
+
+    :param request: The Django Request object
+    :return: A structured dictionary with the context that needs to be
+    displayed on all pages, including the User object all all Tag Classes for navigation
+    """
     return {
         'user': get_user(request),
         'tag_classes': TagClass.objects.all()
@@ -26,6 +32,11 @@ def get_base_context(request):
 
 
 def index(request):
+    """
+    This is a Django handler function for the index page
+    :param request: The Django Request object
+    :return: The index page
+    """
     if request.method == 'POST':
         return redirect('codestudy:index')
     else:
@@ -34,6 +45,12 @@ def index(request):
 
 
 def search(request):
+    """
+    This is a Django handler function for the search page. Client would pass information into this function through
+    HTTP GET parameters
+    :param request: The Django Request object
+    :return: The results g
+    """
     tags = []
     for tag_class in TagClass.objects.all():
         tag_names = request.GET.getlist(tag_class.name)
@@ -52,6 +69,15 @@ def search(request):
 
 
 def browse(request, tag_class=None, tag=None):
+    """
+    This is a Django handler function for browsing all papers tagged with a specific tag
+    :param request: The Django Request object
+    :param tag_class: The name of the Tag Class
+    :param tag: The name of the Tag
+    :return: The results g
+    """
+
+    # Thought about using the pk of the tag, but used name instead as it is more human readable
     tag_class = unescape(tag_class)
     tag = unescape(tag)
 
@@ -64,6 +90,11 @@ def browse(request, tag_class=None, tag=None):
 
 
 def all_papers(request):
+    """
+    This is a Django handler function for browser all papers in the database
+    :param request: The Django Request object
+    :return: The results page
+    """
     context = get_base_context(request)
     context.update({
         'page_title': 'All Papers',
@@ -74,11 +105,20 @@ def all_papers(request):
 
 
 class UploadOption(enum.IntEnum):
+    """
+    This Enum specifies all upload options and their associated integer value that is used in the front end as well
+    """
     FILE = 1
     LINK = 2
 
 
 def add_paper(request):
+    """
+    This is a Django handler function for adding a paper into the database. This also handlers form submission through
+    HTTP POST.
+    :param request: The Django Request object
+    :return: Depending on the request method, it either returns the upload UI, or a redirect to the index page
+    """
     if get_user(request) and get_user(request).can_edit:
         if request.method == 'POST':
             title = request.POST.get('title', '')
@@ -113,22 +153,38 @@ def add_paper(request):
 
 
 def presign_s3(request):
-    file_name = request.GET['file_name']
-    file_name = os.path.join(str(uuid.uuid4()), file_name)
+    """
+    The files stored in the AWS S3 bucket are not public and requires authentication for security reasons as the
+    client might want to limit the access to only certain users. Only certain people should be able to edit the
+    database. As the user might leak the credentials through negligence or incompetence, the presigned url is only
+    limited to one file for a certain time frame. Function designed to be interacted programmatically.
+    :param request: The Django Request object
+    :return: A Json string of the credentials
+    """
+    if get_user(request).can_edit:
+        file_name = request.GET['file_name']
+        file_name = os.path.join(str(uuid.uuid4()), file_name)
 
-    presigned_post = s3_client.generate_presigned_post(
-        Bucket=settings.AWS_STORAGE_BUCKET_NAME,
-        Key=file_name,
-        Fields={"Content-Type": 'application/pdf'},
-        Conditions=[
-            {"Content-Type": 'application/pdf'}
-        ],
-        ExpiresIn=600
-    )
-    return JsonResponse(presigned_post)
+        presigned_post = s3_client.generate_presigned_post(
+            Bucket=settings.AWS_STORAGE_BUCKET_NAME,
+            Key=file_name,
+            Fields={"Content-Type": 'application/pdf'},
+            Conditions=[
+                {"Content-Type": 'application/pdf'}
+            ],
+            ExpiresIn=600
+        )
+        return JsonResponse(presigned_post)
+    else:
+        raise Http404()
 
 
 def edit_tags(request):
+    """
+    This is a Django handler function for editing the tag and tag class in the database
+    :param request: The Django Request object
+    :return: The edit tags page
+    """
     if get_user(request) and get_user(request).can_edit:
         if request.method == 'POST':
             change_log = json.loads(request.POST['changeLog-json'])
@@ -159,10 +215,16 @@ def edit_tags(request):
             context = get_base_context(request)
             return render(request, 'codestudy/edit-tags.html', context=context)
     else:
-        raise Http404
+        raise Http404()
 
 
 def edit_paper(request, pk):
+    """
+    This is a Django handler function for editing the tags and names for existing papers.
+    :param request: The Django Request object
+    :param pk: The primary key of the paper
+    :return: The edit paper page
+    """
     if get_user(request) and get_user(request).can_edit:
         if request.method == 'POST':
             paper = Paper.objects.get(pk=pk)
@@ -186,6 +248,13 @@ def edit_paper(request, pk):
 
 
 def update_tag(request, paper):
+    """
+    This is a helper function that extract the tags in an HTTP POST form and update the tags for the paper object
+    :param request: The Django Request object
+    :param paper: the paper that needs to be updated
+    :type paper: Paper
+    :return: None
+    """
     paper.tags.clear()
     for tag_class in TagClass.objects.all():
         tags = request.POST.getlist(str(tag_class.pk))
@@ -196,6 +265,12 @@ def update_tag(request, paper):
 
 
 def login(request):
+    """
+    This is a Django handler function that verifies the login details according to the token gained by signing in with
+    Google. Designed to be interacted programmatically
+    :param request: The Django Request object
+    :return: The login status in JSON format
+    """
     if request.method == 'POST':
         id_token = request.POST['id-token']
         try:
@@ -223,6 +298,11 @@ def login(request):
 
 
 def admin(request):
+    """
+    This is a Django handler function for the admin console
+    :param request: The Django Request object
+    :return: Rendered admin console page
+    """
     if get_user(request) and get_user(request).is_admin:
         if request.method == 'POST':
             for user in User.objects.all():
@@ -240,6 +320,11 @@ def admin(request):
 
 
 def logout(request):
+    """
+    This is a Django handler function that logs the current user out. Designed to be accessed programmatically.
+    :param request:
+    :return:
+    """
     try:
         del request.session['sub']
         success = True
@@ -248,11 +333,14 @@ def logout(request):
     return JsonResponse({'success': success})
 
 
-def permission_denied(request):
-    raise PermissionDenied
-
-
 def handler404(request, exception):
+    """
+    This is a Django handler function designed to override the default 404 page to provide a nicer formatting that is
+    consistent with the rest of the website
+    :param request: The Django Request object
+    :param exception: The Exception caught
+    :return: The 404 page
+    """
     context = get_base_context(request)
     context.update({
         'message': {
@@ -265,6 +353,14 @@ def handler404(request, exception):
 
 # noinspection PyBroadException
 def handler500(request):
+    """
+    This is a Django handler function for the 500 server error page. Because a server error can imply an serious issue
+    such as corrupted database, a nice render of the 500 page may be impossible. So the server first attemps to nicely
+    render the page with all the dynamic element, if it fails, it falls back to the safest render which does not contain
+    any dynamic element
+    :param request: The Django request object
+    :return: The 500 error page
+    """
     try:
         context = get_base_context(request)
         context.update({
@@ -279,6 +375,13 @@ def handler500(request):
 
 
 def handler403(request, exception):
+    """
+    This is a Django handler function for HTTP 403 permission error
+    :param request: The Django Request object
+    :param exception: The exception caught
+    :return: The 403 error page
+    """
+    logging.exception(exception)
     context = get_base_context(request)
     context.update({
         'message': {
@@ -290,6 +393,12 @@ def handler403(request, exception):
 
 
 def handler400(request, exception):
+    """
+    This is a Django handler function for 400 Bad Request error
+    :param request: The Django Request object
+    :param exception: The exception caught
+    :return: The 400 error page
+    """
     context = get_base_context(request)
     context.update({
         'message': {
@@ -300,7 +409,17 @@ def handler400(request, exception):
     return render(request, 'codestudy/base.html', context=context, status=400)
 
 
+def invoke_500(request):
+    raise Exception
+
+
 def bookmark(request):
+    """
+    This is a Django handler function for bookmarking a paper. This can be accessed either programmatically or directly
+    by the user
+    :param request: The Django Request object
+    :return: A redirection
+    """
     user = get_user(request)
     if user:
         paper = Paper.objects.get(pk=request.GET['pk'])
@@ -314,6 +433,11 @@ def bookmark(request):
 
 
 def bookmarked(request):
+    """
+    This is a Django handler for viewing all bookmarked papers
+    :param request: The Django Request object
+    :return: The results page
+    """
     user = get_user(request)
     if user:
         context = get_base_context(request)

@@ -2,6 +2,10 @@ from .models import TagClass, Tag
 
 
 def populate_new_database():
+    """
+    The client asked to have some specific tags, but because of the generality of the tag systems, the specific tags
+    have to added manually. The function adds them programmatically.
+    """
     tags_groups = {
         'Approaches': [
             'Biological',

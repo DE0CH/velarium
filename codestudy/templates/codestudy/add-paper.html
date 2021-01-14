@@ -66,13 +66,6 @@
 {% block js %}
     <!--suppress JSUnfilteredForInLoop -->
     <script>
-        /**
-         *
-         * @param str
-         * @returns {string}
-         *
-         * source https://stackoverflow.com/questions/3820381/need-a-basename-function-in-javascript
-         */
         const bar = $('#progress-bar');
         bar.progress({
             value: 20,
@@ -95,7 +88,6 @@
             .dropdown({
                 onChange: function (value, text, $selectedItem) {
                     uploadOption = Number(value);
-                    console.log(uploadOption);
                     if (uploadOption === uploadOptionsEnum.file) {
                         pdf.removeAttr('hidden');
                         link.attr('hidden', 'hidden');
@@ -129,36 +121,51 @@
 
         let uploaded = false;
 
+        /**
+         * A click handler function for submitting submitting the form.
+         * @type {*|jQuery.fn.init|jQuery|HTMLElement}
+         */
         async function fs() {
             const submit = $('#submit');
             if (uploaded || !form.form('is valid') || uploadOption === uploadOptionsEnum.link) {
                 submit.click();
                 return;
             }
+            $('#fake-submit').css('display', 'none');
+            bar.css('display', 'block');
             const s3Data = await getS3Data(pdf.val().replace(/C:\\fakepath\\/i, ''));
-            uploadFile(pdf.prop('files')[0], s3Data, fileName => {
-                    return () => {
-                        $('#pdf-key').val(fileName);
-                        $('#pdf').val(null);
-                        form.form({});
-                        uploaded = true;
-                        submit.click();
-                    }
-                }
-            );
+            let fileName = await uploadFile(pdf.prop('files')[0], s3Data);
+            $('#pdf-key').val(fileName);
+            pdf.val(null);
+            form.form({});
+            uploaded = true;
+            submit.click();
         }
 
+        /** This gets the presigned data from the server in order for the browser to upload, and returns a Promise
+         * of the data.
+         * @param {string} fileName The file name of the file to be uploaded. Used as part of the presigned signature.
+         * @return {Promise<Object>} The presigned S3 data.
+         */
         function getS3Data(fileName) {
-            return new Promise(((resolve, reject) => {
+            return new Promise((resolve, reject) => {
                 const url = "{% url 'codestudy:presign-s3' %}?" + $.param({file_name: fileName});
                 $.get(
                     url,
                     data => resolve(data)
                 )
-            }))
+            });
         }
 
-        function uploadFile(file, s3Data, successHandler) {
+        /**
+         * Upload the file given file to the S3 bucket.
+         * @param {File} file The file to be uploaded.
+         * @param {Object} s3Data The presigned S3 data.
+         * @return {Promise<string>} The object key in the S3 bucket.
+         * @type {XMLHttpRequest}
+         */
+        function uploadFile(file, s3Data) {
+
             let xhr = new XMLHttpRequest();
             xhr.open('POST', s3Data.url);
             let postData = new FormData();
@@ -166,9 +173,6 @@
                 postData.append(key, s3Data.fields[key]);
             }
             postData.append('file', file);
-
-            bar.css('display', 'block');
-            $('#fake-submit').css('display', 'none');
             xhr.upload.addEventListener('progress', function (e) {
                 // Percentage of upload completed
                 bar.progress({
@@ -176,13 +180,15 @@
                     total: e.total,
                 });
             });
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 204)) {
-                    successHandler(s3Data.fields.key)();
-                }
-            };
-            xhr.send(postData);
-            // s3Data.fields['file'] = file;
+            return new Promise(resolve => {
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 204)) {
+                        resolve(s3Data.fields.key);
+                    }
+                };
+                xhr.send(postData);
+            });
+
         }
     </script>
     <script>

@@ -16,6 +16,7 @@ urlpatterns = [
     path('admin/', views.admin, name='admin'),
     path('logout/', views.logout, name='logout'),
     path('bookmark/', views.bookmark, name='bookmark'),
-    path('bookmarked/', views.bookmarked, name='bookmarked')
+    path('bookmarked/', views.bookmarked, name='bookmarked'),
+    path('500/', views.invoke_500, name='invoke_500'),
 ]
 

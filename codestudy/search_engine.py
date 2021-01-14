@@ -6,12 +6,12 @@ import fuzzywuzzy.process
 
 def search(terms, tags, user):
     """
-
-    :param terms: the search terms.
-    :param tags: the search tags.
-    :param user: the user logged in.
-    :return: A list of paper, ranked.
-
+    The search engine that returns a ranked result based on the search terms, tags and user. The search term uses
+    Levenshtein distance to ranked the relevance to the search term. The tag is counted such that the number of tag in
+    the portion search query that matches that in the database is linearly related to the ranking score. The proportion
+    of the element that is in the search term but not in the database is linearly related to one minus the ranking
+    score. The user is used to place a higher relevance to the papers that the user have bookmarked. The weighing of
+    each factor is provided below.
     Weights:
     properties: 3/4
         title + description: 1/3
@@ -24,6 +24,11 @@ def search(terms, tags, user):
             star_count: 2/3
             field_search: 1/3
     star: 1/4
+    :param terms: the search terms.
+    :param tags: the search tags.
+    :param user: the user logged in.
+    :return: A list of paper, ranked.
+
     """
     _RE_COMBINE_WHITESPACE = re.compile(r"\s+")
     terms = _RE_COMBINE_WHITESPACE.sub(" ", terms).lower().translate(str.maketrans('', '', string.punctuation))

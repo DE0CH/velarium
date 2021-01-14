@@ -1,6 +1,7 @@
 from storages.backends.s3boto3 import S3Boto3Storage
 from utils import generate_presigned_url
 
+
 class MediaStorage(S3Boto3Storage):
     file_overwrite = False
 

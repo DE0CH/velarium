@@ -97,6 +97,11 @@ Edit Tags | Code Study
             deletedTags: new Set(),
         };
 
+        /**
+         * Add a tag in the tag class and render the corresponding UI element.
+         * @param {string} tagClassPk The primary key of the tag class.
+         * @param {string} tagClassName The name of the tag class.
+         */
         function addTag(tagClassPk, tagClassName) {
             const newTagInput = $('#new_tag_input_' + tagClassPk);
             const tagName = newTagInput.val();
@@ -114,9 +119,13 @@ Edit Tags | Code Study
                         <button class="ui icon button"><i class="trash icon"></i></button>
                     </td>
                 </tr>
-            `))
+            `));
         }
 
+        /**
+         * Mark a tag as deleted.
+         * @param tagPk The primary key of the tag.
+         */
         function deleteTag(tagPk) {
             const tagUi = $(`#tag_${tagPk}`);
             const tagDeleteButton = tagUi.find('td > button');
@@ -127,9 +136,12 @@ Edit Tags | Code Study
                 tagDeleteButton.addClass('negative');
                 changeLog.deletedTags.add(tagPk);
             }
-            tagDeleteButton.removeClass('active')
+            tagDeleteButton.removeClass('active');
         }
 
+        /**
+         * Add a tag class and add the UI onto the page.
+         */
         function addTagClass() {
             const newTagClassInput = $('#new_tag_class_input');
             const tagClassName = newTagClassInput.val();
@@ -171,6 +183,10 @@ Edit Tags | Code Study
             `));
         }
 
+        /**
+         * Delete the tag class and update the UI element.
+         * @param tagClassPk The primary key of the tag class.
+         */
         function deleteTagClass(tagClassPk) {
             const tagClassUi = $(`#tag_class_${tagClassPk}`);
             const tagClassDeleteButton = tagClassUi.find('div > button');
@@ -183,6 +199,9 @@ Edit Tags | Code Study
             }
         }
 
+        /**
+         * Upload the changes to server through JSON.
+         */
         function save() {
             changeLog.deletedTags = Array.from(changeLog.deletedTags);
             changeLog.deletedTagClasses = Array.from(changeLog.deletedTagClasses);
