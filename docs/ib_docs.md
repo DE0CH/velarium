@@ -63,15 +63,19 @@ I choose Semantic UI as the front end development framework because it speeds up
 ![User Case Iteration 2](img/use%20cases%20iteration%202.png)
 \
 
-The client feedback that she would like to use the help of students to manage some paper for her but would not want them to change who can edit the papers. Therefore I have decided to refactor the user into three groups: standard, editor and admin. Standard users can only view the website and bookmark for themselves, editors can, in addition, add, edit and remove papers, and admin can, in addition, manage the permissions of users. 
-
-### Iteration 3
-![Landing Page Iteration 3](img/landing%20page%20iteration%203.png)
-\
-
-I have added a header to navigate to different functions of the web app, and designed a favicon for the website.
+The client feedback that she would like to use the help of students to manage some paper for her but would not want them to change who can edit the papers. Therefore I have decided to refactor the user into three groups: standard, editor and admin. Standard users can only view the website and bookmark for themselves, editors can, in addition, add, edit and remove papers, and admin can, in addition, manage the permissions of users.
 
 ## UML
+
+### Iteration 1
+![UML Iteration 1](img/uml%20iteration%201.png)
+\
+
+### Iteration 2
+![UML Iteration 2](img/uml%20iteration%202.png)
+\
+
+This UML reflects changes in the data structure from one specific to the structure of psychology units and paper to that of a general tagging system. The user now also has their type, allowing them to have different permission to edit the content. 
 
 ## Mockup
 
@@ -87,12 +91,6 @@ This is the page that the user first sees when he/she open the application. It p
 \ 
 
 After the first iteration, the client game me feedback that she would want to be able to select multiple topic and approaches for each search box. After I have found no way to implement it with Bootstrap and I didn't want to write UI from scratch because it will inevitably look ugly, I found out that I could use a framework called Semantic UI.
-
-#### Iteration 3
-![Landing Page Iteration 3](img/landing%20page%20iteration%203.png)
-\ 
-
-In this iteration, I have added a navigation bar and a sign in with Google option. 
 
 ### Results Page
 
