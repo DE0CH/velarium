@@ -4,7 +4,6 @@ from django.contrib.staticfiles.storage import staticfiles_storage
 import re
 import logging
 import uuid
-import urllib.request
 import textract
 import string
 

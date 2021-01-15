@@ -123,7 +123,6 @@
 
         /**
          * A click handler function for submitting submitting the form.
-         * @type {*|jQuery.fn.init|jQuery|HTMLElement}
          */
         async function fs() {
             const submit = $('#submit');
@@ -162,25 +161,23 @@
          * @param {File} file The file to be uploaded.
          * @param {Object} s3Data The presigned S3 data.
          * @return {Promise<string>} The object key in the S3 bucket.
-         * @type {XMLHttpRequest}
          */
         function uploadFile(file, s3Data) {
-
-            let xhr = new XMLHttpRequest();
-            xhr.open('POST', s3Data.url);
-            let postData = new FormData();
-            for (const key in s3Data.fields) {
-                postData.append(key, s3Data.fields[key]);
-            }
-            postData.append('file', file);
-            xhr.upload.addEventListener('progress', function (e) {
-                // Percentage of upload completed
-                bar.progress({
-                    value: e.loaded,
-                    total: e.total,
-                });
-            });
             return new Promise(resolve => {
+                let xhr = new XMLHttpRequest();
+                xhr.open('POST', s3Data.url);
+                let postData = new FormData();
+                for (const key in s3Data.fields) {
+                    postData.append(key, s3Data.fields[key]);
+                }
+                postData.append('file', file);
+                xhr.upload.addEventListener('progress', function (e) {
+                    // Percentage of upload completed
+                    bar.progress({
+                        value: e.loaded,
+                        total: e.total,
+                    });
+                });
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 204)) {
                         resolve(s3Data.fields.key);
@@ -188,10 +185,6 @@
                 };
                 xhr.send(postData);
             });
-
         }
-    </script>
-    <script>
-
     </script>
 {% endblock %}
