@@ -11,80 +11,87 @@
     <style>
         html, body {
             height: 100%;
+            margin: 0;
         }
 
-        body {
-            display: flex;
-            flex-direction: column;
-        }
+        .wrapper {
+            min-height: 100%;
 
-        .content {
-            flex: 1 0 auto;
+            /* Equal to height of footer */
+            /* But also accounting for potential margin-bottom of last child */
+            margin-bottom: -62px;
         }
 
         .footer {
+            height: 48px;
             margin-top: 14px;
-            flex-shrink: 0;
+        }
+        .push {
+            height: 62px;
         }
     </style>
     <title>{% block title %}Code Study{% endblock %}</title>
 </head>
 <body>
-<div class="content">
-    <div class="ui menu">
-        <div class="header item"><a href="{% url 'codestudy:index' %}" style="color: black">Code Study</a></div>
-        <a class="item" id="menu-search" href="{% url 'codestudy:index' %}">Search</a>
-        {% if user.can_edit %}
-            <a class="item" id="menu-add-paper" href="{% url 'codestudy:add-paper' %}">Add Paper</a>
-            <a class="item" id="menu-edit-tags" href="{% url 'codestudy:edit-tags' %}">Edit Tags</a>
-        {% endif %}
-        {% for tag_class in tag_classes %}
-            <div id="menu-{{ tag_class.pk }}" class="ui dropdown item">
-                {{ tag_class.name }}
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    {% for tag in tag_class.tag_set.all %}
-                        <a class="item" href="{% url 'codestudy:browse' tag_class.name tag.name %}">{{ tag.name }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        {% endfor %}
-        <a class="item" id="menu-all-papers" href="{% url 'codestudy:all-papers' %}">All Papers</a>
-        <div class="right menu">
-            {% if user.pk %}
-                <div id="user-info" class="ui dropdown item">
-                    {{ user.name }}
+<div class="wrapper">
+    <div class="content">
+        <div class="ui menu">
+            <div class="header item"><a href="{% url 'codestudy:index' %}" style="color: black">Code Study</a></div>
+            <a class="item" id="menu-search" href="{% url 'codestudy:index' %}">Search</a>
+            {% if user.can_edit %}
+                <a class="item" id="menu-add-paper" href="{% url 'codestudy:add-paper' %}">Add Paper</a>
+                <a class="item" id="menu-edit-tags" href="{% url 'codestudy:edit-tags' %}">Edit Tags</a>
+            {% endif %}
+            {% for tag_class in tag_classes %}
+                <div id="menu-{{ tag_class.pk }}" class="ui dropdown item">
+                    {{ tag_class.name }}
                     <i class="dropdown icon"></i>
                     <div class="menu">
-                        <a class="item" href="{% url 'codestudy:bookmarked' %}"><i class="star icon"></i>Bookmarked
-                            Papers</a>
-                        {% if user.is_admin %}
-                            <a class="item" href="{% url 'codestudy:admin' %}"><i class="edit icon"></i>Admin
-                                Console</a>
-                        {% endif %}
-                        <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out </a>
+                        {% for tag in tag_class.tag_set.all %}
+                            <a class="item"
+                               href="{% url 'codestudy:browse' tag_class.name tag.name %}">{{ tag.name }}</a>
+                        {% endfor %}
                     </div>
                 </div>
-            {% else %}
-                <a id="loginBtn" class="item">
-                    Sign In with Google
-                </a>
-            {% endif %}
-        </div>
-    </div>
-
-    {% if message %}
-        <div class="ui text container">
-            <div class="ui message">
-                <div class="header">{{ message.title }}</div>
-                <p>
-                    {{ message.description }}
-                </p>
+            {% endfor %}
+            <a class="item" id="menu-all-papers" href="{% url 'codestudy:all-papers' %}">All Papers</a>
+            <div class="right menu">
+                {% if user.pk %}
+                    <div id="user-info" class="ui dropdown item">
+                        {{ user.name }}
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item" href="{% url 'codestudy:bookmarked' %}"><i class="star icon"></i>Bookmarked
+                                Papers</a>
+                            {% if user.is_admin %}
+                                <a class="item" href="{% url 'codestudy:admin' %}"><i class="edit icon"></i>Admin
+                                    Console</a>
+                            {% endif %}
+                            <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a id="loginBtn" class="item">
+                        Sign In with Google
+                    </a>
+                {% endif %}
             </div>
         </div>
-    {% endif %}
-    {% block content %}
-    {% endblock %}
+
+        {% if message %}
+            <div class="ui text container">
+                <div class="ui message">
+                    <div class="header">{{ message.title }}</div>
+                    <p>
+                        {{ message.description }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+        <div class="push"></div>
+    </div>
 </div>
 <footer class="footer">
     <div class="ui footer segment">
