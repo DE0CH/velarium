@@ -22,5 +22,5 @@ Please see the (much better and more elegant than PDF) `docs/ib/ib_docs.md` mark
 I am still working on a development documentation. Depending on if people actually want to use it and whether I can find other developers to maintain and improve the project. For now, you can read the `docs/ib/ib_docs.md` to get a rough idea of the project. 
 
 ## Licence
-All parts of the program EXCEPT the IB related documents under `docs/ib` are available under the MIT License.
+All parts of the program EXCEPT the IB related documents under `docs/ib` are available under the [MIT License](https://de0ch.mit-license.org/).
 
