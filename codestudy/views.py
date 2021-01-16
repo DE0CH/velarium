@@ -278,13 +278,12 @@ def login(request):
                                                                  google.auth.transport.requests.Request(),
                                                                  settings.G_CLIENT_ID)
 
-            user, created = User.objects.get_or_create(pk=id_info['sub'])
-            if created:
-                user.email = id_info['email']
-                user.name = id_info['name']
-                user.given_name = id_info['given_name']
-                user.family_name = id_info['family_name']
-                user.save()
+            user = User.objects.get_or_create(pk=id_info['sub'])[0]
+            user.email = id_info['email']
+            user.name = id_info['name']
+            user.given_name = id_info['given_name']
+            user.family_name = id_info['family_name']
+            user.save()
             request.session['sub'] = user.pk
             success = True
         except ValueError:

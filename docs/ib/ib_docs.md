@@ -1017,6 +1017,9 @@ def handler500(request):
 
 This function is hooked to the server error handler in Django. The first thing it tires is to have some dynamic element such as the header bar, if it still fails (which sometimes happens if the database is corrupt), it would return a static 500 page with all the links hardcoded. 
 
+# Criterion D
+[Criterion D Screencast](https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4)
+
 # Appendix
 
 ## Source code
@@ -3320,3 +3323,6 @@ A: Sign in with Google if that is not too difficult for you to implement. Becaus
 Q: Would you just want you or all teachers to be able to access the edit page?
 
 A: Just me is fine, but I also want to be able to add some students' email so they can add the papers in for me. They cannot add other students tho obviously. The changes also need to go through me before they can published on the database. I would also want the ability to add other teachers as admins, who are able to add and remove students' account.
+
+# Work Cited
+To ba added soon.
