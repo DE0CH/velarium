@@ -1,57 +1,26 @@
-# Python: Getting Started
+# Code Study
+A webapp designed to categorise PDF research paper based on tags for academic disciplines such as psychology that needs to frequently look up papers. Originally developed as for International Baccalaureate computer science internal assessment. Website live on [codestudy.herokuapp.com](https://codestudy.herokuapp.com)
 
-A barebones Django app, which can easily be deployed to Heroku.
+## Screenshots
 
-This application supports the [Getting Started with Python on Heroku](https://devcenter.heroku.com/articles/getting-started-with-python) article - check it out.
+### Home Page
+![Home Page](docs/img/home%20page.png)
 
-## Running Locally
+### Browse Papers
+![All Papers Page](docs/img/all%20papers%20page.png)
 
-Make sure you have Python 3.7 [installed locally](http://install.python-guide.org). To push to Heroku, you'll need to install the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli), as well as [Postgres](https://devcenter.heroku.com/articles/heroku-postgresql#local-setup).
+### Add Paper
+![Add Paper Page](docs/img/add%20paper%20page.png)
 
-```sh
-$ git clone https://github.com/heroku/python-getting-started.git
-$ cd python-getting-started
+### Edit Tags
+![Edit Tags Page](docs/img/edit%20tags%20page.png)
 
-$ python3 -m venv getting-started
-$ pip install -r requirements.txt
+## Dear IB Examiner, 
+Please see the (much better and more elegant than PDF) `docs/ib/ib_docs.md` markdown document for the write-up needed exclusively for the grades. 
 
-$ createdb python_getting_started
+## Development
+I am still working on a development documentation. Depending on if people actually want to use it and whether I can find other developers to maintain and improve the project. For now, you can read the `docs/ib/ib_docs.md` to get a rough idea of the project. 
 
-$ python manage.py migrate
-$ python manage.py collectstatic
+## Licence
+All parts of the program EXCEPT the IB related documents under `docs/ib` are available under the [MIT License](https://de0ch.mit-license.org/).
 
-$ heroku local
-```
-
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```sh
-$ heroku create
-$ git push heroku main
-
-$ heroku run python manage.py migrate
-$ heroku open
-```
-or
-
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
-
-## Documentation
-
-For more information about using Python on Heroku, see these Dev Center articles:
-
-- [Python on Heroku](https://devcenter.heroku.com/categories/python)
-
-#TODO Track
-<ol>
-<li>Figure out how to do the UI</li>
-</ol>
-
-#Known Issues
-<ul>
-<li>
-If the file is too large or the internet is too slow (i.e. it takes more than 30 seconds to upload). The server will crash.
-</li>
-</ul>

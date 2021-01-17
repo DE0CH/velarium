@@ -13,7 +13,6 @@ from django.conf import settings
 from utils import s3_client
 import google.oauth2.id_token
 import google.auth.transport.requests
-from django.core.exceptions import PermissionDenied
 from .search_engine import search as s_search
 import enum
 
