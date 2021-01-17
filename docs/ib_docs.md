@@ -1115,23 +1115,6 @@ fuzzywuzzy
 
 ```
 
-In `gen.py`:
-```
-import os
-
-for path, dirs, files in os.walk('.'):
-	for file in files:
-		if file == '.DS_Store':
-			continue
-		file_o = open(os.path.join(path, file))
-		print(f'In `{str(os.path.join(path, file))[2:]}`:')
-		print('```')
-		print(file_o.read())
-		print('```')
-		print()
- 
-```
-
 In `app.json`:
 ```
 {
