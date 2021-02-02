@@ -22,7 +22,7 @@ def pdf_to_png_and_save(paper):
         png_name = str(uuid.uuid4())
         image.save(png_name, 'PNG')
         with open(png_name, 'rb') as f:
-            paper.png.save(os.path.basename(paper.pdf.name).replace('.pdf', '') + '.png', f)
+            paper.png.save(paper.pdf.name.replace('.pdf', '') + '.png', f)
         os.remove(png_name)
         paper.pdf.close()
     except:
