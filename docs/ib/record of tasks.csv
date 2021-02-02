@@ -1,0 +1,19 @@
+Task number,Planned Action,Planned Outcome,Time Estimated,Target Date (yyyy/mm/dd),Criterion,Stage
+1,Interview with the client to understand her needs,Understand her needs and have a vision for the website,2 hours,2020/10/12,A,Planning
+2,Preliminary research to find out the tools to use,Understand the strength and weakness of of different frameworks and make a choice,5 hours,2020/10/20,A,Planning
+3,Create the UI mockup for the website,Completed the mockups,2 hours,2020/10/28,A,Design
+4,Create a rough prototype for the UI with hardcoded data,Client confirms whether it is something she wants,4 hours,2020/11/4,"B, C",Design
+5,Push the project to Heroku and host the website,The website is accessible through the internet,1 hour,2020/11/4,C,Implementation
+6,Restructure the website UI as per client's request to allow for multiple selection for tags,Client is happy with the new design,5 hours,2020/11/14,E,Testing
+7,Restructure the data structure of the website to allow for more flexibility,Client can create new tags and remove old ones,5 hours,2020/11/19,C,Developing
+8,Test that I can create new paper objects in the database with new user interface,The objects would be created without no error,3 hours,2020/11/20,C,Testing
+9,Setting the browser to upload directly to the s3 bucket instead of through the server,Website is much faster simply because the file server is located more locally,5 hours,2020/11/25,C,Developing
+10,Fix a bug in django-storage :(,The bug is fixed and the issue is still unaddressed by the library developers :(,2 hours,2020/12/4,C,Developing
+11,Create the add tags page,The page is finished and functional,5 hours,2020/12/14,C,Developing
+12,Integrate log in with google,User can log in with Google and the UI looks integrated,6 hours,2020/12/19,C,Developing
+13,Refactor the user types so that different users have different permissions,User with their respective permissions can accomplish different tasks,2 hours,2020/12/22,C,Developing
+14,Add an admin page for admins to manage user permissions,Admins can change the permissions of other users,3 hours,2020/12/26,C,Developing
+15,Write the search engine,The search engine works and returns relevant results,4 hours,2021/1/2,C,Developing
+16,Write the edit paper page,User can edit the paper even after it is uploaded,3 hours,2021/1/5,C,Developing
+17,Get the client feedback for the finished product,Client is happy,2 hours,2020/1/9,E,Testing
+18,Conduct user training by given the client a 20 minute walk through of the program,The user knows how to use the website,20 minutes,2020/1/20,E,Implementation
