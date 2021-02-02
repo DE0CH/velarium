@@ -15,6 +15,7 @@ import google.oauth2.id_token
 import google.auth.transport.requests
 from .search_engine import search as s_search
 import enum
+from django.db import DataError
 
 
 def get_base_context(request):
@@ -133,7 +134,19 @@ def add_paper(request):
                 def process(paper):
                     pdf_to_png_and_save(paper)
                     paper.text = get_text(paper)
-                    paper.save()
+                    try:
+                        paper.save()
+                    except DataError:
+                        context = get_base_context(request)
+                        context.update({
+                            'message': {
+                                'title': 'File Name Too Long',
+                                'description': 'The file name of the PDF you just uploaded is too long. Please try to '
+                                               'shorten it.'
+                            }
+                        })
+                        return render(request, 'codestudy/base.html', context)
+
                 Thread(target=process, args=(paper,)).start()
 
             elif upload_option == UploadOption.LINK:
