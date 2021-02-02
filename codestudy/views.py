@@ -128,8 +128,18 @@ def add_paper(request):
             if upload_option == UploadOption.FILE:
                 pdf_key = request.POST.get('pdf-key', 'failed.pdf')
                 paper.pdf.name = pdf_key
-                paper.save()
-
+                try:
+                    paper.save()
+                except DataError:
+                    context = get_base_context(request)
+                    context.update({
+                        'message': {
+                            'title': 'Filename Too Long',
+                            'description': 'The filename of the pdf you just uploaded is too long, please try to '
+                                           'shorten it. '
+                        }
+                    })
+                    return render(request, 'codestudy/')
                 def process(paper):
                     pdf_to_png_and_save(paper)
                     paper.text = get_text(paper)

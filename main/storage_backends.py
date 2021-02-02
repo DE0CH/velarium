@@ -4,7 +4,7 @@ from utils import generate_presigned_url
 
 
 class MediaStorage(S3Boto3Storage, ABC):
-    file_overwrite = False
+    # file_overwrite = False
 
     def url(self, name, parameters=None, expire=None, http_method=None):
         # Not sure what http_method will give, so default to https in all cases (there's not many reasons to use http).
