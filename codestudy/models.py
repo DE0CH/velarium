@@ -30,8 +30,8 @@ class Paper(models.Model):
     title = models.TextField()
     description = models.TextField()
     text = models.TextField()
-    png = models.FileField()
-    pdf = models.FileField(default='failed.pdf')
+    png = models.FileField(max_length=262)  # 36 for UUID, 1 for '/' and 225 for filename length
+    pdf = models.FileField(default='failed.pdf', max_length=262)
     link = models.TextField(null=True)
     tags = models.ManyToManyField(Tag)
 

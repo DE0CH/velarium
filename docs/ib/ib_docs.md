@@ -580,6 +580,7 @@ uploadOptionsSelect
 ...
 ```
 
+
 ## Part 2: Storage and Database
 
 The storage was implemented in AWS S3, and database uses PostgresSQL build in on Heroku. This illustrates my technical ability of using cloud database.
@@ -951,6 +952,23 @@ def get_text(paper):
 In the `pdf_to_png_and_save` function, I used fall backs and uses a `filed.png` file to be stored in the database, demonstrating my ability to **gracefully fall back to increase responsiveness**. I have also used lower level API such as `.seek(0,0)` to copy the file from Django file field onto the hard drive where `pdf2image` can access.
 
 In the `get_text` function, not only did I extract the text, but also did preprocessing to replace each continuous span of white spaces with a single space to aid with finding the Levenshtein distance later during the search.
+
+In `codestudy/views.py`:
+```python
+from .pdf_processor import pdf_to_png_and_save, get_text
+...
+def add_paper(request):
+...
+    def process(paper):
+        pdf_to_png_and_save(paper)
+        paper.text = get_text(paper)
+        paper.save()
+    Thread(target=process, args=(paper,)).start()
+...
+```
+
+In order to search through the text in the PDF, I had to extract it as plain text first, but if I were to extract it every time the search is requested, it would be inefficient because extracting text from a PDF file is an expensive operation. Therefore, the text is only extracted once when the paper is initially uploaded, utilizing **optimization by memorisation**. In addition, I have also used **concurrency** to improve responsiveness as the extraction can happen in the background after the user has gotten a response from the server.
+
 
 ## Part 5: The Search Engine
 

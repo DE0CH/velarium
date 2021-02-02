@@ -1,0 +1,7 @@
+It's nice to have Google to search for materials when needed to prepare for a test or to write a research paper. Sometimes the outside world has more than one needs. And sometimes a system of education can be so poorly designed that achievement is awarded to those who appease to the rules instead of those who produce meaningful work. My client, an IB psychology teacher, needs such this program to help her students by organising the psychology papers through a tag system. In this short video, my dearest examiner (on whom my career totally depends), I am going to take you through the usage of the program that makes it valuable, and run some tests to show you the success criteria that gives me grades.
+
+I have preloaded some papers into the database. I can see the title of the paper, a short description that the teacher chooses, and the associated tags. If I click into one of them, it will open a PDF, served from an S3 container. If I log in, I can bookmark my favourite papers, and I can browser them. The data is persistent. Clearing browser data and logging in has no effect.
+
+I will promote myself to an "editor" with server backdoor to show you more functions.
+
+Now additionally, I can edit the papers.
