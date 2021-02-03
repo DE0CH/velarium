@@ -1095,7 +1095,7 @@ def handler500(request):
 This function is hooked to the server error handler in Django. The first thing it tires is to have some dynamic element such as the header bar, if it still fails (which sometimes happens if the database is corrupt), it would return a static 500 page with all the links hardcoded. 
 
 # Criterion D
-[Criterion D Screencast](https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4)
+[Criterion D Screencast](https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4) <https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4>
 
 # Criterion E
 
@@ -1156,7 +1156,7 @@ Looking forward, there are a few improvements I formulated other than the client
 
 ## Source code
 
-Also available on [Github](https://github.com/de0ch/csia).
+Also available on [Github](https://github.com/de0ch/csia) <https://github.com/de0ch/csia>.
 
 ### File Tree
 ```
