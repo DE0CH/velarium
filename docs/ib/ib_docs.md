@@ -240,6 +240,9 @@ def search_ranked(terms, tags, user):
 ### Infrastructure / Database Design
 ![Infrastructure Iteration 1](img/infrastructure%20iteration%201.png)
 \
+
+The structure of the SQL database:
+
 ```
 codestudy::DATABASE=> \d
                            List of relations
@@ -652,10 +655,13 @@ In `main/settings.py`:
 ```python
 import dotenv
 
+# Load the environment variables if there is such a file on the disk
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
 ...
+
+# Load the environment variables into Python variables
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 ```
@@ -678,8 +684,7 @@ from utils import generate_presigned_url
 
 
 class MediaStorage(S3Boto3Storage, ABC):
-    file_overwrite = False
-
+    
     def url(self, name, parameters=None, expire=None, http_method=None):
         # Not sure what http_method will give, so default to https in all cases (there's not many reasons to use http).
         if expire is None:
@@ -694,6 +699,7 @@ from django.conf import settings
 import boto3
 import botocore.client
 
+# Make a persistent s3 client
 s3_client = boto3.client('s3',
                          aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
                          aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
@@ -706,7 +712,6 @@ def generate_presigned_url(object_key, expiration):
                                                      Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                                                              'Key': object_key},
                                                      ExpiresIn=expiration)
-    # presigned_url = fix_hk_s3_url(presigned_url)
     return presigned_url
 
 ```
@@ -725,16 +730,22 @@ In `codestudy/templates/codestudy/add-paper.html`:
     ...
     async function fs() {
         const submit = $('#submit');
+        // If the form is invalid, click the button so that the error can show. If the file is uploaded, click the 
+        // button so that the form can be submitted. If a link is supplied, click the submit button normally because 
+        // there is no extra step to handle file upload.
         if (uploaded || !form.form('is valid') || uploadOption === uploadOptionsEnum.link) {
             submit.click();
             return;
         }
+        // The button that the user clicks is a dummy button so that the JS code can intercept.
         $('#fake-submit').css('display', 'none');
         bar.css('display', 'block');
+        // Clean the data and get the upload credentials from the server.
         const s3Data = await getS3Data(pdf.val().replace(/C:\\fakepath\\/i, ''));
         let fileName = await uploadFile(pdf.prop('files')[0], s3Data);
         $('#pdf-key').val(fileName);
         pdf.val(null);
+        // Clear the form validation .
         form.form({});
         uploaded = true;
         submit.click();
@@ -763,7 +774,7 @@ In `codestudy/templates/codestudy/add-paper.html`:
      */
     function uploadFile(file, s3Data) {
         return new Promise(resolve => {
-            postData = ... // adds the post data as required by s3 specifications.
+            postData = ... // Add the post data as required by s3 specifications.
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4 && (xhr.status === 200 || xhr.status === 204)) {
                     resolve(s3Data.fields.key);
@@ -785,6 +796,7 @@ In `codestudy/templates/base.html`:
 ```html
 <script>
     function logout() {
+        // Use JS to visit the logout url.
         const xhr = new XMLHttpRequest();
         xhr.open('GET', '{% url 'codestudy:logout' %}');
         xhr.onload = () => {
@@ -794,6 +806,7 @@ In `codestudy/templates/base.html`:
     }
 
     function sendIdToken(idToken) {
+        // Send the id token to server for validation.
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "{% url 'codestudy:login' %}");
         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -814,6 +827,7 @@ In `codestudy/templates/base.html`:
             //scope: 'additional_scope'
         });
         const element = document.getElementById('loginBtn');
+        // Attach sign-in with Google to the sign-in button. 
         auth2.attachClickHandler(element, {},
             function (googleUser) {
                 const id_token = googleUser.getAuthResponse().id_token;
@@ -844,6 +858,7 @@ def login(request):
                                                                  settings.G_CLIENT_ID)
 
             user = User.objects.get_or_create(pk=id_info['sub'])[0]
+            # Save the user info provided by Google to the database.
             user.email = id_info['email']
             user.name = id_info['name']
             user.given_name = id_info['given_name']
@@ -867,6 +882,7 @@ def logout(request):
     :return:
     """
     try:
+        # Delete the sessoin cookie.
         del request.session['sub']
         success = True
     except KeyError:
@@ -913,6 +929,7 @@ def pdf_to_png_and_save(paper):
     """
     # noinspection PyBroadException
     try:
+        # Grab the screenshot of the first page
         paper.pdf.seek(0, 0)
         pdf_byte = paper.pdf.read()
         image = pdf2image.convert_from_bytes(pdf_byte, last_page=1, dpi=100)[0]
@@ -923,6 +940,7 @@ def pdf_to_png_and_save(paper):
         os.remove(png_name)
         paper.pdf.close()
     except:
+        # Processing has filed, fall back to default failed image.
         logging.exception('exception occurred converting pdf to png')
         with open(staticfiles_storage.path('failed/failed.png'), 'rb') as f:
             paper.png.save('failed.png', f)
