@@ -4,9 +4,9 @@
 My client is the psychology teacher in my school. For the subject Psychology, students often need to quote studies to support their claims in their exams or research paper. The categorization for the paper are very specific to IB as well, such as the nine designated topics, the three different approaches. There is also a very specific set of code studies that are considered valid for the examinations. In my initial meeting with her (See Interview Transcript in Appendix), she said that students can benefit greatly from a search engine that can filter the studies for them as they would not need to manually go through all the studies themselves to find the relevant one. The current search engine such as Google Scholar and Jstor are not suitable for the specific scenario as they contain a very large dataset, many of the paper are not suitable for the IB Psychology. She told me that she would want students to be able to search for specific topics and approaches. She would also want to be able to guide students through manually tagging documents.
 
 ## Rational
-I judged that using a web app would be most suitable for the Scenario. More specifically, using Django + Python + Semantic UI as the development frameworks, SQL, AWS S3 as the database and storage, and deployed on Heroku. An web app is chosen over an conventional app for several reasons. First, the database will be updated periodically by the teacher, so it would be convenient if all the students and teacher share the same database in order to eliminate the duplication of files. Second, a web app would load faster as it does not require download from the user. Third, it works cross platform as it would only require a web browser from the user to run well, which exist on almost all platforms such as Mac, Windows, Ubuntu Desktop and smartphones and tablets. It significantly widens the compatibility of the program without requiring the programmer to make a program for every platform. While cross platforms tools such as electron does exist, those are still unnecessary for the purpose of the this project as the project would not need to be run offline. In addition, the city of the client has well built internet infrastructure, so a slow or unavailable internet is not taken into account. Lastly, making this a web app significantly reduces the maintenance cost as an update can be pushed out instantly for everyone is there is a feature update. 
+I judged that using a web app would be most suitable for the Scenario. More specifically, using Django + Python + Semantic UI as the development frameworks, SQL, AWS S3 as the database and storage, and deployed on Heroku. A web app is chosen over a conventional app for several reasons. First, the database will be updated periodically by the teacher, so it would be convenient if all the students and teacher share the same database in order to eliminate the duplication of files. Second, a web app would load faster as it does not require download from the user. Third, it works cross platform as it would only require a web browser from the user to run well, which exist on almost all platforms such as Mac, Windows, Ubuntu Desktop and smartphones and tablets. It significantly widens the compatibility of the program without requiring the programmer to make a program for every platform. While cross platforms tools such as electron does exist, those are still unnecessary for the purpose of this project as the project would not need to be run offline. In addition, the city of the client has well-built internet infrastructure, so a slow or unavailable internet is not taken into account. Lastly, making this a web app significantly reduces the maintenance cost as an update can be pushed out instantly for everyone is there is a feature update. 
 
-The reason to choose Python and Django as the back end framework is predominately due to the connivance. Python is chosen over other programming language such as Java and C++ because of the faster development speed in trade of the slower runtime speed (Barot). The program does not need to have excellent performance as there would not be too much traffic. A web development framework would be very beneficial as that eliminates the need to write an web app from scratch. Plain HTML, CSS and Javascript (i.e. a static website) is not suitable for this project as the database will be dynamically built by the client. For the exact reason, Django is chosen over other Python web development frameworks such as Flask because it has a very well built interface for SQL databases that allow the user to interface with Python instead of SQL syntax (Singh). 
+The reason to choose Python and Django as the back end framework is predominately due to the connivance. Python is chosen over other programming language such as Java and C++ because of the faster development speed in trade of the slower runtime speed (Barot). The program does not need to have excellent performance as there would not be too much traffic. A web development framework would be very beneficial as that eliminates the need to write a web app from scratch. Plain HTML, CSS and Javascript (i.e. a static website) is not suitable for this project as the database will be dynamically built by the client. For the exact reason, Django is chosen over other Python web development frameworks such as Flask because it has a very well-built interface for SQL databases that allow the user to interface with Python instead of SQL syntax (Singh). 
 
 I choose Semantic UI as the front end development framework because it speeds up the development time as well. Semantic UI is particularly useful as it has a very large library of beautiful elements and modules for developers to incorporate into their design. 
 
@@ -1098,9 +1098,20 @@ This function is hooked to the server error handler in Django. The first thing i
 # Criterion D
 [Criterion D Screencast](https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4)
 
+# Criterion E
+
+## Demonstration of Success Criteria
+
+## User Feedback
+The user is very satisfied with the product. She said that it completely realises her vision (see Meeting #3 Transcript in Appendix). I was pleasantly surprised when she said she was actually going to use the website, and the app was not just an intellectual exercise. One improvement is to make an info page between the card and the PDF. The page can contain additional information such as the units the paper is related to, and similar paper (Meeting #3 Transcript). This will increase the functionality of the program and allow students to explore the subject more. 
+
+Looking forward, there are a few improvements I formulated other than the client suggestions. First, I can improve the efficiency of the web program. SQL is, be design, very efficient for general purpose database, but since the search engine requires searching through plan text, there might be a more efficient data structure to index the data. The complexity of the search grows linearly with the number of papers in the database, so if the database gets large, the search function might be unreasonably slow. In addition, I could also write a more sophisticated search algorithm. Right now the ranking algorithm is quite primitive with no research to back up the weight of different aspect I assigned it. In addition, by controlling lower levels of the server, I could employ more layers of caching to make access faster. In addition, I could also add a list layout in addition to the grid layout for the result page because some people prefer to see data in a list. 
+
 # Appendix
 
 ## Source code
+
+Also available on [Github](https://github.com/de0ch/csia).
 
 ### File Tree
 ```
@@ -3395,6 +3406,21 @@ A: Yes that is exactly what I wanted. Although there is one problem, I would wan
 Q: Did I get all the tags that you need?
 
 A: Not really. There are also ethics, experimental methods, and options. I'll send you a list of them soon. Then once you are done I can get the students to add the tags and organize the papers. It would also be good revision exercise as well.
+
+## Meeting #3 Transcript
+The transcript is reconstructed from shorthand notes.
+
+Q: What do you think of the product? Have you had a chance to give it a try?
+
+A: Yes. I think it's amazing. I can definitely use this for my class. 
+
+Q: Is this product the same as what you have visioned? Is there anything else that I need to add to make it better?
+
+A: It does everything I wanted it to do. I am really satisfied with the product. I don't think there's many other improvements that I need to make. 
+
+Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be unrealistic because I am not going to implement them. 
+
+A: (laughs) Sure. Let's see... Oh, you could have another info page when I click into a card that displays the unit and criteria the paper is associated to, and you can click on the topics that it associates with and go further into that. It will help students to find more resources.
 
 # Work Cited
 To ba added soon.
