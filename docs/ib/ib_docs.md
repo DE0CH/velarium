@@ -15,10 +15,9 @@ I choose Semantic UI as the front end development framework because it speeds up
 ### 1. Functionality
 1. Admins and Editors can upload paper and add tags.
 2. The search function would return relevant result.
-3. The admin can add students to add studies to the website's database.
-4. The user should be able to download the papers in the server.
-5. The user should be able to see the thumbnail and successfully download the PDF.
-6. The storage should be large enough to store all the PDFs in the database.
+3. Admins can add students to add studies to the website's database.
+4. The user can to see the thumbnail and successfully download the PDF.
+5. The storage should be large enough to store all the PDFs in the database.
 
 
 ### 2. Security
@@ -444,7 +443,7 @@ def get_base_context(request):
     }
 ```
 
-Besides the dynamic rendering on the server side, the client also uses dynamic rendering implemented using JS. One prime example is in `codestudy/templates/codestudy/edit-tags.html`:
+Beside the dynamic rendering on the server side, the client also uses dynamic rendering implemented using JS. One prime example is in `codestudy/templates/codestudy/edit-tags.html`:
 
 ```jsx
 ...
@@ -590,7 +589,7 @@ The storage was implemented in AWS S3, and database uses PostgresSQL build in on
 
 There are primarily three parts that enabled the cloud storage — provisioning and configuring an S3 bucket, integrating the storage into Django models, and optimisation by allowing the user to directly upload into the s3 bucket without having to go through the server. 
 
-The bucket is called `codestudy` — the name of the application and an IAM user is created in AWS with the following policy.
+The bucket is called `codestudy` — the name of the application, and an IAM user is created in AWS with the following policy.
 
 ```json
 {
@@ -616,7 +615,7 @@ The bucket is called `codestudy` — the name of the application and an IAM user
 }
 ```
 
-Because the browser needs to upload paper into the database, I have to configure it so that it allows for cross-origin request that is normally blocked for security reasons. It access from the `codestudy` url and `localhost` for development purposes.
+Because the browser needs to upload paper into the database, I have to configure it so that it allows for cross-origin request that is normally blocked for security reasons ("Cross-origin resource"). It access from the `codestudy` url and `localhost` for development purposes.
 
 ```json
 [
@@ -649,7 +648,7 @@ Because the browser needs to upload paper into the database, I have to configure
 ]
 ```
 
-The S3 database requires API keys and secrete, but because I intend to have the application open source, I cannot direly put the keys in plain text in the source code. Therefore, I have put them in the environmental variable with a file `.env` which is untracked by git and separately uploaded onto heroku. 
+The S3 database requires API keys and secrete, but because I intend to have the application open source, I cannot direly put the keys in plain text in the source code (D33tah). Therefore, I have put them in the environmental variable with a file `.env` which is untracked by git and separately uploaded onto heroku. 
 
 In `main/settings.py`:
 ```python
@@ -718,7 +717,7 @@ def generate_presigned_url(object_key, expiration):
 
 In the previous code example, I have overridden the default general url function to use a lower level function provided by `boto3` and wrapped in `utils.py`.
 
-JS in browser allows hte user to upload to s3 directly, greatly imporving the speed of the website.
+JS in the browser allows hte user to upload to s3 directly, greatly improving the speed of the website.
 
 In `codestudy/templates/codestudy/add-paper.html`:
 ```html
@@ -790,7 +789,7 @@ In `codestudy/templates/codestudy/add-paper.html`:
 In particular in `getS3Data(fileName)`, I have demonstrated my ability to code using concurrency in JS through Promise. I have also demonstrated to dynamically communicate between the front-end and the back-end.
 
 ## Part 3: User Login, Permissions & Security
-Logging in is achieved through Sign in with Google. I have decided not to use username and password because that leads to higher security vulnerability as now I have to handle hashing, salting and storing the user data safely myself. Sign in with Google is easier for use as well. 
+Logging in is achieved through Sign in with Google. I have decided not to use username and password because that leads to higher security vulnerability as now I have to handle hashing, salting and storing the user data safely myself (Scott). Sign in with Google is easier for use as well. 
 
 In `codestudy/templates/base.html`:
 ```html
@@ -967,7 +966,7 @@ def get_text(paper):
     return _RE_COMBINE_WHITESPACE.sub(" ", text).lower().translate(str.maketrans('', '', string.punctuation))
 ```
 
-In the `pdf_to_png_and_save` function, I used fall backs and uses a `filed.png` file to be stored in the database, demonstrating my ability to **gracefully fall back to increase responsiveness**. I have also used lower level API such as `.seek(0,0)` to copy the file from Django file field onto the hard drive where `pdf2image` can access.
+In the `pdf_to_png_and_save` function, I used fall backs and uses a `filed.png` file to be stored in the database, demonstrating my ability to gracefully fall back to increase responsiveness. I have also used lower level API such as `.seek(0,0)` to copy the file from Django file field onto the hard drive where `pdf2image` can access.
 
 In the `get_text` function, not only did I extract the text, but also did preprocessing to replace each continuous span of white spaces with a single space to aid with finding the Levenshtein distance later during the search.
 
@@ -985,7 +984,7 @@ def add_paper(request):
 ...
 ```
 
-In order to search through the text in the PDF, I had to extract it as plain text first, but if I were to extract it every time the search is requested, it would be inefficient because extracting text from a PDF file is an expensive operation. Therefore, the text is only extracted once when the paper is initially uploaded, utilizing **optimization by memorisation**. In addition, I have also used **concurrency** to improve responsiveness as the extraction can happen in the background after the user has gotten a response from the server.
+In order to search through the text in the PDF, I had to extract it as plain text first, but if I were to extract it every time the search is requested, it would be inefficient because extracting text from a PDF file is an expensive operation. Therefore, the text is only extracted once when the paper is initially uploaded, utilizing ptimization by memorisation. In addition, I have also used concurrency to improve responsiveness as the extraction can happen in the background after the user has gotten a response from the server.
 
 
 ## Part 5: The Search Engine
@@ -1044,7 +1043,7 @@ In `codestudy/templates/add-paper.html`:
 
 This JS code in combination with that from Semantic UI verifies the input are not empty. Note that it is not necessary for me to sanitizes the input because Django automatically and by default escape strings so that code injection is impossible to my best knowledge. 
 
-Because all the papers are rendered in one page using the Django template language, if a single rendering raises an exception, the entire page will fail to render. So I have added a few precaution to prevent that. 
+Because all the papers are rendered in one page using the Django template language, if a single rendering raises an exception, the entire page will fail to render. So I have added a few precautions to prevent that. 
 
 In `codestudy/models.py`:
 ```python
@@ -1073,7 +1072,7 @@ in `codestudy/templates/codestudy/results.html`:
 
 In the above code, the template language checks if the files exists before trying to get the url from the model so that it would not show an exception. I have tested this by raising exceptions in various places to see if it crashes more than it should. 
 
-This demonstrate my technical ability to **handler errors gracefully**. 
+This demonstrate my technical ability to handler errors gracefully. 
 
 In addition, the 500 error also implement multiple level of fall backs. 
 
@@ -1101,6 +1100,52 @@ This function is hooked to the server error handler in Django. The first thing i
 # Criterion E
 
 ## Demonstration of Success Criteria
+
+### 1.1. Admins and Editors can upload paper and add tags
+![Add Paper](img/add%20paper.png)
+\
+
+![Edit Tags](img/edit%20tags.png)
+\
+
+### 1.2. The search function would return relevant result
+![Search](img/search.png)
+\
+
+![Search Results](img/search%20results.png)
+\
+
+### 1.3. The admin can add students to add studies to the website's database
+![Admin](img/admin.png)
+\
+
+### 1.4. The user can to see the thumbnail and successfully download the PDF
+![All Papers](img/all%20papers.png)
+\
+
+### 1.5 The storage should be large enough to store all the PDFs in the database
+
+There is no theoretical limit to the size of the S3 container as AWS charges by the amount of storage used.
+
+### 2.1 Only editors can modify the database
+![Add Paper 404](img/add%20paper%20404.png)
+\
+
+### 2.2. Only the admins can modify manage user permissions
+![Admin 404](img/admin%20404.png)
+\
+
+### 2.3. The site in encrypted in transit
+![SSL](img/ssl.png)
+\
+
+### 2.4. Plain text password is never stored in the database
+
+Not Applicable because I used Sign-in with Google with which the authentication is handled by Google. 
+
+### 3.1. The UI would still work when it's zoomed in or viewed on a smaller device like a mobile screen.
+![Mobile](img/mobile.png)
+\
 
 ## User Feedback
 The user is very satisfied with the product. She said that it completely realises her vision (see Meeting #3 Transcript in Appendix). I was pleasantly surprised when she said she was actually going to use the website, and the app was not just an intellectual exercise. One improvement is to make an info page between the card and the PDF. The page can contain additional information such as the units the paper is related to, and similar paper (Meeting #3 Transcript). This will increase the functionality of the program and allow students to explore the subject more. 
@@ -3421,6 +3466,3 @@ A: It does everything I wanted it to do. I am really satisfied with the product.
 Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be unrealistic because I am not going to implement them. 
 
 A: (laughs) Sure. Let's see... Oh, you could have another info page when I click into a card that displays the unit and criteria the paper is associated to, and you can click on the topics that it associates with and go further into that. It will help students to find more resources.
-
-# Work Cited
-To ba added soon.

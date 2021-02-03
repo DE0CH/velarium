@@ -14,5 +14,4 @@ def generate_presigned_url(object_key, expiration):
                                                      Params={'Bucket': settings.AWS_STORAGE_BUCKET_NAME,
                                                              'Key': object_key},
                                                      ExpiresIn=expiration)
-    # presigned_url = fix_hk_s3_url(presigned_url)
     return presigned_url
