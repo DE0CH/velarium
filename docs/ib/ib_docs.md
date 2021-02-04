@@ -1039,6 +1039,7 @@ In `codestudy/templates/add-paper.html`:
         })
     ;
     uploadOptionsSelect.dropdown('set selected', uploadOptionsEnum.file);
+</script>
 ```
 
 This JS code in combination with that from Semantic UI verifies the input are not empty. Note that it is not necessary for me to sanitizes the input because Django automatically and by default escape strings so that code injection is impossible to my best knowledge. 
@@ -1100,6 +1101,8 @@ This function is hooked to the server error handler in Django. The first thing i
 # Criterion E
 
 ## Demonstration of Success Criteria
+
+My client has said that I've met all the success criteria (See Appendix Meeting #3 Transcript). Here are some screenshots for demonstration. 
 
 ### 1.1. Admins and Editors can upload paper and add tags
 ![Add Paper](img/add%20paper.png)
@@ -3462,6 +3465,10 @@ A: Yes. I think it's amazing. I can definitely use this for my class.
 Q: Is this product the same as what you have visioned? Is there anything else that I need to add to make it better?
 
 A: It does everything I wanted it to do. I am really satisfied with the product. I don't think there's many other improvements that I need to make. 
+
+Q: Here are the success criteria I have set for the product (hands her a printed list). Do you think the product has met all of them?
+
+A: (looks at the list) I think so. It's quite a completed product.
 
 Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be unrealistic because I am not going to implement them. 
 
