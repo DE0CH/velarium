@@ -179,7 +179,7 @@ This class represents a registered user
 ##### Iteration 1
 |Property Name|Signature     |Description                                                                     |
 |-------------|--------------|--------------------------------------------------------------------------------|
-|name         |name: String  |The name of the user.                                                          re |
+|name         |name: String  |The name of the user.                                                           |
 |email        |name: Email   |The email of the user.                                                          |
 |type         |type: UserType|The type of the user, i.e. whether it is a standard user, an editor or an admin.|
 
