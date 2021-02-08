@@ -194,7 +194,7 @@ This class represents a registered user
 This iteration reflects the added functionality of allowing users to bookmark paper and having users who have different permissions. 
 
 #### Methods
-This class does not have have any method.
+This class does not have any method.
 
 ## Algorithm / DFD
 The following code is written in python-like pseudocode.

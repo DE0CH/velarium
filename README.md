@@ -21,6 +21,10 @@ Please see the (much better and more elegant than PDF) `docs/ib/ib_docs.md` mark
 ## Development
 I am still working on a development documentation. Depending on if people actually want to use it and whether I can find other developers to maintain and improve the project. For now, you can read the `docs/ib/ib_docs.md` to get a rough idea of the project. 
 
+Let me know that you are interested in developing by staring this project. 
+
+But for now, all the dependencies are listed in `requirements.txt`. You will also need apt packages listed in `AptFile`. The runtime is stated in `runtime.txt`.
+
 ## Licence
 All parts of the program EXCEPT the IB related documents under `docs/ib` are available under the [MIT License](https://de0ch.mit-license.org/).
 
