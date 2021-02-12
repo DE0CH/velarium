@@ -3470,6 +3470,6 @@ Q: Here are the success criteria I have set for the product (hands her a printed
 
 A: (looks at the list) I think so. It's quite a completed product.
 
-Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be unrealistic because I am not going to implement them. 
+Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be anything because I am not going to implement them. 
 
 A: (laughs) Sure. Let's see... Oh, you could have another info page when I click into a card that displays the unit and criteria the paper is associated to, and you can click on the topics that it associates with and go further into that. It will help students to find more resources.
