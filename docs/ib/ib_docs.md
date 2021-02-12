@@ -179,7 +179,7 @@ This class represents a registered user
 ##### Iteration 1
 |Property Name|Signature     |Description                                                                     |
 |-------------|--------------|--------------------------------------------------------------------------------|
-|name         |name: String  |The name of the user.                                                          re |
+|name         |name: String  |The name of the user.                                                           |
 |email        |name: Email   |The email of the user.                                                          |
 |type         |type: UserType|The type of the user, i.e. whether it is a standard user, an editor or an admin.|
 
@@ -194,7 +194,7 @@ This class represents a registered user
 This iteration reflects the added functionality of allowing users to bookmark paper and having users who have different permissions. 
 
 #### Methods
-This class does not have have any method.
+This class does not have any method.
 
 ## Algorithm / DFD
 The following code is written in python-like pseudocode.
@@ -1039,6 +1039,7 @@ In `codestudy/templates/add-paper.html`:
         })
     ;
     uploadOptionsSelect.dropdown('set selected', uploadOptionsEnum.file);
+</script>
 ```
 
 This JS code in combination with that from Semantic UI verifies the input are not empty. Note that it is not necessary for me to sanitizes the input because Django automatically and by default escape strings so that code injection is impossible to my best knowledge. 
@@ -1101,6 +1102,11 @@ This function is hooked to the server error handler in Django. The first thing i
 
 ## Demonstration of Success Criteria
 
+<<<<<<< HEAD
+=======
+My client has said that I've met all the success criteria (See Appendix Meeting #3 Transcript). Here are some screenshots for demonstration. 
+
+>>>>>>> 1dc076b2d39b58aebc3af4c1926480f91e53691e
 ### 1.1. Admins and Editors can upload paper and add tags
 ![Add Paper](img/add%20paper.png)
 \
@@ -3463,6 +3469,13 @@ Q: Is this product the same as what you have visioned? Is there anything else th
 
 A: It does everything I wanted it to do. I am really satisfied with the product. I don't think there's many other improvements that I need to make. 
 
+<<<<<<< HEAD
+=======
+Q: Here are the success criteria I have set for the product (hands her a printed list). Do you think the product has met all of them?
+
+A: (looks at the list) I think so. It's quite a completed product.
+
+>>>>>>> 1dc076b2d39b58aebc3af4c1926480f91e53691e
 Q: That's good to hear. But I need some "improvements" for IB grades, could you think of some. It can be unrealistic because I am not going to implement them. 
 
 A: (laughs) Sure. Let's see... Oh, you could have another info page when I click into a card that displays the unit and criteria the paper is associated to, and you can click on the topics that it associates with and go further into that. It will help students to find more resources.
