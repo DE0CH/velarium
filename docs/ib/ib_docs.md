@@ -1,12 +1,12 @@
 # Criterion A
 ## Description of Scenario
 
-My client is the psychology teacher in my school. For the subject Psychology, students often need to quote studies to support their claims in their exams or research paper. The categorization for the paper are very specific to IB as well, such as the nine designated topics, the three different approaches. There is also a very specific set of code studies that are considered valid for the examinations. In my initial meeting with her (See Interview Transcript in Appendix), she said that students can benefit greatly from a search engine that can filter the studies for them as they would not need to manually go through all the studies themselves to find the relevant one. The current search engine such as Google Scholar and Jstor are not suitable for the specific scenario as they contain a very large dataset, many of the paper are not suitable for the IB Psychology. She told me that she would want students to be able to search for specific topics and approaches. She would also want to be able to guide students through manually tagging documents.
+My client is a psychology teacher in my school. For the subject Psychology, students often need to quote studies to support their claims in their exams or research paper. The categorization for the papers is very specific to IB as well, such as the nine designated topics, the three different approaches. There is also a very specific set of studies that are considered valid for the examination. In my initial meeting with her (See Interview Transcript #1 in Appendix), she said that students can benefit greatly from a search engine that can filter the studies for them as they would not need to manually go through all the studies themselves on the internet to find the relevant ones. The current search engine such as Google Scholar and Jstor are not suitable for the specific scenario as they contain a very large dataset, many of the papers are not suitable for IB Psychology. She told me that she would want students to be able to search for specific topics and approaches. She would also want to be able to guide students through manually tagging papers.
 
 ## Rational
-I judged that using a web app would be most suitable for the Scenario. More specifically, using Django + Python + Semantic UI as the development frameworks, SQL, AWS S3 as the database and storage, and deployed on Heroku. A web app is chosen over a conventional app for several reasons. First, the database will be updated periodically by the teacher, so it would be convenient if all the students and teacher share the same database in order to eliminate the duplication of files. Second, a web app would load faster as it does not require download from the user. Third, it works cross platform as it would only require a web browser from the user to run well, which exist on almost all platforms such as Mac, Windows, Ubuntu Desktop and smartphones and tablets. It significantly widens the compatibility of the program without requiring the programmer to make a program for every platform. While cross platforms tools such as electron does exist, those are still unnecessary for the purpose of this project as the project would not need to be run offline. In addition, the city of the client has well-built internet infrastructure, so a slow or unavailable internet is not taken into account. Lastly, making this a web app significantly reduces the maintenance cost as an update can be pushed out instantly for everyone is there is a feature update. 
+I judge that using a web app would be most suitable for the Scenario. More specifically, using Django + Python + Semantic UI as the development frameworks, SQL, AWS S3 as the database and storage, and deploying on Heroku. A web app is chosen over a conventional app for several reasons. First, the database will be updated periodically by the teacher, so it would be convenient if all the students and teacher share the same database in order to eliminate the duplication of files. Second, a web app would load faster as it does not require download from the user. Third, it works cross platform as it would only require a web browser, which exist on almost all platforms such as Mac, Windows, Ubuntu Desktop,  smartphones and tablets. It significantly widens the compatibility of the program without requiring the programmer to make a program for every platform. While cross platforms tools such as electron does exist, those are unnecessary as the project would not need to be run offline. In addition, the city of the client has a well-built internet infrastructure, so a slow or unavailable internet is not a concern. Lastly, making this a web app significantly reduces the maintenance cost as an update can be pushed out instantly for everyone when there is a feature update. 
 
-The reason to choose Python and Django as the back end framework is predominately due to the connivance. Python is chosen over other programming language such as Java and C++ because of the faster development speed in trade of the slower runtime speed (Barot). The program does not need to have excellent performance as there would not be too much traffic. A web development framework would be very beneficial as that eliminates the need to write a web app from scratch. Plain HTML, CSS and Javascript (i.e. a static website) is not suitable for this project as the database will be dynamically built by the client. For the exact reason, Django is chosen over other Python web development frameworks such as Flask because it has a very well-built interface for SQL databases that allow the user to interface with Python instead of SQL syntax (Singh). 
+The reason to choose Python and Django as the back end framework is predominately due to the connivance. Python is chosen over other programming language such as Java and C++ because of the faster development speed in trade of the slower runtime speed (Barot). The program does not need to have excellent performance as there would not be too much traffic. A web development framework would be very beneficial as that eliminates the need to write a web app from scratch. Plain HTML, CSS and Javascript (i.e. a static website) is not suitable for this project as the database will be dynamically updated by the client. For the exact reason, Django is chosen over other Python web development frameworks such as Flask because it has a very well-built interface for SQL databases that allow the user to interface with Python instead of SQL syntax (Singh). 
 
 I choose Semantic UI as the front end development framework because it speeds up the development time as well. Semantic UI is particularly useful as it has a very large library of beautiful elements and modules for developers to incorporate into their design. 
 
@@ -17,17 +17,17 @@ I choose Semantic UI as the front end development framework because it speeds up
 2. The search function would return relevant result.
 3. Admins can add students to add studies to the website's database.
 4. The user can to see the thumbnail and successfully download the PDF.
-5. The storage should be large enough to store all the PDFs in the database.
+5. The storage is large enough to store all the PDFs in the database.
 
 
 ### 2. Security
-1. Only editors can modify the database.
+1. Only the editors can modify the database.
 2. Only the admins can modify manage user permissions.
 3. The site in encrypted in transit.
 4. Plain text password is never stored in the database. 
 
 ### 3. Accessibility
-1. The UI would still work when it's zoomed in or viewed on a smaller device like a mobile screen.
+1. The UI still works when it's zoomed in or viewed on a smaller device like a mobile screen.
 
 # Criterion B
 
@@ -42,7 +42,7 @@ I choose Semantic UI as the front end development framework because it speeds up
 |6          |Restructure the website UI as per client's request to allow for multiple selection for tags|Client is happy with the new design                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |5 hours       |2020/11/14              |E        |Testing       |
 |7          |Restructure the data structure of the website to allow for more flexibility|Client can create new tags and remove old ones                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |5 hours       |2020/11/19              |C        |Developing    |
 |8          |Test that I can create new paper objects in the database with new user interface|The objects would be created without no error                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |3 hours       |2020/11/20              |C        |Testing       |
-|9          |Setting the browser to upload directly to the s3 bucket instead of through the server|Website is much faster simply because the file server is located more locally                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |5 hours       |2020/11/25              |C        |Developing    |
+|9          |Setting the browser to upload directly to the s3 bucket instead of through the server|Website is much faster simply because the file server is located closer to the client and has a higher bandwidth                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |5 hours       |2020/11/25              |C        |Developing    |
 |10         |Fix a bug in django-storage :(                                 |The bug is fixed and the issue is still unaddressed by the library developers :(                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |2 hours       |2020/12/4               |C        |Developing    |
 |11         |Create the add tags page                                       |The page is finished and functional                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |5 hours       |2020/12/14              |C        |Developing    |
 |12         |Integrate log in with google                                   |User can log in with Google and the UI looks integrated                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |6 hours       |2020/12/19              |C        |Developing    |
@@ -91,7 +91,7 @@ This is the page that the user first sees when he/she open the application. It p
 ![Landing Page Iteration 2](img/landing%20page%20iteration%202.png)
 \ 
 
-After the first iteration, the client game me feedback that she would want to be able to select multiple topic and approaches for each search box (See Meeting #2 Transcript in Appendix). After I have found no way to implement it with Bootstrap and I didn't want to write UI from scratch because it will inevitably look ugly, I found out that I could use a framework called Semantic UI.
+After the first iteration, the client gave me feedback that she would want to be able to select multiple topic and approaches for each search box (See Meeting #2 Transcript in Appendix). After I have found no way to implement it with Bootstrap and I didn't want to write UI from scratch because it will inevitably look ugly, I found out that I could use a framework called Semantic UI.
 
 ### Results Page
 
@@ -116,7 +116,7 @@ This page is used to add and delete tag and tag groups in the database.
 \ 
 
 ## Design Description
-The program is entirely based on the web, part of the functionality will be accomplished through JS running on client's computer, but a core part of the program will be accomplished through back-end code in Python running on Heroku and storage stored in AWS S3.  The UI will be rendered using client's web browser.
+The program is a web app, so part of the functionality will be accomplished through JS running on client's computer, but a core part of the program will be accomplished through back-end code in Python running on Heroku and storage stored in AWS S3.  The UI will be rendered using client's web browser.
 
 
 ## Class Dictionary
@@ -133,7 +133,7 @@ This class represents a paper stored in the database
 |approaches   |approaches: String[]                |Self-explanatory. Similar as above.                                                                                                                              |
 |methods      |methods: String[]                   |Self-explanatory. Similar as above.                                                                                                                              |
 |ethics       |ethics: String[]                    |Self-explanatory. Similar as above.                                                                                                                              |
-|pdf          |pdf: File                           |This stores the pdf of the paper                                                                                                                                 |
+|pdf          |pdf: File                           |This stores the pdf of the paper.                                                                                                                                |
 |png          |png: File                           |This stores the screenshot of the first page to be displayed on the results page.                                                                                |
 |text         |text: String[]                      |This is the content of the paper, extracted in plain text form to increase the search speed.                                                                     |
 
@@ -147,7 +147,7 @@ This class represents a paper stored in the database
 |png          |png: File         |This stores the screenshot of the first page to be displayed on the results page.                                          |
 |text         |text: String[]    |This is the content of the paper, extracted in plain text form to increase the search speed.                               |
 
-I realised that the user wants more flexibility to add and remove tag that I cannot foresee during development, so I've generalized the class to allow for more flexibility.
+I realised that the the client might want more flexibility to add and remove tag that I cannot foresee during development, so I've generalized the class to allow for more flexibility.
 
 #### Methods
 This class does not have any method.
@@ -169,7 +169,7 @@ This class does not have any property.
 |------------|-----------------------------------------------------------------|---------------------------------------------------------------------------------------------------------|
 |searchPapers|searchPapers(keywords: String[], tags:Tag[], user: User): Paper[]|This returns the set of paper, in order of relevance, based on a series of parameters the user has given.|
 
-Since the refactor, the tags do not have their hard coded tag groups, so the method parameter is less. 
+Since the refactor, the tags do not have their hard coded tag groups, so the method has fewer parameters. 
 
 ### Class - User
 This class represents a registered user
@@ -236,6 +236,8 @@ def search_ranked(terms, tags, user):
     return scores.sorted_by_value()
 ```
 
+In the algorithm, the `weighting` is different for each aspect. The specific values are to be fined tuned after the database is populated.
+
 ### Infrastructure / Database Design
 ![Infrastructure Iteration 1](img/infrastructure%20iteration%201.png)
 \
@@ -277,7 +279,6 @@ codestudy::DATABASE=> \d
 (27 rows)
 ```
 ![AWS S3 Bucket](img/aws%20s3%20bucket.png)
-\
 
 ### Upload Paper 
 ![Upload Paper Iteration 1](img/upload%20paper%20iteration%201.png)
@@ -302,13 +303,13 @@ codestudy::DATABASE=> \d
 |No plain text password stored in the database                                                                              |Alpha Testing, Debugging                                       |Input: none                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |2.4             |
 
 # Criterion C
-On a high level overview, the website I designed is a dynamic web application that uses tags and title to organise pdf documents in a database, which, specifically for my client, are psychology papers that students will use, but because the application is highly dynamic, it can also be used for other types of paper. I will give a general overview of technical skills and algorithm.
+On a high level overview, the website I designed is a dynamic web application that uses tags, titles and descriptions to organise pdf documents in a database, which, specifically for my client, are psychology papers that students will use, but because the application is highly dynamic, it can also be used for other types of papers. I will give a general overview of technical skills and algorithms.
 
 Most of the processing is done in the server backend, with some light processing mostly responsible for the UI in the front end. All the users using the website share the same database. 
 
 ## List of Technical Skills
 
-- Using multiple frameworks and languages.
+- Using multiple frameworks and languages
 - Using Django Models
 - Using cloud storage (S3)
 - Using JS to dynamically update the page content
@@ -316,7 +317,7 @@ Most of the processing is done in the server backend, with some light processing
 - Multithreading in the server to increase responsiveness
 - Using presigned URL
 - Securely handle API secrets in an open source application
-- Graceful multiple fall back to increase responsiveness 
+- Graceful multiple fall backs to increase responsiveness 
 
 ## List of Algorithm Used
 
@@ -328,7 +329,7 @@ Most of the processing is done in the server backend, with some light processing
 
 The UI was designed with Semantic UI, rendered with the help of Django Template language with some custom JS script for the dynamic elements. 
 
-Example 1: Using Django template language to implement loose coupling. Because all pages share the same menu items and UI library, I have put them in one HTML and allows subsequent pages to extend on that to reduce the code size, reducing the potential sources of bugs. The HTML comments illustrate the technical skills. 
+Example 1: Using Django template language to implement loose coupling. Because all pages share the same menu items and UI library, I have put them in one HTML that allows subsequent pages to extend on that to reduce the code size, reducing the potential sources of bugs. The HTML comments illustrate the technical skills. 
 
 In `codestudy/template/codestudy/base.html`:
 
@@ -383,7 +384,7 @@ In `codestudy/template/codestudy/base.html`:
 
 Example 2: Even though there are multiple ways to search for a paper, they all share the same HTML base template, except with different data. 
 
-In `codestudy/templates/codestudy`:
+In `codestudy/templates/codestudy/results.html`:
 
 ```html
 {% extends "codestudy/base.html" %}
@@ -458,11 +459,13 @@ function addTag(tagClassPk, tagClassName) {
     const newTagInput = $('#new_tag_input_' + tagClassPk);
     const tagName = newTagInput.val();
     const tagPk = uuid.v4();
+    // Get the tag name that user inputs and assign a UUID as the primary key
     changeLog.newTags.push({
         pk: tagPk,
         name: tagName,
         tagClass: tagClassName
     });
+    // Push change to the changeLog to be sent to the server
     newTagInput.val('');
     $('#new_tags_' + tagClassPk).before(htmlToElement(`
         <tr id="tag_${tagPk}">
@@ -471,7 +474,8 @@ function addTag(tagClassPk, tagClassName) {
                 <button class="ui icon button"><i class="trash icon"></i></button>
             </td>
         </tr>
-    `))
+    `));
+    // Update the UI to reflect the added tag
 }
 
 function deleteTag(tagPk) {
@@ -484,23 +488,26 @@ function deleteTag(tagPk) {
         tagDeleteButton.addClass('negative');
         changeLog.deletedTags.add(tagPk);
     }
-    tagDeleteButton.removeClass('active')
+    // If the tag is not marked deleted, mark it deleted and vise versa.
+    tagDeleteButton.removeClass('active');
 }
 
 function addTagClass() {
     const newTagClassInput = $('#new_tag_class_input');
     const tagClassName = newTagClassInput.val();
-    if (tagClassName === '') {
+    if (tagClassName === '') { // Check if the input is empty and display an error message if so
         const TagClassError = $('#tag_class_error');
         TagClassError.removeClass('hidden');
         setTimeout(() => TagClassError.addClass('hidden'), 2000);
         return;
     }
     const tagClassPk = uuid.v4();
+    // Get the tag name that user inputs and assign a UUID as the primary key
     changeLog.newTagClasses.push({
         pk: tagClassPk,
         name: tagClassName,
     });
+    // Push change to the changeLog to be sent to the server
     newTagClassInput.val('');
     $('#new_tag_classes').before(htmlToElement(`
         <div id="tag_class_${tagClassPk}" class="ui stackable grid">
@@ -526,11 +533,12 @@ function addTagClass() {
             </tbody>
         </table>
     `));
+    // Update the UI to reflect the added tag
 }
 ...
 ```
 
-Importantly, the webpage tracks and uploads only the changes to the database instead of the entire data The `addTag` and `addClass` functions adds the element to the webpage with the relevant click handler. Admittedly, using a string to render html element is not the most efficient and elegant approach. I should create reusable elements using frameworks like React, but judging this is the only page that requires such dynamic rendering, the improved efficiency would not justify the cost. 
+Importantly, the webpage tracks and uploads only the changes to the database instead of the entire data The `addTag` and `addClass` functions adds the element to the webpage with the relevant click handler. Admittedly, using a string to render html element is not the most efficient and elegant approach. I should create reusable elements using frameworks like React, but judging this is the only page that requires such dynamic rendering, the improved efficiency would not justify the development cost. 
 
 Another example of dynamic rendering is in selecting the ways to upload. The user can either choose to upload a link or a PDF by selecting from the dropdown menu. The JS element will then change the requirement validation of the form accordingly.
 
@@ -585,11 +593,11 @@ uploadOptionsSelect
 
 ## Part 2: Storage and Database
 
-The storage was implemented in AWS S3, and database uses PostgresSQL build in on Heroku. This illustrates my technical ability of using cloud database.
+The storage was implemented in AWS S3, and database uses PostgresSQL build in on Heroku. This illustrates my technical ability of using cloud database and storage.
 
 There are primarily three parts that enabled the cloud storage — provisioning and configuring an S3 bucket, integrating the storage into Django models, and optimisation by allowing the user to directly upload into the s3 bucket without having to go through the server. 
 
-The bucket is called `codestudy` — the name of the application, and an IAM user is created in AWS with the following policy.
+The bucket is called `codestudy` — the name of the application, and an IAM user is created in AWS with the following policy. The limited scope ensures that even if the API keys are leaked, other buckets and services would not be affected.
 
 ```json
 {
@@ -654,7 +662,7 @@ In `main/settings.py`:
 ```python
 import dotenv
 
-# Load the environment variables if there is such a file on the disk
+# Load the environment variables from .env file if there is such a file on the disk
 dotenv_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(dotenv_file):
     dotenv.load_dotenv(dotenv_file)
@@ -685,7 +693,6 @@ from utils import generate_presigned_url
 class MediaStorage(S3Boto3Storage, ABC):
     
     def url(self, name, parameters=None, expire=None, http_method=None):
-        # Not sure what http_method will give, so default to https in all cases (there's not many reasons to use http).
         if expire is None:
             expire = 3600
         response = generate_presigned_url(name, 600)
@@ -717,7 +724,7 @@ def generate_presigned_url(object_key, expiration):
 
 In the previous code example, I have overridden the default general url function to use a lower level function provided by `boto3` and wrapped in `utils.py`.
 
-JS in the browser allows hte user to upload to s3 directly, greatly improving the speed of the website.
+JS in the browser allows the user to upload to s3 directly, greatly improving the speed of the website.
 
 In `codestudy/templates/codestudy/add-paper.html`:
 ```html
@@ -744,7 +751,7 @@ In `codestudy/templates/codestudy/add-paper.html`:
         let fileName = await uploadFile(pdf.prop('files')[0], s3Data);
         $('#pdf-key').val(fileName);
         pdf.val(null);
-        // Clear the form validation .
+        // Clear the form validation.
         form.form({});
         uploaded = true;
         submit.click();
@@ -863,6 +870,7 @@ def login(request):
             user.given_name = id_info['given_name']
             user.family_name = id_info['family_name']
             user.save()
+            # Set the session cookie so that the user is rememberd.
             request.session['sub'] = user.pk
             success = True
         except ValueError:
@@ -876,12 +884,12 @@ def login(request):
 ...
 def logout(request):
     """
-    This is a Django handler function that logs the current user out. Designed to be accessed programmatically.
+    This is a Django handler function that logs the current user out, designed to be accessed programmatically.
     :param request:
     :return:
     """
     try:
-        # Delete the sessoin cookie.
+        # Delete the session cookie.
         del request.session['sub']
         success = True
     except KeyError:
@@ -890,7 +898,7 @@ def logout(request):
 ...
 ```
 
-The logout function visits the log out page, which clears the This demonstrates my technical ability to integrate existing framework into my own app. The login function verifies the login details. For security, the data is accepted through post because the django post function requires a Cross-site request forgery token, which prevents arbitrary access to the database. In addition, I followed the documentation and used the id-token, which is signed with the secrete key of the Google API. This demonstrates my ability to handle user authentication well. 
+The logout function visits the log out page, which clears the session cookie. This demonstrates my technical ability to integrate existing framework into my own app. The login function verifies the login details. For security, the data is accepted through post because the django post function requires a Cross-site request forgery token, which prevents arbitrary access to the database. In addition, I followed the documentation and used the id-token, which is signed with the secrete key of the Google API. This demonstrates my ability to handle user authentication well. 
 
 In order to prevent unauthorized access, not only is the corresponding url hidden from view, but direct access to the urls will return a 404 page as if the pages don't exist. 
 
@@ -906,7 +914,7 @@ def add_paper(request):
 
 ## Part 4: PDF processing
 
-I need to complete two tasks with the PDF: extract the first page as a PNG image, and extract the plain text from the PDF to be used by the search engine, which is using the algorithm of optimization by memorization. Thankfully I was able to find external high-level libraries: `pdf2image` and `textract`. All I needed to do was to wrap the library so that I can integrate it easily into the website.
+I need to complete two tasks with the PDF: extract the first page as a PNG image, and extract the plain text from the PDF to be used by the search engine, which uses the algorithm of optimization by memorization. Thankfully I was able to find external high-level libraries: `pdf2image` and `textract`. All I needed to do was to wrap the library so that I can integrate it easily into the website.
 
 In `codestudy/pdf_processor.py`:
 ```python
@@ -989,7 +997,96 @@ In order to search through the text in the PDF, I had to extract it as plain tex
 
 ## Part 5: The Search Engine
 
-The search engine is quite a naive one, for the pseudocode of the algorithm, please see the criterion B document. 
+The search engine is quite a naive one, for the pseudocode of the algorithm, please see the criterion B document. The implementation is shown below.
+
+In `codestudy/seach_engine.py`:
+```python
+from codestudy.models import Paper
+import re
+import string
+import fuzzywuzzy.process
+
+
+def search(terms, tags, user):
+    """
+    The search engine that returns a ranked result based on the search terms, tags and user. The search term uses
+    Levenshtein distance to ranked the relevance to the search term. The tag is counted such that the number of tag in
+    the portion search query that matches that in the database is linearly related to the ranking score. The proportion
+    of the element that is in the search term but not in the database is linearly related to one minus the ranking
+    score. The user is used to place a higher relevance to the papers that the user have bookmarked. The weighing of
+    each factor is provided below.
+    Weights:
+    properties: 3/4
+        title + description: 1/3
+            title: 2/3
+            description: 1/3
+        tags: 1/3
+            has_tag: 2/3
+            no_tag: 1/3
+        others: 1/3:
+            star_count: 2/3
+            field_search: 1/3
+    star: 1/4
+    :param terms: the search terms.
+    :param tags: the search tags.
+    :param user: the user logged in.
+    :return: A list of paper, ranked.
+
+    """
+    _RE_COMBINE_WHITESPACE = re.compile(r"\s+")
+    terms = _RE_COMBINE_WHITESPACE.sub(" ", terms).lower().translate(str.maketrans('', '', string.punctuation))
+    tags = set(tags)
+    texts = []
+    text_scores = {}
+    titles = []
+    title_scores = {}
+    descriptions = []
+    descriptions_scores = {}
+    scores = {}
+    max_no_tag = 1
+    max_bookmarker = 1
+    for paper in Paper.objects.all():
+        titles.append(paper.title)
+        descriptions.append(paper.description)
+        texts.append(paper.text)
+        scores[paper] = 0
+        if user and paper.is_bookmarked(user):
+            scores[paper] += 1/4
+        no_tag = 0
+        for tag in paper.tags.all():
+            if tag not in tags:
+                no_tag += 1
+        max_no_tag = max(max_no_tag, no_tag)
+        max_bookmarker = max(max_bookmarker, paper.bookmarkers.count())
+    fz = fuzzywuzzy.process.extract(terms, texts)
+    for text, score in fz:
+        text_scores[text] = score / 100
+    fz = fuzzywuzzy.process.extract(terms, titles)
+    for title, score in fz:
+        title_scores[title] = score / 100
+    fz = fuzzywuzzy.process.extract(terms, descriptions)
+    for description, score in fz:
+        descriptions_scores[description] = score / 100
+    for paper in scores:
+        scores[paper] += title_scores.get(paper.title, 0) * 3/4 * 1/3 * 2/3
+        scores[paper] += descriptions_scores.get(paper.description, 0) * 3/4 * 1/3 * 1/3
+        scores[paper] += text_scores.get(paper.text, 0) * 3/4 * 1/3 * 1/3
+        scores[paper] += paper.bookmarkers.count() / max_bookmarker * 3/4 * 1/3 * 2/3
+        tag_has = 0
+        paper_tags = set([tag for tag in paper.tags.all()])
+        for tag in tags:
+            if tag in paper_tags:
+                tag_has += 1
+        scores[paper] += tag_has / max(1, len(tags)) * 3/4 * 1/3 * 2/3
+        tag_no = 0
+        for paper_tag in paper_tags:
+            if paper_tag not in tags:
+                tag_no += 1
+        scores[paper] += (max_no_tag-tag_no) / max_no_tag * 3/4 * 1/3 * 1/3
+
+    papers_ranked = [k for k, v in sorted(scores.items(), key=lambda item: item[1], reverse=True)]
+    return papers_ranked
+```
 
 ## Part 6: Validation, Error handling and Fallbacks
 
@@ -1021,6 +1118,7 @@ In `codestudy/templates/add-paper.html`:
                                 pdf: 'empty',
                             }
                     });
+                    // Change the view of the web page to display the file selection tool and update the validation so that the link is not required and the file is..
                 } else if (uploadOption === uploadOptionsEnum.link) {
                     pdf.attr('hidden', 'hidden');
                     link.removeAttr('hidden');
@@ -1032,6 +1130,7 @@ In `codestudy/templates/add-paper.html`:
                                 link: 'empty',
                             }
                     });
+                    // Change the view of the web page to display the text input box and update the validation so that the file is not required and the link is..
                 } else {
                     console.assert(false, "Upload Option does not match any known type");
                 }
@@ -1093,7 +1192,7 @@ def handler500(request):
         return render(request, 'codestudy/500.html', status=500)
 ```
 
-This function is hooked to the server error handler in Django. The first thing it tires is to have some dynamic element such as the header bar, if it still fails (which sometimes happens if the database is corrupt), it would return a static 500 page with all the links hardcoded. 
+This function is hooked to the server error handler in Django. The first thing it tires is to have some dynamic element such as the header bar, but if that still fails (which sometimes happens if the database is corrupt), it would return a static 500 page with all the links and layout hardcoded to minimise the chances of faliure. 
 
 # Criterion D
 [Criterion D Screencast](https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4) <https://de0ch.s3.ap-east-1.amazonaws.com/csia/Criterion-D.mp4>
@@ -1151,9 +1250,9 @@ Not Applicable because I used Sign-in with Google with which the authentication 
 \
 
 ## User Feedback
-The user is very satisfied with the product. She said that it completely realises her vision (see Meeting #3 Transcript in Appendix). I was pleasantly surprised when she said she was actually going to use the website, and the app was not just an intellectual exercise. One improvement is to make an info page between the card and the PDF. The page can contain additional information such as the units the paper is related to, and similar paper (Meeting #3 Transcript). This will increase the functionality of the program and allow students to explore the subject more. 
+The user is very satisfied with the product. She said that it completely realises her vision (see Meeting #3 Transcript in Appendix). I was pleasantly surprised when she said she was actually going to use the website, and the app was not just an intellectual exercise. One improvement is to make an info page between the card and the PDF. The page can contain additional information such as the units the paper is related to, and similar papers (Meeting #3 Transcript). This will increase the functionality of the program and allow students to explore the subject more. 
 
-Looking forward, there are a few improvements I formulated other than the client suggestions. First, I can improve the efficiency of the web program. SQL is, be design, very efficient for general purpose database, but since the search engine requires searching through plan text, there might be a more efficient data structure to index the data. The complexity of the search grows linearly with the number of papers in the database, so if the database gets large, the search function might be unreasonably slow. In addition, I could also write a more sophisticated search algorithm. Right now the ranking algorithm is quite primitive with no research to back up the weight of different aspect I assigned it. In addition, by controlling lower levels of the server, I could employ more layers of caching to make access faster. In addition, I could also add a list layout in addition to the grid layout for the result page because some people prefer to see data in a list. 
+Looking forward, there are a few improvements I formulated other than the client suggestions. First, I can improve the efficiency of the web program. SQL is, by design, very efficient for a general purpose database, but since the search engine requires searching through plan text, there might be a more efficient data structure to index the data. By controlling lower levels of the server, I could employ more layers of caching to make access faster. The complexity of the search grows linearly with the number of papers in the database, so if the database gets large, the search function might be unreasonably slow. In addition, I could also write a more sophisticated search algorithm. Right now the ranking algorithm is quite primitive with no research to back up the weight of different aspect I assigned it. In addition, I could also add a list layout in addition to the grid layout for the result page because some people prefer to see data in a list. 
 
 # Appendix
 
@@ -3370,7 +3469,6 @@ class MediaStorage(S3Boto3Storage, ABC):
     file_overwrite = False
 
     def url(self, name, parameters=None, expire=None, http_method=None):
-        # Not sure what http_method will give, so default to https in all cases (there's not many reasons to use http).
         if expire is None:
             expire = 3600
         response = generate_presigned_url(name, 600)
@@ -3414,7 +3512,7 @@ A: Yes. It is at [https://www.squarefoot.com.hk/租樓/](https://www.squarefoot.
 
 Q: What is inadequate about the current search engine? 
 
-A: Right now the search engine only searches the key words that are present in the papers themsevles, not the ones that are inferred, also it only takes into account the key words that the author tagged, which might not be the same key words that are useful for the IB subject. In addition, the set of paper that are in its database is much larger than the ones that are needed for the IB, so the results are not as relevant. 
+A: Right now the search engine only searches the key words that are present in the papers themselves, not the ones that are inferred, also it only takes into account the key words that the author tagged, which might not be the same key words that are useful for the IB subject. In addition, the set of paper that are in its database is much larger than the ones that are needed for the IB, so the results are not as relevant. 
 
 Q: Is a modern user interface important to you? Or are you okay with however it looks as long as it gets the job done?
 
