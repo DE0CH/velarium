@@ -1,5 +1,5 @@
 from django.urls import path, include
-from codestudy import views
+from portal import views
 
 # To add a new path, first import the app:
 # import blog
@@ -10,7 +10,7 @@ from codestudy import views
 # Learn more here: https://docs.djangoproject.com/en/2.1/topics/http/urls/
 
 urlpatterns = [
-    path('', include('codestudy.urls'))
+    path('', include('portal.urls'))
 ]
 
 handler404 = views.handler404

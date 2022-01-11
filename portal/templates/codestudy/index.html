@@ -1,0 +1,42 @@
+{% extends "codestudy/base.html" %}
+{% block content %}
+    <div class="ui text container">
+        <h1 style="text-align: center">Search in Code Study</h1>
+        <form class="ui form" action="{% url 'portal:search' %}" method="get" autocomplete="off">
+            <input autocomplete="false" name="hidden" type="text" style="display:none;">
+            <div class="field">
+                <div class="ui left icon input">
+                    <i class="search icon"></i>
+                    <input type="text" name="terms" placeholder="Search Terms">
+                </div>
+            </div>
+            <div class="ui stacked segment">
+                {% for tag_class in tag_classes %}
+                    <div class="field">
+                        <select class="ui fluid search dropdown" multiple id="select-{{ tag_class.pk }}"
+                                name="{{ tag_class.name }}">
+                            <option value="">{{ tag_class.name }}</option>
+                            {% for tag in tag_class.tag_set.all %}
+                                <option value="{{ tag.name }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="submit" class="ui fluid large teal button">Search</button>
+
+
+        </form>
+    </div>
+
+{% endblock %}
+{% block js %}
+    <script>
+        {% for tag_class in tag_classes %}
+            $('#select-{{ tag_class.pk }}').dropdown();
+        {% endfor %}
+        $('#menu-search').addClass('active');
+
+    </script>
+{% endblock %}

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/csia.iml" filepath="$PROJECT_DIR$/.idea/csia.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/vmserver.iml" filepath="$PROJECT_DIR$/.idea/vmserver.iml" />
     </modules>
   </component>
 </project>

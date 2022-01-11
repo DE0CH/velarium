@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+    <meta name="google-signin-client_id"
+          content="330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com">
+    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        .wrapper {
+            min-height: 100%;
+
+            /* Equal to height of footer */
+            /* But also accounting for potential margin-bottom of last child */
+            margin-bottom: -62px;
+        }
+
+        .footer {
+            height: 48px;
+            margin-top: 14px;
+        }
+        .push {
+            height: 62px;
+        }
+    </style>
+    <title>{% block title %}Code Study{% endblock %}</title>
+</head>
+<body>
+<div class="wrapper">
+    <div class="content">
+        <div class="ui menu">
+            <div class="header item"><a href="{% url 'portal:index' %}" style="color: black">Code Study</a></div>
+            <a class="item" id="menu-search" href="{% url 'portal:index' %}">Search</a>
+            {% if user.can_edit %}
+                <a class="item" id="menu-add-paper" href="{% url 'portal:add-paper' %}">Add Paper</a>
+                <a class="item" id="menu-edit-tags" href="{% url 'portal:edit-tags' %}">Edit Tags</a>
+            {% endif %}
+            {% for tag_class in tag_classes %}
+                <div id="menu-{{ tag_class.pk }}" class="ui dropdown item">
+                    {{ tag_class.name }}
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        {% for tag in tag_class.tag_set.all %}
+                            <a class="item"
+                               href="{% url 'portal:browse' tag_class.name tag.name %}">{{ tag.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            <a class="item" id="menu-all-papers" href="{% url 'portal:all-papers' %}">All Papers</a>
+            <div class="right menu">
+                {% if user.pk %}
+                    <div id="user-info" class="ui dropdown item">
+                        {{ user.name }}
+                        <i class="dropdown icon"></i>
+                        <div class="menu">
+                            <a class="item" href="{% url 'portal:bookmarked' %}"><i class="star icon"></i>Bookmarked
+                                Papers</a>
+                            {% if user.is_admin %}
+                                <a class="item" href="{% url 'portal:admin' %}"><i class="edit icon"></i>Admin
+                                    Console</a>
+                            {% endif %}
+                            <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <a id="loginBtn" class="item">
+                        Sign In with Google
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if message %}
+            <div class="ui text container">
+                <div class="ui message">
+                    <div class="header">{{ message.title }}</div>
+                    <p>
+                        {{ message.description }}
+                    </p>
+                </div>
+            </div>
+        {% endif %}
+        {% block content %}
+        {% endblock %}
+        <div class="push"></div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="ui footer segment">
+        <div class="ui center aligned container">
+            <div class="ui horizontal small divided link list">
+                <a class="item" href="https://de0ch.mit-license.org/" target="_blank">Free &amp; Open Source
+                    (MIT)</a>
+                <a class="item" href="https://github.com/DE0CH/vmserver" target="_blank">Source Code on Github</a>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script>
+    {% for tag_class in tag_classes %}
+        $('#menu-{{ tag_class.pk }}').dropdown();
+    {% endfor %}
+    $('#user-info').dropdown();
+
+    function logout() {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', '{% url 'portal:logout' %}');
+        xhr.onload = () => {
+            location.reload();
+        };
+        xhr.send();
+    }
+
+    function sendIdToken(idToken) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', "{% url 'portal:login' %}");
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onload = function () {
+            const response = JSON.parse(xhr.responseText);
+            location.reload();
+        };
+        xhr.send('id-token=' + idToken + '&csrfmiddlewaretoken=' + '{{ csrf_token }}');
+
+    }
+
+    gapi.load('auth2', function () {
+        // Retrieve the singleton for the GoogleAuth library and set up the client.
+        const auth2 = gapi.auth2.init({
+            client_id: '330093561618-bc6pprilkfqi5sc6oibm376psnfe9tub.apps.googleusercontent.com',
+            cookiepolicy: 'single_host_origin',
+            // Request scopes in addition to 'profile' and 'email'
+            //scope: 'additional_scope'
+        });
+        const element = document.getElementById('loginBtn');
+        auth2.attachClickHandler(element, {},
+            function (googleUser) {
+                const id_token = googleUser.getAuthResponse().id_token;
+                sendIdToken(id_token)
+            }, function (error) {
+                console.log(error);
+            });
+    });
+</script>
+{% block js %}
+{% endblock %}
+</body>
+</html>

@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "codestudy",
+    "portal",
 ]
 
 MIDDLEWARE = [
@@ -118,7 +118,8 @@ USE_TZ = True
 # S3 Integration
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = 'codestudy'
+DEMO = os.getenv('DEMO', 'FALSE') == 'TRUE'
+AWS_STORAGE_BUCKET_NAME = 'portal'
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
@@ -135,8 +136,5 @@ DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-if os.getenv('IS_LOCAL', 'FALSE') != 'TRUE':
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = True
 
 django_heroku.settings(locals())
