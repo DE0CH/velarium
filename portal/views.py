@@ -48,11 +48,11 @@ def install_keys(request):
         if not validate_github(github_username):
             raise ValueError("Not a valid Github username.")
         if not settings.DEMO:
-            print(settings.BASE_DIR)
+            print( os.path.join(settings.BASE_DIR, 'make-user.sh'))
             p = subprocess.run(['sh', os.path.join(settings.BASE_DIR, 'make-user.sh')], shell=True)
             if p.returncode != 0:
                 raise ChildProcessError("Failed to Create User")
-            p = subprocess.run([f'sudo -u {user.username}', os.path.join(settings.BASE_DIR, 'install-keys.sh')])
+            p = subprocess.run(['sudo', '-u', f'{user.username}', os.path.join(settings.BASE_DIR, 'install-keys.sh')])
             if p.returncode != 0:
                 raise ChildProcessError("Failed installing ssh keys")
         user.registered = True
