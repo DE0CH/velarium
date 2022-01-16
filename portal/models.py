@@ -1,65 +1,7 @@
 from django.db import models
-import uuid
+import re
 from enum import IntEnum
 # Create your models here.
-
-
-class TagClass(models.Model):
-    """
-    A group of tags that have a title. For example, "Topic" is a tag class and under it there would be tags such as
-    "Cognitive processes", "The individual and the group", "Cultural influences on behavior", etc.
-    """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-
-class Tag(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    tag_class = models.ForeignKey(TagClass, on_delete=models.CASCADE)
-    name = models.TextField()
-
-    def __str__(self):
-        return self.name
-
-
-class Paper(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.TextField()
-    description = models.TextField()
-    text = models.TextField()
-    png = models.FileField(max_length=262)  # 36 for UUID, 1 for '/' and 225 for filename length
-    pdf = models.FileField(default='failed.pdf', max_length=262)
-    link = models.TextField(null=True)
-    tags = models.ManyToManyField(Tag)
-
-    def is_bookmarked(self, user):
-        """
-        Get if the paper is bookmarked by the user.
-        :param user: The User object in question.
-        :return: Whether the paper is bookmarked.
-        """
-        return self.bookmarkers.filter(pk=user.pk).exists()
-
-    def __str__(self):
-        return self.title
-
-    @property
-    def nested_tag_names(self):
-        """
-        Get a dictionary of the names of all the tag classes as the keys, and the list of the names of all the tags as
-        the values.
-        :return: The dictionary.
-        """
-        tag_classes = {}
-        for tag in self.tags.all():
-            if tag.tag_class.name not in tag_classes:
-                tag_classes[tag.tag_class.name] = []
-            tag_classes[tag.tag_class.name].append(tag.name)
-        return tag_classes
-
 
 class UserType(IntEnum):
     """
@@ -84,11 +26,11 @@ class User(models.Model):
     """
     id = models.TextField(primary_key=True, editable=False)
     type = models.IntegerField(choices=UserType.choices(), default=UserType.STANDARD)
+    registered= models.BooleanField(default=False)
     name = models.TextField()
     given_name = models.TextField()
     family_name = models.TextField()
     email = models.TextField()
-    bookmarks = models.ManyToManyField(Paper, related_name='bookmarkers')
 
     def __str__(self):
         return self.name
@@ -122,14 +64,13 @@ class User(models.Model):
         """
         return UserType(self.type).name.lower()
 
-
-class VM(models.Model):
-    """
-    Represents a VM
-    """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    memory = models.IntegerField()
-    cpus = models.IntegerField()
-    vagrant_box = models.TextField()
-    running = models.BooleanField()
-
+    @property
+    def username(self):
+        email_validation = re.compile('(?:[a-z0-9!#$%&\'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&\'*+/=?^_`{|}~-]+)*|"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])')
+        if not email_validation.match(self.email):
+            raise ValueError("User email is not a valid email.")
+        email_append = re.compile('@.+$')
+        unclean = email_append.sub('', self.email)
+        unix_unsafe = re.compile("[^-._a-zA-Z0-9]")
+        clean= unix_unsafe.sub('', unclean)
+        return clean

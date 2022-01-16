@@ -3,28 +3,70 @@
     Get User | Velarium
 {% endblock %}
 {% block content %}
+
     <div class="ui text container">
-        <h1 style="text-align: center">Get Your SSH Keys installed </h1>
-        <div class="ui form">
-            <p method="post" autocomplete="off">
-                <input autocomplete="false" name="hidden" type="text" style="display:none;">
-                {% csrf_token %}
-                <div class="field">
-                    <div class="ui left icon input">
-                        <i class="sticky note icon"></i>
-                        <input type="text" name="title" placeholder="Github Username">
+        {% if user.pk %}
+            {% if not user.registered %}
+                <h1 style="text-align: center">Get Your SSH Keys installed </h1>
+                <form method="post" autocomplete="off">
+                    <div class="ui form error">
+
+                        <input autocomplete="false" name="hidden" type="text" style="display:none;">
+                        {% csrf_token %}
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="sticky note icon"></i>
+                                <input type="text" name="github" placeholder="Github Username">
+                            </div>
+                        </div>
+                        <div class="ui error message"></div>
+
+                        <button type="submit" id="submit" class="ui fluid large teal button">Install Keys</button>
                     </div>
+                </form>
+
+            {% else %}
+                <h1 style="text-align: center">SSH into Valarium</h1>
+                <h2>Command Line</h2>
+                <div class="ui segment">
+                    <pre><code class="bash">{{ command_line }}</code></pre>
                 </div>
-                <button type="submit" id="submit" class="ui fluid large teal button">Install Keys</button>
-            </form>
+                <h2>SSH Config</h2>
+                <div class="ui segment">
+                    <pre><code>{{ config_file }}</code></pre>
+                </div>
+                <div class="ui form">
+                    <form method="post" autocomplete="off">
+                        <input autocomplete="false" name="reset" type="hidden" value="TRUE">
+                        {% csrf_token %}
+                        <button type="submit" id="submit" class="ui fluid large red button">Reinstall Keys ...</button>
+                    </form>
 
-        </div>
-
+                </div>
+            {% endif %}
+        {% else %}
+            <p>Please Log In.</p>
+        {% endif %}
     </div>
 
 {% endblock %}
 {% block js %}
     <script>
         $('#menu-get-user').addClass('active');
+        {#$('.ui form')#}
+        {#    .form({#}
+        {#        fields: {#}
+        {#            github: {#}
+        {#                identifier: 'github',#}
+        {#                rules: [#}
+        {#                    {#}
+        {#                        type: 'regExp[/^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$/]',#}
+        {#                        prompt: 'Please enter a valid github username.'#}
+        {#                    }#}
+        {#                ]#}
+        {#            }#}
+        {#        }#}
+        {#    })#}
+        {#;#}
     </script>
 {% endblock %}

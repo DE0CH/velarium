@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import django_heroku
 import dotenv
-
+import socket
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,6 +29,9 @@ SECRET_KEY = "iNZc97keQtytmd7x82q9zqBBzX6ZA8sKH8QpncbbqtfsTdRBA9dxAYmCLXQMPAhb"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'FALSE') == 'TRUE'
+hostname = socket.gethostname()
+local_ip = socket.gethostbyname(hostname)
+HOST_NAME = os.getenv('HOST_NAME', local_ip)
 
 ALLOWED_HOSTS = []
 
