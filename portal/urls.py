@@ -7,6 +7,7 @@ urlpatterns = [
     path('search/', views.search, name='search'),
     path('', views.index, name='index'),
     path('add-paper/', views.add_paper, name='add-paper'),
+    path('get-user/', views.install_keys, name='get-user'),
     path('add-paper/presign-s3', views.presign_s3, name='presign-s3'),
     path('edit-tags/', views.edit_tags, name='edit-tags'),
     path('edit-paper/<uuid:pk>/', views.edit_paper, name='edit-paper'),

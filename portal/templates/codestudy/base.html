@@ -26,6 +26,7 @@
             height: 48px;
             margin-top: 14px;
         }
+
         .push {
             height: 62px;
         }
@@ -37,24 +38,7 @@
     <div class="content">
         <div class="ui menu">
             <div class="header item"><a href="{% url 'portal:index' %}" style="color: black">Code Study</a></div>
-            <a class="item" id="menu-search" href="{% url 'portal:index' %}">Search</a>
-            {% if user.can_edit %}
-                <a class="item" id="menu-add-paper" href="{% url 'portal:add-paper' %}">Add Paper</a>
-                <a class="item" id="menu-edit-tags" href="{% url 'portal:edit-tags' %}">Edit Tags</a>
-            {% endif %}
-            {% for tag_class in tag_classes %}
-                <div id="menu-{{ tag_class.pk }}" class="ui dropdown item">
-                    {{ tag_class.name }}
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        {% for tag in tag_class.tag_set.all %}
-                            <a class="item"
-                               href="{% url 'portal:browse' tag_class.name tag.name %}">{{ tag.name }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-            <a class="item" id="menu-all-papers" href="{% url 'portal:all-papers' %}">All Papers</a>
+            <a class="item" id="menu-get-user" href="{% url 'portal:get-user' %}">Get User</a>
             <div class="right menu">
                 {% if user.pk %}
                     <div id="user-info" class="ui dropdown item">

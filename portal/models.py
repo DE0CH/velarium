@@ -122,3 +122,14 @@ class User(models.Model):
         """
         return UserType(self.type).name.lower()
 
+
+class VM(models.Model):
+    """
+    Represents a VM
+    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    memory = models.IntegerField()
+    cpus = models.IntegerField()
+    vagrant_box = models.TextField()
+    running = models.BooleanField()
+

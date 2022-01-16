@@ -37,6 +37,13 @@ def index(request):
     :param request: The Django Request object
     :return: The index page
     """
+    if settings.DEMO:
+        user = User.objects.get_or_create(pk="demo")[0]
+        user.email = "demo@demo.com"
+        user.name = "Demo User"
+        user.type = 3
+        user.save()
+        request.session['sub'] = user.pk
     if request.method == 'POST':
         return redirect('portal:index')
     else:
@@ -163,6 +170,55 @@ def add_paper(request):
     else:
         raise Http404()
 
+def install_keys(request):
+    """
+    This is a Django handler function for adding a paper into the database. This also handlers form submission through
+    HTTP POST.
+    :param request: The Django Request object
+    :return: Depending on the request method, it either returns the upload UI, or a redirect to the index page
+    """
+    if get_user(request) and get_user(request).can_edit:
+        if request.method == 'POST':
+
+            paper = Paper(title=title, description=description)
+            # Did not supply default value because it's better to crash and notify user and dev than silently fail.
+            upload_option = UploadOption(int(request.POST['upload-option']))
+            if upload_option == UploadOption.FILE:
+                pdf_key = request.POST.get('pdf-key', 'failed.pdf')
+                paper.pdf.name = pdf_key
+                paper.save()
+
+                def process(paper):
+                    pdf_to_png_and_save(paper)
+                    paper.text = get_text(paper)
+                    try:
+                        paper.save()
+                    except DataError:
+                        context = get_base_context(request)
+                        context.update({
+                            'message': {
+                                'title': 'File Name Too Long',
+                                'description': 'The file name of the PDF you just uploaded is too long. Please try to '
+                                               'shorten it.'
+                            }
+                        })
+                        return render(request, 'codestudy/base.html', context)
+
+                Thread(target=process, args=(paper,)).start()
+
+            elif upload_option == UploadOption.LINK:
+                link = request.POST.get('link', '')
+                paper.link = link
+                paper.save()
+            else:
+                raise NotImplementedError('Upload Option does not match any known type')
+            update_tag(request, paper)
+            return redirect('portal:index')
+        else:
+            context = get_base_context(request)
+            return render(request, 'codestudy/get-user.html', context=context)
+    else:
+        raise Http404()
 
 def presign_s3(request):
     """
