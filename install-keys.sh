@@ -6,5 +6,5 @@ else
     adduser --disabled-password --gecos "" $1
 fi
 
-su -c "curl https://github.com/$2.keys > ~/.ssh/authorized_keys" - $1
+su -c "mdkri -p ~/.ssh && curl https://github.com/$2.keys > ~/.ssh/authorized_keys" - $1
 
