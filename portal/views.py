@@ -48,7 +48,7 @@ def index(request):
         return redirect('portal:index')
     else:
         context = get_base_context(request)
-        return render(request, 'codestudy/index.html', context=context)
+        return render(request, 'velarium/index.html', context=context)
 
 
 def search(request):
@@ -72,7 +72,7 @@ def search(request):
         'page_title': f'{terms}',
         'papers': papers,
     })
-    return render(request, 'codestudy/results.html', context=context)
+    return render(request, 'velarium/results.html', context=context)
 
 
 def browse(request, tag_class=None, tag=None):
@@ -93,7 +93,7 @@ def browse(request, tag_class=None, tag=None):
         'page_title': tag,
         'papers': Tag.objects.get(name=tag, tag_class__name=tag_class).paper_set.all(),
     })
-    return render(request, 'codestudy/results.html', context=context)
+    return render(request, 'velarium/results.html', context=context)
 
 
 def all_papers(request):
@@ -108,7 +108,7 @@ def all_papers(request):
         'papers': Paper.objects.all(),
         'all_papers': True
     })
-    return render(request, 'codestudy/results.html', context=context)
+    return render(request, 'velarium/results.html', context=context)
 
 
 class UploadOption(enum.IntEnum):
@@ -152,7 +152,7 @@ def add_paper(request):
                                                'shorten it.'
                             }
                         })
-                        return render(request, 'codestudy/base.html', context)
+                        return render(request, 'velarium/base.html', context)
 
                 Thread(target=process, args=(paper,)).start()
 
@@ -166,7 +166,7 @@ def add_paper(request):
             return redirect('portal:index')
         else:
             context = get_base_context(request)
-            return render(request, 'codestudy/add-paper.html', context=context)
+            return render(request, 'velarium/add-paper.html', context=context)
     else:
         raise Http404()
 
@@ -202,7 +202,7 @@ def install_keys(request):
                                                'shorten it.'
                             }
                         })
-                        return render(request, 'codestudy/base.html', context)
+                        return render(request, 'velarium/base.html', context)
 
                 Thread(target=process, args=(paper,)).start()
 
@@ -216,7 +216,7 @@ def install_keys(request):
             return redirect('portal:index')
         else:
             context = get_base_context(request)
-            return render(request, 'codestudy/get-user.html', context=context)
+            return render(request, 'velarium/get-user.html', context=context)
     else:
         raise Http404()
 
@@ -281,7 +281,7 @@ def edit_tags(request):
             return redirect('portal:edit-tags')
         else:
             context = get_base_context(request)
-            return render(request, 'codestudy/edit-tags.html', context=context)
+            return render(request, 'velarium/edit-tags.html', context=context)
     else:
         raise Http404()
 
@@ -310,7 +310,7 @@ def edit_paper(request, pk):
             context.update({
                 'paper': Paper.objects.get(pk=pk),
             })
-            return render(request, 'codestudy/edit-paper.html', context=context)
+            return render(request, 'velarium/edit-paper.html', context=context)
     else:
         raise Http404()
 
@@ -382,7 +382,7 @@ def admin(request):
             context.update({
                 'users': User.objects.all()
             })
-            return render(request, 'codestudy/admin.html', context=context)
+            return render(request, 'velarium/admin.html', context=context)
     else:
         raise Http404()
 
@@ -416,7 +416,7 @@ def handler404(request, exception):
             'description': 'This is no the web page you are looking for.',
         }
     })
-    return render(request, 'codestudy/base.html', context=context, status=404)
+    return render(request, 'velarium/base.html', context=context, status=404)
 
 
 # noinspection PyBroadException
@@ -437,9 +437,9 @@ def handler500(request):
                 'description': 'Something went wrong. Please try again later.'
             }
         })
-        return render(request, 'codestudy/base.html', context=context, status=500)
+        return render(request, 'velarium/base.html', context=context, status=500)
     except:
-        return render(request, 'codestudy/500.html', status=500)
+        return render(request, 'velarium/500.html', status=500)
 
 
 def handler403(request, exception):
@@ -457,7 +457,7 @@ def handler403(request, exception):
             'description': 'Looks like you don\'t have the permission to perform the action.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context, status=403)
+    return render(request, 'velarium/base.html', context=context, status=403)
 
 
 def handler400(request, exception):
@@ -474,7 +474,7 @@ def handler400(request, exception):
             'description': 'Your client has issued a malformed or illegal request.'
         }
     })
-    return render(request, 'codestudy/base.html', context=context, status=400)
+    return render(request, 'velarium/base.html', context=context, status=400)
 
 
 def invoke_500(request):
@@ -513,6 +513,6 @@ def bookmarked(request):
             'page_title': 'Bookmarked',
             'papers': user.bookmarks.all()
         })
-        return render(request, 'codestudy/results.html', context=context)
+        return render(request, 'velarium/results.html', context=context)
     else:
         raise Http404()

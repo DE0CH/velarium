@@ -31,27 +31,22 @@
             height: 62px;
         }
     </style>
-    <title>{% block title %}Code Study{% endblock %}</title>
+    <title>{% block title %}Velarium{% endblock %}</title>
 </head>
 <body>
 <div class="wrapper">
     <div class="content">
         <div class="ui menu">
-            <div class="header item"><a href="{% url 'portal:index' %}" style="color: black">Code Study</a></div>
+            <div class="header item"><a href="{% url 'portal:index' %}" style="color: black">Velarium</a></div>
             <a class="item" id="menu-get-user" href="{% url 'portal:get-user' %}">Get User</a>
+            <a class="item" href="https://github.com/DE0CH/vmserver/blob/main/help.md">Get Help</a>
             <div class="right menu">
                 {% if user.pk %}
                     <div id="user-info" class="ui dropdown item">
                         {{ user.name }}
                         <i class="dropdown icon"></i>
                         <div class="menu">
-                            <a class="item" href="{% url 'portal:bookmarked' %}"><i class="star icon"></i>Bookmarked
-                                Papers</a>
-                            {% if user.is_admin %}
-                                <a class="item" href="{% url 'portal:admin' %}"><i class="edit icon"></i>Admin
-                                    Console</a>
-                            {% endif %}
-                            <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out </a>
+                            <a class="item" onclick="logout()"><i class="sign-out icon"></i>Log out</a>
                         </div>
                     </div>
                 {% else %}
