@@ -51,6 +51,12 @@ def install_keys(request):
             print( os.path.join(settings.BASE_DIR, 'make-user.sh'))
             print([os.path.join(settings.BASE_DIR, 'make-user.sh'), f'{user.username}'])
             p = subprocess.run([os.path.join(settings.BASE_DIR, 'make-user.sh'), f'{user.username}'], shell=True)
+            print(['sudo',
+                                '-u',
+                                f'{user.username}',
+                                os.path.join(settings.BASE_DIR, 'install-keys.sh'),
+                                f'{github_username}'
+                                ])
             p = subprocess.run(['sudo',
                                 '-u',
                                 f'{user.username}',
