@@ -51,7 +51,12 @@ def install_keys(request):
             print( os.path.join(settings.BASE_DIR, 'make-user.sh'))
             print([os.path.join(settings.BASE_DIR, 'make-user.sh'), f'{user.username}'])
             p = subprocess.run([os.path.join(settings.BASE_DIR, 'make-user.sh'), f'{user.username}'], shell=True)
-            p = subprocess.run(['sudo', '-u', f'{user.username}', os.path.join(settings.BASE_DIR, 'install-keys.sh')], shell=True)
+            p = subprocess.run(['sudo',
+                                '-u',
+                                f'{user.username}',
+                                os.path.join(settings.BASE_DIR, 'install-keys.sh'),
+                                f'{github_username}'
+                                ], shell=True)
             if p.returncode != 0:
                 raise ChildProcessError("Failed installing ssh keys")
         user.registered = True
