@@ -53,20 +53,20 @@
 {% block js %}
     <script>
         $('#menu-get-user').addClass('active');
-        {#$('.ui form')#}
-        {#    .form({#}
-        {#        fields: {#}
-        {#            github: {#}
-        {#                identifier: 'github',#}
-        {#                rules: [#}
-        {#                    {#}
-        {#                        type: 'regExp[/^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$/]',#}
-        {#                        prompt: 'Please enter a valid github username.'#}
-        {#                    }#}
-        {#                ]#}
-        {#            }#}
-        {#        }#}
-        {#    })#}
-        {#;#}
+        $('.ui form')
+            .form({
+                fields: {
+                    github: {
+                        identifier: 'github',
+                        rules: [
+                            {
+                                type: 'regExp[/^[a-z\\d](?:[a-z\\d]|-(?=[a-z\\d])){0,38}$/]',
+                                prompt: 'Please enter a valid github username.'
+                            }
+                        ]
+                    }
+                }
+            })
+        ;
     </script>
 {% endblock %}
