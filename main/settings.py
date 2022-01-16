@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-import django_heroku
 import dotenv
 import socket
 
@@ -139,5 +138,3 @@ DEFAULT_FILE_STORAGE = 'main.storage_backends.MediaStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
-
-django_heroku.settings(locals())

@@ -7,25 +7,6 @@ python-dotenv
 # Django
 django
 
-# Heroku stuff
-django-heroku
-psycopg2
-gunicorn
-
-# S3 Storage
-django-storages
-boto3
-
-# PDF Processing
-pdf2image
-
 # Authentication
 requests
 google-auth
-
-# Extract PDF text
-textract
-
-# Search Engine
-python-Levenshtein
-fuzzywuzzy
